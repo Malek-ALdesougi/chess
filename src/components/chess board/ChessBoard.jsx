@@ -1,9 +1,16 @@
-import styles from './styel.module.css';
+import './styel.css'
 
 function ChessBoard() {
   return (
-    <div className={styles.ChessBoard}>
-      <h1>chess board</h1>
+    <div className='board'>
+      {Array(64)
+        .fill()
+        .map((k, i) => (
+          <div
+            key={i}
+            className={`square ${i % 2 === Math.floor(i / 8) % 2 ? 'black' : 'white'}`}
+          />
+        ))}
     </div>
   );
 }
