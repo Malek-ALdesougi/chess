@@ -1,0 +1,181 @@
+* {
+  box-sizing: border-box;
+}
+
+.board {
+  display: grid;
+  grid-template-rows: repeat(8, 90px);
+  grid-template-columns: repeat(8, 90px);
+}
+
+.square {
+  max-width: 90px;
+  max-height: 90px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.black {
+  background-color: #27314e;
+}
+
+.white {
+  background-color: #6f9cac;
+}
+
+.piece {
+  position: absolute;
+  width: 50px;
+  height: 50px;
+  display: flex;
+  justify-self: center;
+  align-items: center;
+  background-image: url('https://media.istockphoto.com/id/916516826/photo/the-queen-in-highlight.jpg?s=612x612&w=0&k=20&c=ygfDiqhSlImTCYzfHMlrndiQVgl5B2zq242zsUTKVKc=');
+  background-size: cover;
+  background-size: 50px;
+  background-repeat: no-repeat;
+}
+
+.white.piece {
+  background-position-y: -50px;
+  width: 70px;
+  height: 70px;
+  background-color:inherit;
+}
+
+.black.piece {
+  background-position-y: 0;
+  width: 70px;
+  height: 70px;
+  background-color: inherit;
+}
+
+.rook {
+  background-position-x: -50px;
+}
+
+.knight {
+  background-position-x: -100px;
+}
+
+.bishop {
+  background-position-x: -150px;
+}
+
+.queen {
+  background-position-x: -200px;
+}
+
+.king {
+  background-position-x: -250px;
+}
+
+.pawn {
+  background-position-x: -300px;
+}
+
+
+/* Media query */
+
+/* Mobile devices – 320px — 480px. */
+@media only screen and (max-width: 320px) {
+  .board {
+    grid-template-rows: repeat(8, 30px);
+    grid-template-columns: repeat(8, 30px);
+  }
+
+  .square {
+    max-width: 30px;
+    max-height: 30px;
+  }
+  .white.piece, .black.piece{
+    width: 20px;
+    height: 20px;
+  }
+}
+
+@media only screen and (min-width: 320px) {
+  .board {
+    grid-template-rows: repeat(8, 40px);
+    grid-template-columns: repeat(8, 40px);
+  }
+
+  .square {
+    max-width: 40px;
+    max-height: 40px;
+  }
+  .white.piece, .black.piece{
+    width: 30px;
+    height: 30px;
+  }
+}
+
+@media only screen and (min-width: 481px) {
+  .board {
+    grid-template-rows: repeat(8, 40px);
+    grid-template-columns: repeat(8, 40px);
+  }
+
+  .square {
+    max-width: 40px;
+    max-height: 40px;
+  }
+  .white.piece, .black.piece{
+    width: 30px;
+    height: 30px;
+  }
+}
+
+/* iPads, Tablets – 481px — 768px. */
+@media only screen and (min-width: 600px) {
+  .board {
+    grid-template-rows: repeat(8, 50px);
+    grid-template-columns: repeat(8, 50px);
+  }
+
+  .square {
+    max-width: 50px;
+    max-height: 50px;
+  }
+
+  .white.piece, .black.piece{
+    width: 40px;
+    height: 40px;
+  }
+}
+
+/* Small screens, laptops – 769px — 1024px */
+@media only screen and (min-width: 769px) {
+  .board {
+    grid-template-rows: repeat(8, 80px);
+    grid-template-columns: repeat(8, 80px);
+  }
+
+  .square {
+    max-width: 80px;
+    max-height: 80px;
+  }
+
+  .white.piece, .black.piece{
+    width: 40px;
+    height: 40px;
+  }
+}
+
+/* Desktops, large screens – 1025px */
+@media only screen and (min-width: 1025px) {
+  .board {
+    grid-template-rows: repeat(8, 100px);
+    grid-template-columns: repeat(8, 100px);
+  }
+
+  .square {
+    max-width: 100px;
+    max-height: 100px;
+  }
+  .white.piece, .black.piece{
+    width: 70px;
+    height: 70px;
+  }
+}
