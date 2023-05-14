@@ -15,7 +15,7 @@ import { UpdatePieces } from '../../redux/piecesReducer/actions';
 
 function ChessBoard() {
   const rows = ['8', '7', '6', '5', '4', '3', '2', '1'];
-  const cols = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'];
+  const cols = ['8', '7', '6', '5', '4', '3', '2', '1'];
 
   const [playerTurn, setPlayerTurn] = useState(true);
   const pieces = useSelector((state) => state);
@@ -24,12 +24,41 @@ function ChessBoard() {
   const [move, setMove] = useState({ from: '', to: '' });
   const [selectedPiece, setSelectedPiece] = useState(null);
 
-  function handleMove(square) {
-    if (selectedPiece) {
+
+  function checkMovesForSinglePiece(){
+
+
+
+  }
+
+
+  const checkAllowedMoves = (piece, targetSquare) => {
+
+    checkMovesForSinglePiece();
+
+
+    if(pieces[targetSquare] !== undefined){
+      // check if the target square contian friendly piece or enemy peice;
+      if(pieces[targetSquare].color === piece.color){
+        return false; 
+      }
+    }
+    return true; 
+  }
+
+  function handleMove(square, row, col) {
+    
+    
+    if (selectedPiece && checkAllowedMoves(pieces[selectedPiece], square))  {
+      console.log('target sqare ' + square );
       chnageMoveNumber(2, square);
       // create a new object with updated keys and values
       const updatedPieces = Object.keys(pieces).reduce((result, key) => {
         if (key === selectedPiece) {
+          
+          //get the eaten piece
+          console.log(pieces[square]);
+
           result[square] = pieces[selectedPiece];
         } else if (key !== square) {
           result[key] = pieces[key];
@@ -40,6 +69,7 @@ function ChessBoard() {
       dispatch(UpdatePieces(updatedPieces));
       setSelectedPiece(null);
     } else {
+    console.log('current sqare ' + square );
       chnageMoveNumber(1, square);
       setSelectedPiece(square);
     }
@@ -82,7 +112,7 @@ function ChessBoard() {
               key={square}
               id={square}
               className={`square ${isBlackSquare ? 'black' : 'white'}`}
-              onClick={() => handleMove(square)}
+              onClick={() => handleMove(square, row, col)}
             >
               {piece && <Piece color={piece.color} type={piece.type} />}
               {!piece && square}
