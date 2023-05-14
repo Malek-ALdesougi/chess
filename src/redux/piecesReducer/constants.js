@@ -1,0 +1,1 @@
+export const UPDATE_PIECES = 'UPDATE_PIECES';

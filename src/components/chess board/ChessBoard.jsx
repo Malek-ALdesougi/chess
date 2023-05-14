@@ -1,54 +1,32 @@
-import Piece from '../pieces/piece';
-import { useEffect, useState } from 'react';
+//style sheet
 import './styel.css';
+
+//react
+import { useEffect, useState } from 'react';
+
+//component
+import Piece from '../pieces/piece';
+
+//redux
+import { useDispatch, useSelector } from 'react-redux';
+
+//action
+import { UpdatePieces } from '../../redux/piecesReducer/actions';
 
 function ChessBoard() {
   const rows = ['8', '7', '6', '5', '4', '3', '2', '1'];
   const cols = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'];
 
-  const [pieces, setPieces] = useState({
-    a1: { color: 'white', type: 'rook', allowdMoves: {} },
-    b1: { color: 'white', type: 'knight', allowdMoves: {} },
-    c1: { color: 'white', type: 'bishop', allowdMoves: {} },
-    d1: { color: 'white', type: 'queen', allowdMoves: {} },
-    e1: { color: 'white', type: 'king', allowdMoves: {} },
-    f1: { color: 'white', type: 'bishop', allowdMoves: {} },
-    g1: { color: 'white', type: 'knight', allowdMoves: {} },
-    h1: { color: 'white', type: 'rook', allowdMoves: {} },
-    a2: { color: 'white', type: 'pawn', allowdMoves: {} },
-    b2: { color: 'white', type: 'pawn', allowdMoves: {} },
-    c2: { color: 'white', type: 'pawn', allowdMoves: {} },
-    d2: { color: 'white', type: 'pawn', allowdMoves: {} },
-    e2: { color: 'white', type: 'pawn', allowdMoves: {} },
-    f2: { color: 'white', type: 'pawn', allowdMoves: {} },
-    g2: { color: 'white', type: 'pawn', allowdMoves: {} },
-    h2: { color: 'white', type: 'pawn', allowdMoves: {} },
-    a8: { color: 'black', type: 'rook', allowdMoves: {} },
-    b8: { color: 'black', type: 'knight', allowdMoves: {} },
-    c8: { color: 'black', type: 'bishop', allowdMoves: {} },
-    d8: { color: 'black', type: 'queen', allowdMoves: {} },
-    e8: { color: 'black', type: 'king', allowdMoves: {} },
-    f8: { color: 'black', type: 'bishop', allowdMoves: {} },
-    g8: { color: 'black', type: 'knight', allowdMoves: {} },
-    h8: { color: 'black', type: 'rook', allowdMoves: {} },
-    a7: { color: 'black', type: 'pawn', allowdMoves: {} },
-    b7: { color: 'black', type: 'pawn', allowdMoves: {} },
-    c7: { color: 'black', type: 'pawn', allowdMoves: {} },
-    d7: { color: 'black', type: 'pawn', allowdMoves: {} },
-    e7: { color: 'black', type: 'pawn', allowdMoves: {} },
-    f7: { color: 'black', type: 'pawn', allowdMoves: {} },
-    g7: { color: 'black', type: 'pawn', allowdMoves: {} },
-    h7: { color: 'black', type: 'pawn', allowdMoves: {} },
-  });
-
   const [playerTurn, setPlayerTurn] = useState(true);
-
+  const pieces = useSelector((state) => state);
+  const dispatch = useDispatch();
   const [moveNumber, setMoveNumber] = useState(0);
   const [move, setMove] = useState({ from: '', to: '' });
   const [selectedPiece, setSelectedPiece] = useState(null);
 
   function handleMove(square) {
     if (selectedPiece) {
+      chnageMoveNumber(2, square);
       // create a new object with updated keys and values
       const updatedPieces = Object.keys(pieces).reduce((result, key) => {
         if (key === selectedPiece) {
@@ -59,21 +37,24 @@ function ChessBoard() {
         return result;
       }, {});
 
-      setPieces(updatedPieces);
+      dispatch(UpdatePieces(updatedPieces));
       setSelectedPiece(null);
     } else {
+      chnageMoveNumber(1, square);
       setSelectedPiece(square);
     }
+  }
 
+  function chnageMoveNumber(num, square) {
     // handle the number of moves available for each turn to the user
-    if (moveNumber === 0) {
-      setSelectedPiece(square);
+    if (num === 1) {
       setMoveNumber(1);
+      setSelectedPiece(square);
       setMove({ ...move, from: square });
-    } else if (moveNumber === 1) {
+    } else if (num === 2) {
       setMove({ ...move, to: square });
-      setMoveNumber(0);
       setPlayerTurn(!playerTurn);
+      setMoveNumber(0);
     }
   }
 
@@ -81,7 +62,6 @@ function ChessBoard() {
   useEffect(() => {
     setMove({ from: '', to: '' });
   }, [playerTurn]);
-
 
   const getPieceAt = (square) => {
     // Return the piece object for the given square to show it on the square
