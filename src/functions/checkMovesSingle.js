@@ -1,3 +1,4 @@
+/* eslint-disable no-fallthrough */
 
 
 
@@ -26,56 +27,33 @@ export function checkMovesForSinglePiece(thePiece, currentCol, currentRow, piece
     switch (thePiece?.type) {
         case 'pawn':
             if (thePiece.color === 'white') {
-
-                // check the position for the current pawn
-
-                // if the pawn has any piece in front of it ... it cant move to this square 
-                if(pieces[currentCol + handleOperations(currentRow, '1', '+')] !== undefined){
-                    allowedMoves.push( 
-                    handleOperations(currentCol, '1', '+') + handleOperations(currentRow, '1', '+'),
-                    handleOperations(currentCol, '1', '-') + handleOperations(currentRow, '1', '+'))
+                // ============== check all available move for the white pawn at any postion ===================
+                if (pieces[currentCol + handleOperations(currentRow, '1', '+')] === undefined) {
+                    if (thePiece.basePostion === true) {
+                        allowedMoves.push(currentCol + handleOperations(currentRow, '2', '+'),
+                            currentCol + handleOperations(currentRow, '1', '+'))
+                        pieces[currentCol + currentRow].basePostion = false;
+                    } else {
+                        allowedMoves.push(currentCol + handleOperations(currentRow, '1', '+'))
+                    }
                 }
 
-                //TODO: change the base position for the pawn after first move;
-                if(thePiece.basePostion === true){
-                    allowedMoves.push(currentCol + handleOperations(currentRow, '2', '+'))
+                // check if the pawn can eat at the country levels 
+                if (pieces[handleOperations(currentCol, '1', '+') + handleOperations(currentRow, '1', '+')]?.color === 'black') {
+                    allowedMoves.push(handleOperations(currentCol, '1', '+') + handleOperations(currentRow, '1', '+'));
                 }
-                allowedMoves.push(
-                    //up move when its not in the base position;
-                    currentCol + handleOperations(currentRow, '1', '+'),
-                    //left & right moves
-                    handleOperations(currentCol, '1', '+') + handleOperations(currentRow, '1', '+'),
-                    handleOperations(currentCol, '1', '-') + handleOperations(currentRow, '1', '+'));
-                console.log('white pawn');
+                if (pieces[handleOperations(currentCol, '1', '-') + handleOperations(currentRow, '1', '+')]?.color === 'black') {
+                    allowedMoves.push(handleOperations(currentCol, '1', '-') + handleOperations(currentRow, '1', '+'))
+                }
+
+                return allowedMoves;
             } else {
                 console.log('black pawn');
             }
+        // ============== check all available move for the white pawn at any postion ===================
 
-
-
-            //the pawn can't move forward at all if there any pieces
-            if (pieces[currentCol + eval(`${currentRow} + 1`)] !== undefined) {
-                return allowedMoves;
-            } else if (thePiece.color === 'white' && thePiece.basePostion) {
-                //   return  allowedMoves.push(
-                //     //   `${eval(`${currentCol} + 1`)}` + `${eval(`${currentCol} + 1 `)}`,
-                //       handleOperations(currentCol, '1', '+') + handleOperations(currentRow, '1', '+'), 
-                //     //   currentCol + `${eval(`${currentRow} + 2`)}`,
-                //      currentCol + handleOperations(currentRow, '2', '+'), 
-                //     // `${eval(`${currentCol} + 1`)}` + `${eval(`${currentRow} + 1`)}`)
-                //      handleOperations(currentCol, '1', '-') + handleOperations(currentRow, '1', '+'));
-                //     // allowedMoves
-                //     //the pawn can't move forward at all if there any pieces
-                //     // )
-            } else {
-                return allowedMoves.push(currentCol + eval(`${currentRow} + 1`));
-            }
 
         default:
             return allowedMoves;
     }
-
-    // console.log(thePiece);
-    // console.log(currentCol);
-    // console.log(currentRow);
 }
