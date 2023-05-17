@@ -1,12 +1,13 @@
-
-
-
 /* eslint-disable no-fallthrough */
 
-function handleNewPosition(str1, str2, color) {
+
+let allowedMoves = [];
+
+
+function handleNewPosition(col, row, color) {
     let operator;
-    const num1 = parseInt(str1);
-    const num2 = parseInt(str2);
+    const num1 = parseInt(col);
+    const num2 = parseInt(row);
     let result = num1 + num2;
 
     // decide white operator to use
@@ -27,10 +28,10 @@ function handleNewPosition(str1, str2, color) {
     return result.toString();
 }
 
-function handleNewPositionTwo(str1, str2, operator) {
+function handleNewPositionTwo(col, row, operator) {
 
-    const num1 = parseInt(str1);
-    const num2 = parseInt(str2);
+    const num1 = parseInt(col);
+    const num2 = parseInt(row);
     let result = num1 + num2;
 
     if (operator === '+') {
@@ -45,11 +46,12 @@ function handleNewPositionTwo(str1, str2, operator) {
 
 }
 
+
 export function checkMovesForSinglePiece(thePiece, currentCol, currentRow, pieces) {
 
-    const allowedMoves = [];
     switch (thePiece?.type) {
         case 'pawn':
+            allowedMoves = [];
             // ============== check all available move for the white pawn at any postion ===================
             if (pieces[currentCol + handleNewPosition(currentRow, '1', thePiece.color)] === undefined) {
                 if (thePiece.basePostion === true) {
@@ -69,7 +71,7 @@ export function checkMovesForSinglePiece(thePiece, currentCol, currentRow, piece
                 if (pieces[handleNewPositionTwo(currentCol, '1', '-') + handleNewPositionTwo(currentRow, '1', '+')]?.color === 'black') {
                     allowedMoves.push(handleNewPositionTwo(currentCol, '1', '-') + handleNewPositionTwo(currentRow, '1', '+'))
                 }
-            }else if(thePiece?.color === 'black'){
+            } else if (thePiece?.color === 'black') {
 
                 if (pieces[handleNewPositionTwo(currentCol, '1', '+') + handleNewPositionTwo(currentRow, '1', '-')]?.color === 'white') {
                     allowedMoves.push(handleNewPositionTwo(currentCol, '1', '+') + handleNewPositionTwo(currentRow, '1', '-'));
@@ -78,11 +80,28 @@ export function checkMovesForSinglePiece(thePiece, currentCol, currentRow, piece
                     allowedMoves.push(handleNewPositionTwo(currentCol, '1', '-') + handleNewPositionTwo(currentRow, '1', '-'))
                 }
             }
-                return allowedMoves;
-
-        // ============== check all available move for the white pawn at any postion ===================
+            return allowedMoves;
 
         case 'knight':
+            allowedMoves = [];
+            allowedMoves.push(eval(`${currentCol} + 8`) + '' + eval(`${currentRow} - 2`),
+                eval(`${currentCol} - 1`) + '' + eval(`${currentRow} - 2`),
+                eval(`${currentCol} + 1`) + '' + eval(`${currentRow} + 2`),
+                eval(`${currentCol} - 1`) + '' + eval(`${currentRow} + 2`),
+                eval(`${currentCol} + 2`) + '' + eval(`${currentRow} + 1`),
+                eval(`${currentCol} + 2`) + '' + eval(`${currentRow} - 1`),
+                eval(`${currentCol} - 2`) + '' + eval(`${currentRow} + 1`),
+                eval(`${currentCol} - 2`) + '' + eval(`${currentRow} - 1`))
+
+            // check if the piece is friend pice to remove from the allowed moves
+            let filterdAllowedMoves = allowedMoves.filter((move) => pieces[move]?.color !== thePiece.color)
+            return filterdAllowedMoves;
+            case 'bishop' : 
+            allowedMoves = [];
+            // first thing check if the right and left position are empty or friend or enemy;
+            // if()
+
+
 
         default:
             return allowedMoves;
