@@ -28,6 +28,8 @@ function ChessBoard() {
   const [allowedMoves, setAllowedMoves] = useState([]);
   const [piecesTrash, setPiecesTrash] = useState([]);
 
+  //TODO: handle when the player want to play another piece instead of the current one
+
   const checkPlayerTurn = (col, row) => {
     // check the player turn
     if (playerTurn === false && pieces[col + row]?.color === 'white') {
