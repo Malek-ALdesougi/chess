@@ -79,11 +79,13 @@ function bishopNewPositionUpLeftDownRight(col, operatorOne, row, operatorTwo, in
         newCol = num1 + increaseValue;
         newRow = num2 - increaseValue;
         result = newCol.toString() + newRow.toString();
+        console.log(result);
         return result;
     } else {
         newCol = num1 - increaseValue;
         newRow = num2 + increaseValue;
         result = newCol.toString() + newRow.toString();
+        console.log(result);
         return result;
     }
 }
@@ -100,6 +102,129 @@ function rookNewPosition(columnOrRow, operator, value) {
     }
     return result.toString();
 
+}
+
+
+function handleBishopLogic(currentCol, currentRow, pieces, thePiece) {
+    // first thing check if the right and left position are empty or friend or enemy;
+    let flagA = true;
+    let flagB = true;
+    let flagC = true;
+    let flagD = true;
+    for (let i = 1; i <= 8; i++) {
+
+        if (flagA) {
+            if (pieces[bishopNewPositionUpRightDownLeft(currentCol, currentRow, '+', i)] !== undefined) {
+                flagA = false;
+            }
+
+            if (pieces[bishopNewPositionUpRightDownLeft(currentCol, currentRow, '+', i)] === undefined ||
+                pieces[bishopNewPositionUpRightDownLeft(currentCol, currentRow, '+', i)]?.color !== thePiece.color) {
+                allowedMoves.push(bishopNewPositionUpRightDownLeft(currentCol, currentRow, '+', i))
+            }
+        }
+
+        if (flagB) {
+
+            if (pieces[bishopNewPositionUpRightDownLeft(currentCol, currentRow, '-', i)] !== undefined) {
+                flagB = false;
+            }
+
+            if (pieces[bishopNewPositionUpRightDownLeft(currentCol, currentRow, '-', i)] === undefined ||
+                pieces[bishopNewPositionUpRightDownLeft(currentCol, currentRow, '-', i)]?.color !== thePiece.color) {
+                allowedMoves.push(bishopNewPositionUpRightDownLeft(currentCol, currentRow, '-', i))
+            }
+        }
+
+        //handle UP-LEFT && DOWN-RIGHT DIRECTIONS
+        if (flagC) {
+
+            if (pieces[bishopNewPositionUpLeftDownRight(currentCol, '-', currentRow, '+', i)] !== undefined) {
+                flagC = false;
+            }
+
+            if (pieces[bishopNewPositionUpLeftDownRight(currentCol, '-', currentRow, '+', i)] === undefined ||
+                pieces[bishopNewPositionUpLeftDownRight(currentCol, '-', currentRow, '+', i)]?.color !== thePiece.color) {
+                allowedMoves.push(bishopNewPositionUpLeftDownRight(currentCol, '-', currentRow, '+', i))
+            }
+        }
+
+        if (flagD) {
+
+            if (pieces[bishopNewPositionUpLeftDownRight(currentCol, '+', currentRow, '-', i)] !== undefined) {
+                flagD = false;
+            }
+
+            if (pieces[bishopNewPositionUpLeftDownRight(currentCol, '+', currentRow, '-', i)] === undefined ||
+                pieces[bishopNewPositionUpLeftDownRight(currentCol, '+', currentRow, '-', i)]?.color !== thePiece.color) {
+                allowedMoves.push(bishopNewPositionUpLeftDownRight(currentCol, '+', currentRow, '-', i))
+            }
+        }
+    }
+
+    return allowedMoves;
+
+
+}
+
+
+function handleRookLogic(currentCol, currentRow, pieces, thePiece) {
+    // maximum squares the rook can move to up-down-right-left is 8 
+    //check the available moves within all directions
+    let flagUp = true;
+    let flagDown = true;
+    let flagRight = true;
+    let flagLeft = true;
+
+    for (let i = 1; i <= 8; i++) {
+
+        // up
+        if (flagUp) {
+
+            if (pieces[currentCol + rookNewPosition(currentRow, '+', i)] === undefined ||
+                pieces[currentCol + rookNewPosition(currentRow, '+', i)]?.color !== thePiece.color) {
+                allowedMoves.push(currentCol + rookNewPosition(currentRow, '+', i))
+            } else {
+                flagUp = false;
+            }
+        }
+
+        // down
+        if (flagDown) {
+
+            if (pieces[currentCol + rookNewPosition(currentRow, '-', i)] === undefined ||
+                pieces[currentCol + rookNewPosition(currentRow, '-', i)]?.color !== thePiece.color) {
+                allowedMoves.push(currentCol + rookNewPosition(currentRow, '-', i))
+            } else {
+                flagDown = false;
+            }
+        }
+
+        // right
+        if (flagRight) {
+
+            if (pieces[rookNewPosition(currentCol, '+', i) + currentRow] === undefined ||
+                pieces[rookNewPosition(currentCol, '+', i) + currentRow]?.color !== thePiece.color) {
+                allowedMoves.push(rookNewPosition(currentCol, '+', i) + currentRow)
+            } else {
+                flagRight = false;
+            }
+        }
+
+        // left
+        if (flagLeft) {
+
+            if (pieces[rookNewPosition(currentCol, '-', i) + currentRow] === undefined ||
+                pieces[rookNewPosition(currentCol, '-', i) + currentRow]?.color !== thePiece.color) {
+                allowedMoves.push(rookNewPosition(currentCol, '-', i) + currentRow)
+            } else {
+                flagLeft = false;
+            }
+        }
+
+    }
+
+    return allowedMoves;
 }
 
 
@@ -152,132 +277,19 @@ export function checkMovesForSinglePiece(thePiece, currentCol, currentRow, piece
             // check if the piece is friend pice to remove from the allowed moves
             let filterdAllowedMoves = allowedMoves.filter((move) => pieces[move]?.color !== thePiece.color)
             return filterdAllowedMoves;
+        // chain the bishop moves with
         case 'bishop':
             allowedMoves = [];
-            // first thing check if the right and left position are empty or friend or enemy;
-            let flagA = true;
-            let flagB = true;
-            let flagC = true;
-            let flagD = true;
-
-            // MAXIMUM SQUARES THE BISHOP CAN MOVE IS ''8''
-            for (let i = 1; i <= 8; i++) {
-
-                //handle UP-RIGHT && DOWN-LEFT DIRECTIONS
-                if (flagA) {
-                    if (pieces[bishopNewPositionUpRightDownLeft(currentCol, currentRow, '+', i)] !== undefined) {
-                        flagA = false;
-                    }
-
-                    if (pieces[bishopNewPositionUpRightDownLeft(currentCol, currentRow, '+', i)] === undefined ||
-                        pieces[bishopNewPositionUpRightDownLeft(currentCol, currentRow, '+', i)]?.color !== thePiece.color) {
-                        allowedMoves.push(bishopNewPositionUpRightDownLeft(currentCol, currentRow, '+', i))
-                    }
-                }
-
-                if (flagB) {
-
-                    if (pieces[bishopNewPositionUpRightDownLeft(currentCol, currentRow, '-', i)] !== undefined) {
-                        flagB = false;
-                    }
-
-                    if (pieces[bishopNewPositionUpRightDownLeft(currentCol, currentRow, '-', i)] === undefined ||
-                        pieces[bishopNewPositionUpRightDownLeft(currentCol, currentRow, '-', i)]?.color !== thePiece.color) {
-                        allowedMoves.push(bishopNewPositionUpRightDownLeft(currentCol, currentRow, '-', i))
-                    }
-                }
-
-                //handle UP-LEFT && DOWN-RIGHT DIRECTIONS
-                if (flagC) {
-
-                    if (pieces[bishopNewPositionUpLeftDownRight(currentCol, '-', currentRow, '+', i)] !== undefined) {
-                        flagC = false;
-                    }
-
-                    if (pieces[bishopNewPositionUpLeftDownRight(currentCol, '-', currentRow, '+', i)] === undefined ||
-                        pieces[bishopNewPositionUpLeftDownRight(currentCol, '-', currentRow, '+', i)]?.color !== thePiece.color) {
-                        allowedMoves.push(bishopNewPositionUpLeftDownRight(currentCol, '-', currentRow, '+', i))
-                    }
-                }
-
-                if (flagD) {
-
-                    if (pieces[bishopNewPositionUpLeftDownRight(currentCol, '+', currentRow, '-', i)] !== undefined) {
-                        flagD = false;
-                    }
-
-                    if (pieces[bishopNewPositionUpLeftDownRight(currentCol, '+', currentRow, '-', i)] === undefined ||
-                        pieces[bishopNewPositionUpLeftDownRight(currentCol, '+', currentRow, '-', i)]?.color !== thePiece.color) {
-                        allowedMoves.push(bishopNewPositionUpLeftDownRight(currentCol, '+', currentRow, '-', i))
-                    }
-                }
-
-            }
-            return allowedMoves;
-
+            return handleBishopLogic(currentCol, currentRow, pieces, thePiece);
         case 'rook':
             allowedMoves = [];
-            // maximum squares the rook can move to up-down-right-left is 8 
-            //check the available moves within all directions
-            let flagUp = true;
-            let flagDown = true;
-            let flagRight = true;
-            let flagLeft = true;
-
-            for (let i = 1; i <= 8; i++) {
-
-                // up
-                if (flagUp) {
-
-                    if (pieces[currentCol + rookNewPosition(currentRow, '+', i)] === undefined ||
-                        pieces[currentCol + rookNewPosition(currentRow, '+', i)]?.color !== thePiece.color) {
-                        allowedMoves.push(currentCol + rookNewPosition(currentRow, '+', i))
-                    } else {
-                        flagUp = false;
-                    }
-                }
-
-                // down
-                if (flagDown) {
-
-                    if (pieces[currentCol + rookNewPosition(currentRow, '-', i)] === undefined ||
-                        pieces[currentCol + rookNewPosition(currentRow, '-', i)]?.color !== thePiece.color) {
-                        allowedMoves.push(currentCol + rookNewPosition(currentRow, '-', i))
-                    } else {
-                        flagDown = false;
-                    }
-                }
-
-                // right
-                if (flagRight) {
-
-                    if (pieces[rookNewPosition(currentCol, '+', i) + currentRow] === undefined ||
-                        pieces[rookNewPosition(currentCol, '+', i) + currentRow]?.color !== thePiece.color) {
-                        allowedMoves.push(rookNewPosition(currentCol, '+', i) + currentRow)
-                    } else {
-                        flagRight = false;
-                    }
-                }
-
-                // left
-                if (flagLeft) {
-
-                    if (pieces[rookNewPosition(currentCol, '-', i) + currentRow] === undefined ||
-                        pieces[rookNewPosition(currentCol, '-', i) + currentRow]?.color !== thePiece.color) {
-                        allowedMoves.push(rookNewPosition(currentCol, '-', i) + currentRow)
-                    } else {
-                        flagLeft = false;
-                    }
-                }
-
-            }
-
-            return allowedMoves;
-
-
-
-
-
+            return handleRookLogic(currentCol, currentRow, pieces, thePiece);
+        case 'queen':
+            allowedMoves = [];
+            allowedMoves = handleBishopLogic(currentCol, currentRow, pieces, thePiece).concat(handleRookLogic(currentCol, currentRow, pieces, thePiece));
+            let filteredAllowdMoves2 = allowedMoves.filter((move) => move.length <= 2 && !move.includes('-'));
+            return filteredAllowdMoves2;
+        case 'king':
 
         default:
             return allowedMoves;
