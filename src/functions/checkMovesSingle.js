@@ -89,6 +89,20 @@ function bishopNewPositionUpLeftDownRight(col, operatorOne, row, operatorTwo, in
 }
 
 
+function rookNewPosition(columnOrRow, operator, value) {
+    let corlOrRowNub = parseInt(columnOrRow);
+    let result;
+
+    if (operator === '+') {
+        result = corlOrRowNub + value;
+    } else if (operator === '-') {
+        result = corlOrRowNub - value;
+    }
+    return result.toString();
+
+}
+
+
 export function checkMovesForSinglePiece(thePiece, currentCol, currentRow, pieces) {
 
     switch (thePiece?.type) {
@@ -126,7 +140,7 @@ export function checkMovesForSinglePiece(thePiece, currentCol, currentRow, piece
 
         case 'knight':
             allowedMoves = [];
-            allowedMoves.push(eval(`${currentCol} + 8`) + '' + eval(`${currentRow} - 2`),
+            allowedMoves.push(eval(`${currentCol} + 1`) + '' + eval(`${currentRow} - 2`),
                 eval(`${currentCol} - 1`) + '' + eval(`${currentRow} - 2`),
                 eval(`${currentCol} + 1`) + '' + eval(`${currentRow} + 2`),
                 eval(`${currentCol} - 1`) + '' + eval(`${currentRow} + 2`),
@@ -141,14 +155,12 @@ export function checkMovesForSinglePiece(thePiece, currentCol, currentRow, piece
         case 'bishop':
             allowedMoves = [];
             // first thing check if the right and left position are empty or friend or enemy;
-
-            //check the UP-RIGHT DIRECTION
-            // MAXIMUM UP-RIGHT SQUARES THE BISHOP CAN MOVE IS ''7''
             let flagA = true;
             let flagB = true;
             let flagC = true;
             let flagD = true;
 
+            // MAXIMUM SQUARES THE BISHOP CAN MOVE IS ''8''
             for (let i = 1; i <= 8; i++) {
 
                 //handle UP-RIGHT && DOWN-LEFT DIRECTIONS
@@ -175,13 +187,13 @@ export function checkMovesForSinglePiece(thePiece, currentCol, currentRow, piece
                     }
                 }
 
+                //handle UP-LEFT && DOWN-RIGHT DIRECTIONS
                 if (flagC) {
 
                     if (pieces[bishopNewPositionUpLeftDownRight(currentCol, '-', currentRow, '+', i)] !== undefined) {
                         flagC = false;
                     }
 
-                    //handle UP-LEFT && DOWN-RIGHT DIRECTIONS
                     if (pieces[bishopNewPositionUpLeftDownRight(currentCol, '-', currentRow, '+', i)] === undefined ||
                         pieces[bishopNewPositionUpLeftDownRight(currentCol, '-', currentRow, '+', i)]?.color !== thePiece.color) {
                         allowedMoves.push(bishopNewPositionUpLeftDownRight(currentCol, '-', currentRow, '+', i))
@@ -203,16 +215,67 @@ export function checkMovesForSinglePiece(thePiece, currentCol, currentRow, piece
             }
             return allowedMoves;
 
+        case 'rook':
+            allowedMoves = [];
+            // maximum squares the rook can move to up-down-right-left is 8 
+            //check the available moves within all directions
+            let flagUp = true;
+            let flagDown = true;
+            let flagRight = true;
+            let flagLeft = true;
 
-        // if (pieces[handleNewPositionBishop(currentCol, currentRow, '+', 1)] === undefined) {
-        //     console.log('your way is green 1');
-        //     if (pieces[handleNewPositionBishop(currentCol, currentRow, '+', 2)] === undefined) {
-        //         console.log('your way is green 2');
-        //     }
+            for (let i = 1; i <= 8; i++) {
 
-        // } else {
-        //     console.log('its blocked');
-        // }
+                // up
+                if (flagUp) {
+
+                    if (pieces[currentCol + rookNewPosition(currentRow, '+', i)] === undefined ||
+                        pieces[currentCol + rookNewPosition(currentRow, '+', i)]?.color !== thePiece.color) {
+                        allowedMoves.push(currentCol + rookNewPosition(currentRow, '+', i))
+                    } else {
+                        flagUp = false;
+                    }
+                }
+
+                // down
+                if (flagDown) {
+
+                    if (pieces[currentCol + rookNewPosition(currentRow, '-', i)] === undefined ||
+                        pieces[currentCol + rookNewPosition(currentRow, '-', i)]?.color !== thePiece.color) {
+                        allowedMoves.push(currentCol + rookNewPosition(currentRow, '-', i))
+                    } else {
+                        flagDown = false;
+                    }
+                }
+
+                // right
+                if (flagRight) {
+
+                    if (pieces[rookNewPosition(currentCol, '+', i) + currentRow] === undefined ||
+                        pieces[rookNewPosition(currentCol, '+', i) + currentRow]?.color !== thePiece.color) {
+                        allowedMoves.push(rookNewPosition(currentCol, '+', i) + currentRow)
+                    } else {
+                        flagRight = false;
+                    }
+                }
+
+                // left
+                if (flagLeft) {
+
+                    if (pieces[rookNewPosition(currentCol, '-', i) + currentRow] === undefined ||
+                        pieces[rookNewPosition(currentCol, '-', i) + currentRow]?.color !== thePiece.color) {
+                        allowedMoves.push(rookNewPosition(currentCol, '-', i) + currentRow)
+                    } else {
+                        flagLeft = false;
+                    }
+                }
+
+            }
+
+            return allowedMoves;
+
+
+
 
 
 
