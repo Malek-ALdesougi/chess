@@ -13,8 +13,10 @@ import { useDispatch, useSelector } from 'react-redux';
 //action
 import { UpdatePieces } from '../../redux/piecesReducer/actions';
 
-//function
+//functions
 import { checkMovesForSinglePiece } from '../../functions/checkMovesSingle';
+import { checkPlayerTurn } from '../../functions/checkPlayerTurn';
+import { checkIfmoveAllowed } from '../../functions/checkIfmoveAllowed';
 
 function ChessBoard() {
   const rows = ['8', '7', '6', '5', '4', '3', '2', '1'];
@@ -27,36 +29,28 @@ function ChessBoard() {
   const [selectedPiece, setSelectedPiece] = useState(null);
   const [allowedMoves, setAllowedMoves] = useState([]);
   const [piecesTrash, setPiecesTrash] = useState([]);
+  const [checkMate, setCheckMate] = useState({ white: false, black: false });
 
   //TODO: handle when the player want to play another piece instead of the current one
 
-  const checkPlayerTurn = (col, row) => {
-    // check the player turn
-    if (playerTurn === false && pieces[col + row]?.color === 'white') {
-      return alert("It's the Black turn now");
-    } else if (playerTurn === true && pieces[col + row]?.color === 'black') {
-      return alert("It's the White turn now");
-    }
+  const getPieceAt = (square) => {
+    // Return the piece object for the given square to show it on the square
+    return pieces[square];
   };
 
-  function checkIfmoveAllowed(col, row) {
-    console.log('from test function');
-    const result = allowedMoves.find((move) => move === col + row);
-
-    if (result) {
-      return true;
-    } else {
-      return false;
-    }
-  }
-
-
   function handleMove(square, col, row) {
-    // checkPlayerTurn(col, row); ///////////////////////// important function
-
+    let firstPick = square;
     if (selectedPiece) {
+      // allow the player to choose another piece to play
+      if (pieces[square]?.color === pieces[selectedPiece]?.color) {
+        setSelectedPiece(firstPick);
+        setAllowedMoves(
+          checkMovesForSinglePiece(pieces[col + row], col, row, pieces)
+        );
+      }
+
       //check if the moves is allowed to let the piece move or not
-      if (checkIfmoveAllowed(col, row)) {
+      if (checkIfmoveAllowed(col, row, allowedMoves)) {
         // create a new object with updated keys and values
         const updatedPieces = Object.keys(pieces).reduce((result, key) => {
           if (key === selectedPiece) {
@@ -70,23 +64,21 @@ function ChessBoard() {
           return result;
         }, {});
         dispatch(UpdatePieces(updatedPieces));
-        setSelectedPiece(null);
         //switch the turns
         setPlayerTurn(!playerTurn);
+        setSelectedPiece(null);
       }
     } else {
-      setAllowedMoves(
-        checkMovesForSinglePiece(pieces[col + row], col, row, pieces)
-      );
-      setSelectedPiece(square);
+      if (checkPlayerTurn(col, row, playerTurn, pieces)) {
+        setAllowedMoves(
+          checkMovesForSinglePiece(pieces[col + row], col, row, pieces)
+        );
+        setSelectedPiece(square);
+      }
     }
   }
-  console.log(allowedMoves);
 
-  const getPieceAt = (square) => {
-    // Return the piece object for the given square to show it on the square
-    return pieces[square];
-  };
+  console.log(allowedMoves);
 
   return (
     <div className="board">
@@ -105,7 +97,7 @@ function ChessBoard() {
               onClick={() => handleMove(square, col, row)}
             >
               {piece && <Piece color={piece.color} type={piece.type} />}
-              {!piece && square}
+              {/* {!piece && square} */}
             </div>
           );
         });
