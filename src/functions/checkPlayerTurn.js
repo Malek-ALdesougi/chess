@@ -1,5 +1,4 @@
 export const checkPlayerTurn = (col, row, playerTurn, pieces,square) => {
-    let firstPick = square;
     // check the player turn
     if (playerTurn === false && pieces[col + row]?.color === 'white') {
         alert("It's the Black turn now");
