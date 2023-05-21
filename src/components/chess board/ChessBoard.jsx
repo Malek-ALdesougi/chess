@@ -22,21 +22,36 @@ function ChessBoard() {
   const rows = ['8', '7', '6', '5', '4', '3', '2', '1'];
   const cols = ['1', '2', '3', '4', '5', '6', '7', '8'];
 
-  const [playerTurn, setPlayerTurn] = useState(true);
   const pieces = useSelector((state) => state);
   const dispatch = useDispatch();
-
+  
+  const [playerTurn, setPlayerTurn] = useState(true);
   const [selectedPiece, setSelectedPiece] = useState(null);
   const [allowedMoves, setAllowedMoves] = useState([]);
   const [piecesTrash, setPiecesTrash] = useState([]);
   const [checkMate, setCheckMate] = useState({ white: false, black: false });
+  const [currentPiece, setCurrentPiece] = useState({});
+  const [escapeAllowedMoves, setEscapeAllowedMoves] = useState([]);
 
-  //TODO: handle when the player want to play another piece instead of the current one
 
   const getPieceAt = (square) => {
     // Return the piece object for the given square to show it on the square
     return pieces[square];
   };
+
+  function pieceNextStepAllowedMoves(col, row, pieces) {
+    setAllowedMoves(checkMovesForSinglePiece(currentPiece, col, row, pieces));
+  }
+
+  useEffect(() => {
+    allowedMoves.map((move) => {
+      if (pieces[move]?.type === 'king' && pieces[move]?.color !== currentPiece?.color) {
+        // check mate
+        console.log('check mate !!! ');
+        currentPiece?.color === 'white' ? checkMate.black = true : checkMate.white = true;
+      }
+    });
+  }, [allowedMoves, checkMate, currentPiece?.color, pieces]);
 
   function handleMove(square, col, row) {
     let firstPick = square;
@@ -56,7 +71,9 @@ function ChessBoard() {
           if (key === selectedPiece) {
             //get the eaten piece
             pieces[square] !== undefined && piecesTrash.push(pieces[square]);
+            // know the last square the piece moved too. to check the new available moves immediatly
 
+            pieceNextStepAllowedMoves(col, row, pieces);
             result[square] = pieces[selectedPiece];
           } else if (key !== square) {
             result[key] = pieces[key];
@@ -74,6 +91,7 @@ function ChessBoard() {
           checkMovesForSinglePiece(pieces[col + row], col, row, pieces)
         );
         setSelectedPiece(square);
+        setCurrentPiece(pieces[square]);
       }
     }
   }
@@ -96,8 +114,8 @@ function ChessBoard() {
               className={`square ${isBlackSquare ? 'black' : 'white'}`}
               onClick={() => handleMove(square, col, row)}
             >
-              {piece && <Piece color={piece.color} type={piece.type} />}
-              {/* {!piece && square} */}
+              {piece && <Piece color={piece?.color} type={piece.type} />}
+              {!piece && square}
             </div>
           );
         });

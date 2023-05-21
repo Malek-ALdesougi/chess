@@ -79,13 +79,11 @@ function bishopNewPositionUpLeftDownRight(col, operatorOne, row, operatorTwo, in
         newCol = num1 + increaseValue;
         newRow = num2 - increaseValue;
         result = newCol.toString() + newRow.toString();
-        console.log(result);
         return result;
     } else {
         newCol = num1 - increaseValue;
         newRow = num2 + increaseValue;
         result = newCol.toString() + newRow.toString();
-        console.log(result);
         return result;
     }
 }
@@ -119,8 +117,7 @@ function handleBishopLogic(currentCol, currentRow, pieces, thePiece) {
             }
 
             if ((pieces[bishopNewPositionUpRightDownLeft(currentCol, currentRow, '+', i)] === undefined ||
-                pieces[bishopNewPositionUpRightDownLeft(currentCol, currentRow, '+', i)]?.color !== thePiece.color) &&
-                pieces[bishopNewPositionUpRightDownLeft(currentCol, currentRow, '+', i)]?.type !== 'king') {
+                pieces[bishopNewPositionUpRightDownLeft(currentCol, currentRow, '+', i)]?.color !== thePiece.color)){
                 allowedMoves.push(bishopNewPositionUpRightDownLeft(currentCol, currentRow, '+', i))
             }
         }
@@ -132,8 +129,7 @@ function handleBishopLogic(currentCol, currentRow, pieces, thePiece) {
             }
 
             if ((pieces[bishopNewPositionUpRightDownLeft(currentCol, currentRow, '-', i)] === undefined ||
-                pieces[bishopNewPositionUpRightDownLeft(currentCol, currentRow, '-', i)]?.color !== thePiece.color) &&
-                pieces[bishopNewPositionUpRightDownLeft(currentCol, currentRow, '-', i)]?.type !== 'king') {
+                pieces[bishopNewPositionUpRightDownLeft(currentCol, currentRow, '-', i)]?.color !== thePiece.color)) {
                 allowedMoves.push(bishopNewPositionUpRightDownLeft(currentCol, currentRow, '-', i))
             }
         }
@@ -146,8 +142,7 @@ function handleBishopLogic(currentCol, currentRow, pieces, thePiece) {
             }
 
             if ((pieces[bishopNewPositionUpLeftDownRight(currentCol, '-', currentRow, '+', i)] === undefined ||
-                pieces[bishopNewPositionUpLeftDownRight(currentCol, '-', currentRow, '+', i)]?.color !== thePiece.color) &&
-                pieces[bishopNewPositionUpLeftDownRight(currentCol, '-', currentRow, '+', i)]?.type !== 'king') {
+                pieces[bishopNewPositionUpLeftDownRight(currentCol, '-', currentRow, '+', i)]?.color !== thePiece.color)) {
                 allowedMoves.push(bishopNewPositionUpLeftDownRight(currentCol, '-', currentRow, '+', i))
             }
         }
@@ -159,14 +154,15 @@ function handleBishopLogic(currentCol, currentRow, pieces, thePiece) {
             }
 
             if ((pieces[bishopNewPositionUpLeftDownRight(currentCol, '+', currentRow, '-', i)] === undefined ||
-                pieces[bishopNewPositionUpLeftDownRight(currentCol, '+', currentRow, '-', i)]?.color !== thePiece.color) &&
-                pieces[bishopNewPositionUpLeftDownRight(currentCol, '+', currentRow, '-', i)]?.type !== 'king') {
+                pieces[bishopNewPositionUpLeftDownRight(currentCol, '+', currentRow, '-', i)]?.color !== thePiece.color)) {
                 allowedMoves.push(bishopNewPositionUpLeftDownRight(currentCol, '+', currentRow, '-', i))
             }
         }
     }
 
-    return allowedMoves;
+    const filterdAllowedMoves = allowedMoves.filter((move) => move.length < 3 && !move.includes('-'))
+
+    return filterdAllowedMoves;
 
 
 }
@@ -283,7 +279,7 @@ export function checkMovesForSinglePiece(thePiece, currentCol, currentRow, piece
                 eval(`${currentCol} - 2`) + '' + eval(`${currentRow} - 1`))
 
             // check if the piece is friend pice to remove from the allowed moves
-            let filterdAllowedMoves = allowedMoves.filter((move) => pieces[move]?.color !== thePiece.color && pieces[move]?.type !== 'king')
+            let filterdAllowedMoves = allowedMoves.filter((move) => pieces[move]?.color !== thePiece.color)
             return filterdAllowedMoves;
         // chain the bishop moves with
         case 'bishop':
