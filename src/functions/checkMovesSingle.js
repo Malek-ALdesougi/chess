@@ -293,7 +293,7 @@ export function checkMovesForSinglePiece(thePiece, currentCol, currentRow, piece
             allowedMoves = handleBishopLogic(currentCol, currentRow, pieces, thePiece).concat(handleRookLogic(currentCol, currentRow, pieces, thePiece));
             let filteredAllowdMoves2 = allowedMoves.filter((move) => move.length <= 2 && !move.includes('-'));
             return filteredAllowdMoves2;
-        case 'king':
+        case 'king': 
 
         default:
             return allowedMoves;
