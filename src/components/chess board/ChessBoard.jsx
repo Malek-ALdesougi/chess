@@ -2,7 +2,7 @@
 import './styel.css';
 
 //react
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 //component
 import Piece from '../pieces/piece';
@@ -17,6 +17,7 @@ import { UpdatePieces } from '../../redux/piecesReducer/actions';
 import { checkMovesForSinglePiece } from '../../functions/checkMovesSingle';
 import { checkPlayerTurn } from '../../functions/checkPlayerTurn';
 import { checkIfmoveAllowed } from '../../functions/checkIfmoveAllowed';
+import { AllowedMovesToEscapeCheckMate } from '../../functions/AllowedMovesToEscapeCheckMate';
 
 function ChessBoard() {
   const rows = ['8', '7', '6', '5', '4', '3', '2', '1'];
@@ -29,10 +30,13 @@ function ChessBoard() {
   const [selectedPiece, setSelectedPiece] = useState(null);
   const [allowedMoves, setAllowedMoves] = useState([]);
   const [piecesTrash, setPiecesTrash] = useState([]);
-  const [checkMate, setCheckMate] = useState({ white: false, black: false });
+  const [isCheckMate, setIsCheckMate] = useState({ white: false, black: false });
   const [currentPiece, setCurrentPiece] = useState({});
-  const [escapeAllowedMoves, setEscapeAllowedMoves] = useState([]);
+  const attackerPiece = useRef(null);
+  const [attackerCurrentSquare, setAttackerCurrentSquare] = useState('');
+  const [checkMateAllowedMoves, setCheckMateAllowedMoves] = useState({});
 
+  //TODO: handle when the uesr first click on undefiend square -----> the game is get craches;
 
   const getPieceAt = (square) => {
     // Return the piece object for the given square to show it on the square
@@ -44,14 +48,23 @@ function ChessBoard() {
   }
 
   useEffect(() => {
+    attackerPiece.current = currentPiece;
+  }, [currentPiece, isCheckMate])
+
+
+  useEffect(() => {
     allowedMoves.map((move) => {
       if (pieces[move]?.type === 'king' && pieces[move]?.color !== currentPiece?.color) {
+        currentPiece?.color === 'white' ? isCheckMate.black = true : isCheckMate.white = true;
         // check mate
-        console.log('check mate !!! ');
-        currentPiece?.color === 'white' ? checkMate.black = true : checkMate.white = true;
+        // here we need to set Allowed moves as return to the state ;
+        // TODO: SET THE ALLOWED MOVES TO NEXT UESR ---> ONLY THE MOVES WHICH BREAKE THE CHECK MATE !!!!!!
+        setCheckMateAllowedMoves(AllowedMovesToEscapeCheckMate(isCheckMate, attackerPiece.current, attackerCurrentSquare, pieces))
       }
     });
-  }, [allowedMoves, checkMate, currentPiece?.color, pieces]);
+  }, [isCheckMate, pieces]);
+
+
 
   function handleMove(square, col, row) {
     let firstPick = square;
@@ -59,20 +72,22 @@ function ChessBoard() {
       // allow the player to choose another piece to play
       if (pieces[square]?.color === pieces[selectedPiece]?.color) {
         setSelectedPiece(firstPick);
-        setAllowedMoves(
-          checkMovesForSinglePiece(pieces[col + row], col, row, pieces)
-        );
+        setAllowedMoves(checkMovesForSinglePiece(pieces[col + row], col, row, pieces));
       }
 
       //check if the moves is allowed to let the piece move or not
+      // and also check if the current setuation is checkMate or not
+      // because the allowed moves will be deferent in checkMate case 
+
       if (checkIfmoveAllowed(col, row, allowedMoves)) {
         // create a new object with updated keys and values
         const updatedPieces = Object.keys(pieces).reduce((result, key) => {
           if (key === selectedPiece) {
             //get the eaten piece
             pieces[square] !== undefined && piecesTrash.push(pieces[square]);
+            console.log('Attacker current square : ' + square);
+            setAttackerCurrentSquare(square);
             // know the last square the piece moved too. to check the new available moves immediatly
-
             pieceNextStepAllowedMoves(col, row, pieces);
             result[square] = pieces[selectedPiece];
           } else if (key !== square) {
@@ -87,9 +102,7 @@ function ChessBoard() {
       }
     } else {
       if (checkPlayerTurn(col, row, playerTurn, pieces)) {
-        setAllowedMoves(
-          checkMovesForSinglePiece(pieces[col + row], col, row, pieces)
-        );
+        setAllowedMoves(checkMovesForSinglePiece(pieces[col + row], col, row, pieces));
         setSelectedPiece(square);
         setCurrentPiece(pieces[square]);
       }
