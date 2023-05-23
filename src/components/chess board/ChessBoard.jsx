@@ -57,13 +57,14 @@ function ChessBoard() {
       if (pieces[move]?.type === 'king' && pieces[move]?.color !== currentPiece?.color) {
         currentPiece?.color === 'white' ? isCheckMate.black = true : isCheckMate.white = true;
         // check mate
-        // here we need to set Allowed moves as return to the state ;
-        // TODO: SET THE ALLOWED MOVES TO NEXT UESR ---> ONLY THE MOVES WHICH BREAKE THE CHECK MATE !!!!!!
-        setCheckMateAllowedMoves(AllowedMovesToEscapeCheckMate(isCheckMate, attackerPiece.current, attackerCurrentSquare, pieces))
+        console.log(move + ' is the current king square');
+        // TODO: we must check if isCheckmate or not to deciede check allowed moves on what the array OR the object
+        setCheckMateAllowedMoves(AllowedMovesToEscapeCheckMate(isCheckMate, attackerPiece.current, attackerCurrentSquare, move, pieces))
+
       }
     });
   }, [isCheckMate, pieces]);
-
+  
 
 
   function handleMove(square, col, row) {
