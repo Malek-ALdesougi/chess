@@ -1,4 +1,4 @@
-export function checkIfmoveAllowed(col, row, allowedMoves) {
+export function checkIfmoveAllowed(col, row, allowedMoves, checkMateAllowedMoves) {
 
 
     //TODO: THE ALLOWED MOVES COULD BE AN ARRAY IN THE NORMAL SETUATION
