@@ -81,17 +81,19 @@ export const AllowedMovesToEscapeCheckMate = (isCheckMate, attackerPiece, attack
     // all the enemy pieces allowed moves
     let enemyPiecesAllowedMoves = getEachEnemyPieceAllowedMoves(pieces, enemyColor);
 
-    kingPossibleMoves.map((kingPossibleleMove) => {
-        enemyPiecesAllowedMoves.map((enemySingleMove) => {
-            if (kingPossibleleMove !== enemySingleMove && pieces[kingPossibleleMove]?.color !== enemyColor && !kingPossibleleMove.includes('0')) {
-                kingAllowedMoves.push(kingPossibleleMove);
-            }
-        })
+    kingPossibleMoves.map((kingPossibleMove) => {
+        if (!enemyPiecesAllowedMoves.includes(kingPossibleMove) &&
+            pieces[kingPossibleMove]?.color !== enemyColor &&
+            !kingPossibleMove.includes('0')) {
+
+            kingAllowedMoves.push(kingPossibleMove);
+        }
+
     })
+
     let finalArray = Array.from(new Set(kingAllowedMoves))
 
-
-    return {...checkMateAllowedMoves, 'king' : finalArray}
+    return { ...checkMateAllowedMoves, 'king': finalArray }
 
 
     //TODO: THIS FUNCTION MUST RETURN THE OBJECT OF THE ALLOWED MOVES IN THE CHECK-MATE CASE ;
