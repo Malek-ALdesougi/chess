@@ -70,7 +70,7 @@ function getEachEnemyPieceAllowedMoves(pieces, enemyColor) {
 
 export const AllowedMovesToEscapeCheckMate = (isCheckMate, attackerPiece, attackerCurrentSquare, currentKingSquare, pieces) => {
 
-    // -----------------------  1   -------------------------
+    // <<<<<<<<<==========================================  1   ==========================================>>>>>>>>>>
 
     let enemyColor = isCheckMate.white === true ? 'white' : 'black';
     let col = currentKingSquare[0];
@@ -90,6 +90,12 @@ export const AllowedMovesToEscapeCheckMate = (isCheckMate, attackerPiece, attack
         }
 
     })
+
+    // <<<<<<<<==========================================  2   ==========================================>>>>>>>>>>
+
+
+
+
 
     let finalArray = Array.from(new Set(kingAllowedMoves))
 
