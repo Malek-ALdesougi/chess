@@ -25,12 +25,15 @@ function ChessBoard() {
 
   const pieces = useSelector((state) => state);
   const dispatch = useDispatch();
-  
+
   const [playerTurn, setPlayerTurn] = useState(true);
   const [selectedPiece, setSelectedPiece] = useState(null);
   const [allowedMoves, setAllowedMoves] = useState([]);
   const [piecesTrash, setPiecesTrash] = useState([]);
-  const [isCheckMate, setIsCheckMate] = useState({ white: false, black: false });
+  const [isCheckMate, setIsCheckMate] = useState({
+    white: false,
+    black: false,
+  });
   const [currentPiece, setCurrentPiece] = useState({});
   const attackerPiece = useRef(null);
   const [attackerCurrentSquare, setAttackerCurrentSquare] = useState('');
@@ -49,38 +52,55 @@ function ChessBoard() {
 
   useEffect(() => {
     attackerPiece.current = currentPiece;
-  }, [currentPiece, isCheckMate])
-
+  }, [currentPiece, isCheckMate]);
 
   useEffect(() => {
     allowedMoves.map((move) => {
-      if (pieces[move]?.type === 'king' && pieces[move]?.color !== currentPiece?.color) {
-        currentPiece?.color === 'white' ? isCheckMate.black = true : isCheckMate.white = true;
+      if (
+        pieces[move]?.type === 'king' &&
+        pieces[move]?.color !== currentPiece?.color
+      ) {
+        currentPiece?.color === 'white'
+          ? (isCheckMate.black = true)
+          : (isCheckMate.white = true);
         // check mate
         console.log(move + ' is the current king square');
         // TODO: we must check if isCheckmate or not to deciede check allowed moves on what the array OR the object
-        setCheckMateAllowedMoves(AllowedMovesToEscapeCheckMate(isCheckMate, attackerPiece.current, attackerCurrentSquare, move, pieces))
+        setCheckMateAllowedMoves(
+          AllowedMovesToEscapeCheckMate(
+            isCheckMate,
+            attackerPiece.current,
+            attackerCurrentSquare,
+            move,
+            pieces
+          )
+        );
       }
     });
   }, [isCheckMate, pieces]);
-  
-  console.log(checkMateAllowedMoves);
 
+  console.log(checkMateAllowedMoves);
 
   function handleMove(square, col, row) {
     let firstPick = square;
     if (selectedPiece) {
       // allow the player to choose another piece to play
       if (pieces[square]?.color === pieces[selectedPiece]?.color) {
-        setSelectedPiece(firstPick);
-        setAllowedMoves(checkMovesForSinglePiece(pieces[col + row], col, row, pieces));
+        setSelectedPiece(firstPick)
+       return setAllowedMoves(checkMovesForSinglePiece(pieces[col + row], col, row, pieces));
+         
       }
 
       //check if the moves is allowed to let the piece move or not
       // and also check if the current setuation is checkMate or not
-      // because the allowed moves will be deferent in checkMate case 
+      // because the allowed moves will be deferent in checkMate case
 
+      //TODO:  WE HAVE SOME IMPORTANT WORK HERE !!!
       if (checkIfmoveAllowed(col, row, allowedMoves)) {
+        if (pieces[selectedPiece]?.type === 'pawn') {
+          pieces[selectedPiece].basePostion = false;
+        }
+
         // create a new object with updated keys and values
         const updatedPieces = Object.keys(pieces).reduce((result, key) => {
           if (key === selectedPiece) {
@@ -103,7 +123,9 @@ function ChessBoard() {
       }
     } else {
       if (checkPlayerTurn(col, row, playerTurn, pieces)) {
-        setAllowedMoves(checkMovesForSinglePiece(pieces[col + row], col, row, pieces));
+        setAllowedMoves(
+          checkMovesForSinglePiece(pieces[col + row], col, row, pieces, isCheckMate)
+        );
         setSelectedPiece(square);
         setCurrentPiece(pieces[square]);
       }

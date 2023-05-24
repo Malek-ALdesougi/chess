@@ -35,6 +35,7 @@
   background-size: cover;
   background-size: 50px;
   background-repeat: no-repeat;
+  animation: show-stone .3s forwards;
 }
 
 .white.piece {
@@ -177,5 +178,14 @@
   .white.piece, .black.piece{
     width: 70px;
     height: 70px;
+  }
+}
+
+@keyframes show-stone {
+  from {
+    transform: scale(0);
+  }
+  to{
+    transform: scale(1);
   }
 }
