@@ -60,11 +60,11 @@ function ChessBoard() {
         console.log(move + ' is the current king square');
         // TODO: we must check if isCheckmate or not to deciede check allowed moves on what the array OR the object
         setCheckMateAllowedMoves(AllowedMovesToEscapeCheckMate(isCheckMate, attackerPiece.current, attackerCurrentSquare, move, pieces))
-
       }
     });
   }, [isCheckMate, pieces]);
   
+  console.log(checkMateAllowedMoves);
 
 
   function handleMove(square, col, row) {
