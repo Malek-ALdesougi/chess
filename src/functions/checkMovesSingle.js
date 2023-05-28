@@ -3,6 +3,7 @@
 
 let allowedMoves = [];
 let kingPossibleMoves = [];
+let kingColor = '';
 
 
 
@@ -231,105 +232,136 @@ function handleRookLogic(currentCol, currentRow, pieces, thePiece) {
 }
 
 function handleKingNormalMoves(currentCol, currentRow, pieces) {
-
+    allowedMoves = [];
+    kingPossibleMoves = [];
 
     let enemyColor = pieces[currentCol + currentRow]?.color === 'white' ? 'black' : 'white';
-
-    kingPossibleMoves = checkKingAllowedMoves(currentCol, currentRow, pieces);
+    kingColor = pieces[currentCol + currentRow]?.color;
 
     let enemyPiecesAllowedMoves = getEachEnemyPieceAllowedMoves(pieces, enemyColor);
 
 
-    kingPossibleMoves?.map((kingPossibleMove) => {
-        if (!enemyPiecesAllowedMoves.includes(kingPossibleMove) &&
-            pieces[kingPossibleMove]?.color !== enemyColor &&
-            !kingPossibleMove.includes('0')) {
+    kingPossibleMoves = checkKingAllowedMoves(currentCol, currentRow, pieces);
 
+
+    console.log(enemyPiecesAllowedMoves);
+    console.log(kingPossibleMoves);
+
+
+    kingPossibleMoves?.map((kingPossibleMove) => {
+        if (!enemyPiecesAllowedMoves.includes(kingPossibleMove)) {
             allowedMoves.push(kingPossibleMove);
         }
-
     })
 
-    console.log(allowedMoves);
-    return allowedMoves;
+    let filteredMoves = allowedMoves?.filter((move) => move.length <= 2 && !move.includes('0') && !move.includes('9'));
+
+    console.log(filteredMoves);
+
+    return filteredMoves;
 
 }
 
 
-function checkKingAllowedMoves(col, row) {
+function checkKingAllowedMoves(col, row, pieces) {
 
     //check the safty for THE EACH possible square for all direction around it
     let colNum = parseInt(col);
     let rowNum = parseInt(row);
     let possibleSquare;
 
-    for (let i = 1; i <= 8; i++) {
-        switch (i) {
-            case 1:
-                possibleSquare = colNum + (rowNum + 1).toString();
-                kingPossibleMoves.push(possibleSquare);
-                break;
+    if (pieces) {
 
-            case 2: possibleSquare = colNum + (rowNum - 1).toString();
-                kingPossibleMoves.push(possibleSquare);
-                break;
+        for (let i = 1; i <= 8; i++) {
+            switch (i) {
+                case 1:
+                    possibleSquare = colNum + (rowNum + 1).toString();
+                    if (pieces[possibleSquare]?.color !== kingColor) {
+                        kingPossibleMoves.push(possibleSquare);
+                    }
+                    break;
 
-            case 3: possibleSquare = (colNum - 1).toString() + rowNum;
-                kingPossibleMoves.push(possibleSquare);
-                break;
+                case 2: possibleSquare = colNum + (rowNum - 1).toString();
+                    if (pieces[possibleSquare]?.color !== kingColor) {
 
-            case 4: possibleSquare = (colNum + 1).toString() + rowNum;
-                kingPossibleMoves.push(possibleSquare);
-                break;
+                        kingPossibleMoves.push(possibleSquare);
+                    }
+                    break;
 
-            case 5: possibleSquare = (colNum - 1).toString() + (rowNum + 1).toString();
-                kingPossibleMoves.push(possibleSquare);
-                break;
+                case 3: possibleSquare = (colNum - 1).toString() + rowNum;
+                    if (pieces[possibleSquare]?.color !== kingColor) {
 
-            case 6: possibleSquare = (colNum + 1).toString() + (rowNum - 1).toString();
-                kingPossibleMoves.push(possibleSquare);
-                break;
+                        kingPossibleMoves.push(possibleSquare);
+                    }
+                    break;
 
-            case 7: possibleSquare = (colNum + 1).toString() + (rowNum + 1).toString();
-                kingPossibleMoves.push(possibleSquare);
-                break;
+                case 4: possibleSquare = (colNum + 1).toString() + rowNum;
+                    if (pieces[possibleSquare]?.color !== kingColor) {
 
-            case 8: possibleSquare = (colNum - 1).toString() + (rowNum - 1).toString();
-                kingPossibleMoves.push(possibleSquare);
-                break;
+                        kingPossibleMoves.push(possibleSquare);
+                    }
+                    break;
 
-            default: return kingPossibleMoves;
+                case 5: possibleSquare = (colNum - 1).toString() + (rowNum + 1).toString();
+                    if (pieces[possibleSquare]?.color !== kingColor) {
+
+                        kingPossibleMoves.push(possibleSquare);
+                    }
+                    break;
+
+                case 6: possibleSquare = (colNum + 1).toString() + (rowNum - 1).toString();
+                    if (pieces[possibleSquare]?.color !== kingColor) {
+
+                        kingPossibleMoves.push(possibleSquare);
+                    }
+                    break;
+
+                case 7: possibleSquare = (colNum + 1).toString() + (rowNum + 1).toString();
+                    if (pieces[possibleSquare]?.color !== kingColor) {
+
+                        kingPossibleMoves.push(possibleSquare);
+                    }
+                    break;
+
+                case 8: possibleSquare = (colNum - 1).toString() + (rowNum - 1).toString();
+                    if (pieces[possibleSquare]?.color !== kingColor) {
+
+                        kingPossibleMoves.push(possibleSquare);
+                    }
+                    break;
+
+                default: return kingPossibleMoves;
+            }
         }
     }
     return kingPossibleMoves;
 }
 
-let flagW = true;
-let flagB = true;
 
 function getEachEnemyPieceAllowedMoves(pieces, enemyColor) {
 
     let concatedArray = [];
+    let pawn = 'pawn';
+
     Object.keys(pieces)?.map(sinlgePiece => {
         if (pieces[sinlgePiece]?.color === enemyColor) {
 
-            pieces[sinlgePiece]?.color === 'white' ? flagW = false : flagB = false;
-
-            if (pieces[sinlgePiece]?.type === 'king' && (flagW || flagB)) {
-
-                concatedArray = [...concatedArray, ...checkMovesForSinglePiece(pieces[sinlgePiece], sinlgePiece[0], sinlgePiece[1], pieces)];
-
-            } else if (pieces[sinlgePiece]?.type !== 'king') {
-                concatedArray = [...concatedArray, ...checkMovesForSinglePiece(pieces[sinlgePiece], sinlgePiece[0], sinlgePiece[1], pieces)];
+            if (pieces[sinlgePiece]?.type === 'king') {
+                kingPossibleMoves = checkKingAllowedMoves(sinlgePiece[0], sinlgePiece[1], pieces)
+                concatedArray = [...concatedArray, ...kingPossibleMoves]
+                kingPossibleMoves = [];
             }
 
+            if (pieces[sinlgePiece]?.type !== 'king') {
+                concatedArray = [...concatedArray, ...checkMovesForSinglePiece(pieces[sinlgePiece], sinlgePiece[0], sinlgePiece[1], pieces, pawn)];
+            }
         }
-    });
+    })
     let filteredArray = concatedArray?.filter(item => !item.includes('0') && !item.includes('9') && item.length <= 2);
     return filteredArray;
 }
 
-export function checkMovesForSinglePiece(thePiece, currentCol, currentRow, pieces) {
+export function checkMovesForSinglePiece(thePiece, currentCol, currentRow, pieces, pawn) {
 
     switch (thePiece?.type) {
         case 'pawn':
@@ -347,6 +379,11 @@ export function checkMovesForSinglePiece(thePiece, currentCol, currentRow, piece
             // check if the pawn can eat at the country levels depending on its color '''''''
             if (thePiece?.color === 'white') {
 
+                if (pawn === 'pawn') {
+                    allowedMoves.push(handleNewPositionTwo(currentCol, '1', '+') + handleNewPositionTwo(currentRow, '1', '+'));
+                    allowedMoves.push(handleNewPositionTwo(currentCol, '1', '-') + handleNewPositionTwo(currentRow, '1', '+'))
+                }
+
                 if (pieces[handleNewPositionTwo(currentCol, '1', '+') + handleNewPositionTwo(currentRow, '1', '+')] !== undefined) {
                     allowedMoves.push(handleNewPositionTwo(currentCol, '1', '+') + handleNewPositionTwo(currentRow, '1', '+'));
                 }
@@ -354,6 +391,11 @@ export function checkMovesForSinglePiece(thePiece, currentCol, currentRow, piece
                     allowedMoves.push(handleNewPositionTwo(currentCol, '1', '-') + handleNewPositionTwo(currentRow, '1', '+'))
                 }
             } else if (thePiece?.color === 'black') {
+
+                if (pawn === 'pawn') {
+                    allowedMoves.push(handleNewPositionTwo(currentCol, '1', '+') + handleNewPositionTwo(currentRow, '1', '-'));
+                    allowedMoves.push(handleNewPositionTwo(currentCol, '1', '-') + handleNewPositionTwo(currentRow, '1', '-'))
+                }
 
                 if (pieces[handleNewPositionTwo(currentCol, '1', '+') + handleNewPositionTwo(currentRow, '1', '-')] !== undefined) {
                     allowedMoves.push(handleNewPositionTwo(currentCol, '1', '+') + handleNewPositionTwo(currentRow, '1', '-'));
@@ -394,7 +436,6 @@ export function checkMovesForSinglePiece(thePiece, currentCol, currentRow, piece
             console.log('start king');
             allowedMoves = [];
             return handleKingNormalMoves(currentCol, currentRow, pieces);
-
 
 
         default:
