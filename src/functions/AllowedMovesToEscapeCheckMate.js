@@ -104,6 +104,8 @@ const checkIfAttackerCouldBeEaten = (attackerPiece, attackerCurrentSquare, piece
 
 const checkIfCanAnyPieceBlock = (attackerPiece, attackerCurrentSquare, currentKingSquare, pieces) => {
 
+    let defendableSquares = [];
+
     //need to check if i can move any of my pieces to be in the attacker allowed moves to block him
 
     // When want to block ---> the attacker only could be (queen, bishop, pawn, rook)
@@ -113,23 +115,107 @@ const checkIfCanAnyPieceBlock = (attackerPiece, attackerCurrentSquare, currentKi
 
 
     //bishop attack logic
-    if (Number(attackerCurrentSquare[0]) > Number(currentKingSquare[0]) && Number(attackerCurrentSquare[1]) > Number(currentKingSquare[1])) {
-        console.log('the enemy is top right');
-    } else if (Number(attackerCurrentSquare[0]) > Number(currentKingSquare[0]) && Number(attackerCurrentSquare[1]) < Number(currentKingSquare[1])) {
-        console.log('the enemy is bottom left');
-    }else if (Number(attackerCurrentSquare[0]) > Number(currentKingSquare[0]) && Number(attackerCurrentSquare[1]) < Number(currentKingSquare[1])) {
-        console.log('the enemy is bottom left');
+    if (Number(attackerCurrentSquare[0]) > Number(currentKingSquare[0]) && Number(attackerCurrentSquare[1]) < Number(currentKingSquare[1])) {
+        
+        let kingCol = Number(currentKingSquare[0]) + 1;
+        let kingRwo = Number(currentKingSquare[1]) - 1;
+        let square = ''
+
+        let attackerCol = Number(attackerCurrentSquare[0]);
+        let attackerRwo = Number(attackerCurrentSquare[1]);
+
+        for(let i = kingCol, x = kingRwo; i < attackerCol || x < attackerRwo; i++, x--){
+            let col = i.toString();
+            let row = x.toString();
+
+            square = col + row;
+
+            defendableSquares.push(square);
+        }
+
+        console.log(defendableSquares);
+        
+        console.log('the enemy is right bottom');
+    } 
+    
+    
+    
+    else if (Number(attackerCurrentSquare[0]) > Number(currentKingSquare[0]) && Number(attackerCurrentSquare[1]) > Number(currentKingSquare[1])) {
+
+        // we add 1 to execlude the king square 
+        let kingCol = Number(currentKingSquare[0]) + 1;
+        let kingRwo = Number(currentKingSquare[1]) + 1;
+        let square = ''
+
+        let attackerCol = Number(attackerCurrentSquare[0]);
+        let attackerRwo = Number(attackerCurrentSquare[1]);
+
+        for(let i = kingCol, x = kingRwo; i < attackerCol || x < attackerRwo; i++, x++){
+            let col = i.toString();
+            let row = x.toString();
+
+            square = col + row;
+
+            defendableSquares.push(square);
+        }
+
+        console.log('the enemy is right top');
+
+
+
+        
+    } else if (Number(attackerCurrentSquare[0]) < Number(currentKingSquare[0]) && Number(attackerCurrentSquare[1]) < Number(currentKingSquare[1])) {
+       
+        let kingCol = Number(currentKingSquare[0]) - 1;
+        let kingRwo = Number(currentKingSquare[1]) - 1;
+        let square = ''
+
+        let attackerCol = Number(attackerCurrentSquare[0]);
+        let attackerRwo = Number(attackerCurrentSquare[1]);
+
+        for(let i = kingCol, x = kingRwo; i > attackerCol || x > attackerRwo; i--, x--){
+            let col = i.toString();
+            let row = x.toString();
+
+            square = col + row;
+
+            defendableSquares.push(square);
+        }
+       
+        console.log(defendableSquares);
+       
+       
+        console.log('the enemy is left bottom');
+    } else if (Number(attackerCurrentSquare[0]) < Number(currentKingSquare[0]) && Number(attackerCurrentSquare[1]) > Number(currentKingSquare[1])) {
+       
+
+        let kingCol = Number(currentKingSquare[0]) - 1;
+        let kingRwo = Number(currentKingSquare[1]) + 1;
+        let square = ''
+
+        let attackerCol = Number(attackerCurrentSquare[0]);
+        let attackerRwo = Number(attackerCurrentSquare[1]);
+
+        for(let i = kingCol, x = kingRwo; i > attackerCol || x < attackerRwo; i--, x++){
+            let col = i.toString();
+            let row = x.toString();
+
+            square = col + row;
+
+            defendableSquares.push(square);
+        }
+
+        console.log(defendableSquares);
+       
+       
+        console.log('the enemy is left top');
     }
-    // else{
-    //     console.log('its to the left');
-    // }
 
+    console.log(defendableSquares);
 
-    // if(Number(currentKingSquare[1]) < Number(attackerCurrentSquare[1])){
-    //     console.log('its to the top');
-    // }
 
 }
+
 
 
 
