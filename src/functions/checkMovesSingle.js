@@ -4,7 +4,6 @@
 let allowedMoves = [];
 let kingPossibleMoves = [];
 let kingColor = '';
-let kingFrontSquare = '';
 
 
 
@@ -245,8 +244,6 @@ function handleKingNormalMoves(currentCol, currentRow, pieces) {
 
     allowedMoves = kingPossibleMoves.filter(move => !enemyPiecesAllowedMoves.includes(move) && move.length <= 2 && !move.includes('0') && !move.includes('9'));
 
-    //becuase the king front square is from the allowed moves to the pawn;
-    allowedMoves.push(kingFrontSquare);
     return allowedMoves;
 }
 
@@ -267,7 +264,7 @@ function checkKingAllowedMoves(col, row, pieces) {
                 //
                 case 1: possibleSquare = col + (rowNum + 1).toString();
                     if (pieces[possibleSquare]?.color !== kingColor) {
-                        kingFrontSquare = possibleSquare;
+
                         kingPossibleMoves.push(possibleSquare);
                     }
                     break;
@@ -370,13 +367,18 @@ export function checkMovesForSinglePiece(thePiece, currentCol, currentRow, piece
                         currentCol + handleNewPosition(currentRow, '1', thePiece.color))
                     // pieces[currentCol + currentRow].basePostion = false;
                 } else {
-                    allowedMoves.push(currentCol + handleNewPosition(currentRow, '1', thePiece.color))
+
+                    //to handle the pawn 
+                    if(pawn !== 'pawn'){
+                        allowedMoves.push(currentCol + handleNewPosition(currentRow, '1', thePiece.color))
+                    }
                 }
             }
             // check if the pawn can eat at the country levels depending on its color '''''''
             if (thePiece?.color === 'white') {
 
                 if (pawn === 'pawn') {
+                    console.log('its from check mate only');
                     allowedMoves.push(handleNewPositionTwo(currentCol, '1', '+') + handleNewPositionTwo(currentRow, '1', '+'));
                     allowedMoves.push(handleNewPositionTwo(currentCol, '1', '-') + handleNewPositionTwo(currentRow, '1', '+'))
                 }
@@ -390,6 +392,7 @@ export function checkMovesForSinglePiece(thePiece, currentCol, currentRow, piece
             } else if (thePiece?.color === 'black') {
 
                 if (pawn === 'pawn') {
+                    console.log('its from check mate only');
                     allowedMoves.push(handleNewPositionTwo(currentCol, '1', '+') + handleNewPositionTwo(currentRow, '1', '-'));
                     allowedMoves.push(handleNewPositionTwo(currentCol, '1', '-') + handleNewPositionTwo(currentRow, '1', '-'))
                 }
