@@ -111,13 +111,14 @@ const checkIfCanAnyPieceBlock = (attackerPiece, attackerCurrentSquare, currentKi
 
     console.log(currentKingSquare + " " + attackerCurrentSquare);
 
-    //rook attack logic
+
+    //bishop attack logic
     if (Number(attackerCurrentSquare[0]) > Number(currentKingSquare[0]) && Number(attackerCurrentSquare[1]) > Number(currentKingSquare[1])) {
-        console.log('its top right');
+        console.log('the enemy is top right');
     } else if (Number(attackerCurrentSquare[0]) > Number(currentKingSquare[0]) && Number(attackerCurrentSquare[1]) < Number(currentKingSquare[1])) {
-        console.log('its bottom left');
-        // }else if(Number(attackerCurrentSquare[0]) > Number(currentKingSquare[0]) && Number(attackerCurrentSquare[1]) < Number(currentKingSquare[1])) {
-        console.log('its bottom left');
+        console.log('the enemy is bottom left');
+    }else if (Number(attackerCurrentSquare[0]) > Number(currentKingSquare[0]) && Number(attackerCurrentSquare[1]) < Number(currentKingSquare[1])) {
+        console.log('the enemy is bottom left');
     }
     // else{
     //     console.log('its to the left');
@@ -137,7 +138,7 @@ const checkIfCanAnyPieceBlock = (attackerPiece, attackerCurrentSquare, currentKi
 
 export const AllowedMovesToEscapeCheckMate = (isCheckMate, attackerPiece, attackerCurrentSquare, currentKingSquare, pieces) => {
 
-    // <<<<<<<<<==========================================  1   ==========================================>>>>>>>>>>
+    // <<<<<<<<<==========================================  1- Normal Moves  ==========================================>>>>>>>>>>
 
     // rest the variable :
 
@@ -166,11 +167,12 @@ export const AllowedMovesToEscapeCheckMate = (isCheckMate, attackerPiece, attack
 
     })
 
-    // <<<<<<<<==========================================  2   ==========================================>>>>>>>>>>
+    // <<<<<<<<==========================================  2- Eaten   ==========================================>>>>>>>>>>
 
 
     checkIfAttackerCouldBeEaten(attackerPiece, attackerCurrentSquare, pieces, enemyColor);
 
+    // <<<<<<<<==========================================  3- Blocked   ==========================================>>>>>>>>>>
 
     checkIfCanAnyPieceBlock(attackerPiece, attackerCurrentSquare, currentKingSquare, pieces)
 
@@ -180,6 +182,8 @@ export const AllowedMovesToEscapeCheckMate = (isCheckMate, attackerPiece, attack
     let finalArray = Array.from(new Set(kingAllowedMoves))
 
     resultObject = { ...checkMateAllowedMoves, 'king': finalArray, ...defenders }
+
+    console.log(resultObject);
 
     return resultObject;
 

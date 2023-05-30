@@ -187,7 +187,7 @@ function handleRookLogic(currentCol, currentRow, pieces, thePiece) {
 
             if (pieces[currentCol + rookNewPosition(currentRow, '+', i)] === undefined) {
                 allowedMoves.push(currentCol + rookNewPosition(currentRow, '+', i))
-            } else if (pieces[currentCol + rookNewPosition(currentRow, '+', i)]?.color !== thePiece.color || pieces[rookNewPosition(currentCol, '-', i) + currentRow]?.color === thePiece.color) {
+            } else if (pieces[currentCol + rookNewPosition(currentRow, '+', i)]?.color !== thePiece.color || pieces[currentCol + rookNewPosition(currentRow, '+', i)]?.color === thePiece.color) {
                 allowedMoves.push(currentCol + rookNewPosition(currentRow, '+', i))
                 flagUp = false;
             } else { flagUp = false }
@@ -196,9 +196,9 @@ function handleRookLogic(currentCol, currentRow, pieces, thePiece) {
         // down
         if (flagDown) {
 
-            if (pieces[currentCol + rookNewPosition(currentRow, '-', i)] === undefined ) {
+            if (pieces[currentCol + rookNewPosition(currentRow, '-', i)] === undefined) {
                 allowedMoves.push(currentCol + rookNewPosition(currentRow, '-', i))
-            } else if (pieces[currentCol + rookNewPosition(currentRow, '-', i)]?.color !== thePiece.color || pieces[rookNewPosition(currentCol, '-', i) + currentRow]?.color === thePiece.color) {
+            } else if (pieces[currentCol + rookNewPosition(currentRow, '-', i)]?.color !== thePiece.color ||pieces[currentCol + rookNewPosition(currentRow, '-', i)]?.color === thePiece.color) {
                 allowedMoves.push(currentCol + rookNewPosition(currentRow, '-', i))
                 flagDown = false;
             } else { flagDown = false }
@@ -207,9 +207,9 @@ function handleRookLogic(currentCol, currentRow, pieces, thePiece) {
         // right
         if (flagRight) {
 
-            if (pieces[rookNewPosition(currentCol, '+', i) + currentRow] === undefined ) {
+            if (pieces[rookNewPosition(currentCol, '+', i) + currentRow] === undefined) {
                 allowedMoves.push(rookNewPosition(currentCol, '+', i) + currentRow)
-            } else if (pieces[rookNewPosition(currentCol, '+', i) + currentRow]?.color !== thePiece.color || pieces[rookNewPosition(currentCol, '-', i) + currentRow]?.color === thePiece.color) {
+            } else if (pieces[rookNewPosition(currentCol, '+', i) + currentRow]?.color !== thePiece.color || pieces[rookNewPosition(currentCol, '+', i) + currentRow]?.color === thePiece.color) {
                 allowedMoves.push(rookNewPosition(currentCol, '+', i) + currentRow)
                 flagRight = false;
             }
@@ -219,7 +219,7 @@ function handleRookLogic(currentCol, currentRow, pieces, thePiece) {
         // left
         if (flagLeft) {
 
-            if (pieces[rookNewPosition(currentCol, '-', i) + currentRow] === undefined ) {
+            if (pieces[rookNewPosition(currentCol, '-', i) + currentRow] === undefined) {
                 allowedMoves.push(rookNewPosition(currentCol, '-', i) + currentRow)
             } else if (pieces[rookNewPosition(currentCol, '-', i) + currentRow]?.color !== thePiece.color || pieces[rookNewPosition(currentCol, '-', i) + currentRow]?.color === thePiece.color) {
                 allowedMoves.push(rookNewPosition(currentCol, '-', i) + currentRow)
@@ -243,7 +243,6 @@ function handleKingNormalMoves(currentCol, currentRow, pieces) {
     kingPossibleMoves = checkKingAllowedMoves(currentCol, currentRow, pieces);
 
     allowedMoves = kingPossibleMoves.filter(move => !enemyPiecesAllowedMoves.includes(move) && move.length <= 2 && !move.includes('0') && !move.includes('9'));
-
     return allowedMoves;
 }
 
@@ -283,7 +282,7 @@ function checkKingAllowedMoves(col, row, pieces) {
                     }
                     break;
 
-                    //
+                //
                 case 4: possibleSquare = (colNum + 1).toString() + rowNum;
                     if (pieces[possibleSquare]?.color !== kingColor) {
 
@@ -291,7 +290,7 @@ function checkKingAllowedMoves(col, row, pieces) {
                     }
                     break;
 
-                    //
+                //
                 case 5: possibleSquare = (colNum - 1).toString() + (rowNum + 1).toString();
                     if (pieces[possibleSquare]?.color !== kingColor) {
                         console.log('up right added !!');
@@ -313,7 +312,7 @@ function checkKingAllowedMoves(col, row, pieces) {
                     }
                     break;
 
-                    //
+                //
                 case 8: possibleSquare = (colNum - 1).toString() + (rowNum - 1).toString();
                     if (pieces[possibleSquare]?.color !== kingColor) {
 
@@ -335,7 +334,7 @@ function checkKingAllowedMoves(col, row, pieces) {
 function getEachEnemyPieceAllowedMoves(pieces, enemyColor) {
 
     let concatedArray = [];
-    let pawn = 'pawn';
+    let chekker = 'king';
 
     Object.keys(pieces)?.map(sinlgePiece => {
         if (pieces[sinlgePiece]?.color === enemyColor) {
@@ -347,7 +346,7 @@ function getEachEnemyPieceAllowedMoves(pieces, enemyColor) {
             }
 
             if (pieces[sinlgePiece]?.type !== 'king') {
-                concatedArray = [...concatedArray, ...checkMovesForSinglePiece(pieces[sinlgePiece], sinlgePiece[0], sinlgePiece[1], pieces, pawn)];
+                concatedArray = [...concatedArray, ...checkMovesForSinglePiece(pieces[sinlgePiece], sinlgePiece[0], sinlgePiece[1], pieces, chekker)];
             }
         }
     })
@@ -355,7 +354,7 @@ function getEachEnemyPieceAllowedMoves(pieces, enemyColor) {
     return filteredArray;
 }
 
-export function checkMovesForSinglePiece(thePiece, currentCol, currentRow, pieces, pawn) {
+export function checkMovesForSinglePiece(thePiece, currentCol, currentRow, pieces, chekker) {
 
     switch (thePiece?.type) {
         case 'pawn':
@@ -363,13 +362,15 @@ export function checkMovesForSinglePiece(thePiece, currentCol, currentRow, piece
             // ============== check all available move for the white pawn at any postion ===================
             if (pieces[currentCol + handleNewPosition(currentRow, '1', thePiece.color)] === undefined) {
                 if (thePiece.basePostion === true && pieces[currentCol + handleNewPosition(currentRow, '2', thePiece.color)] === undefined) {
-                    allowedMoves.push(currentCol + handleNewPosition(currentRow, '2', thePiece.color),
-                        currentCol + handleNewPosition(currentRow, '1', thePiece.color))
+                    if (chekker !== 'king') {
+                        allowedMoves.push(currentCol + handleNewPosition(currentRow, '2', thePiece.color),
+                            currentCol + handleNewPosition(currentRow, '1', thePiece.color))
+                    }
                     // pieces[currentCol + currentRow].basePostion = false;
                 } else {
 
-                    //to handle the pawn 
-                    if(pawn !== 'pawn'){
+                    //to handle the pawn allowd moves if the check comes from the king move funciton
+                    if (chekker !== 'king') {
                         allowedMoves.push(currentCol + handleNewPosition(currentRow, '1', thePiece.color))
                     }
                 }
@@ -377,11 +378,8 @@ export function checkMovesForSinglePiece(thePiece, currentCol, currentRow, piece
             // check if the pawn can eat at the country levels depending on its color '''''''
             if (thePiece?.color === 'white') {
 
-                if (pawn === 'pawn') {
-                    console.log('its from check mate only');
                     allowedMoves.push(handleNewPositionTwo(currentCol, '1', '+') + handleNewPositionTwo(currentRow, '1', '+'));
                     allowedMoves.push(handleNewPositionTwo(currentCol, '1', '-') + handleNewPositionTwo(currentRow, '1', '+'))
-                }
 
                 if (pieces[handleNewPositionTwo(currentCol, '1', '+') + handleNewPositionTwo(currentRow, '1', '+')] !== undefined) {
                     allowedMoves.push(handleNewPositionTwo(currentCol, '1', '+') + handleNewPositionTwo(currentRow, '1', '+'));
@@ -391,11 +389,8 @@ export function checkMovesForSinglePiece(thePiece, currentCol, currentRow, piece
                 }
             } else if (thePiece?.color === 'black') {
 
-                if (pawn === 'pawn') {
-                    console.log('its from check mate only');
-                    allowedMoves.push(handleNewPositionTwo(currentCol, '1', '+') + handleNewPositionTwo(currentRow, '1', '-'));
-                    allowedMoves.push(handleNewPositionTwo(currentCol, '1', '-') + handleNewPositionTwo(currentRow, '1', '-'))
-                }
+                allowedMoves.push(handleNewPositionTwo(currentCol, '1', '+') + handleNewPositionTwo(currentRow, '1', '-'));
+                allowedMoves.push(handleNewPositionTwo(currentCol, '1', '-') + handleNewPositionTwo(currentRow, '1', '-'))
 
                 if (pieces[handleNewPositionTwo(currentCol, '1', '+') + handleNewPositionTwo(currentRow, '1', '-')] !== undefined) {
                     allowedMoves.push(handleNewPositionTwo(currentCol, '1', '+') + handleNewPositionTwo(currentRow, '1', '-'));
