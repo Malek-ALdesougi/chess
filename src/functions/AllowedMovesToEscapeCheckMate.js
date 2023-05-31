@@ -1,11 +1,15 @@
 // Reuse checkMovesForSinglePiece
 import { checkMovesForSinglePiece } from "./checkMovesSingle";
 
+import { getDiagonalDefensalbleSquares } from "./DefenseKing/DiagonalDirections/getDiagonalDefensalbleSquares";
+
+import { getStraightDefensebaleSquares } from "./DefenseKing/straightDirections/getStraightDefensebaleSquares";
 
 const checkMateAllowedMoves = {};
 let kingPossibleMoves = [];
 let kingAllowedMoves = [];
-let defenders = {}
+let EatDefenders = {};
+let blockDefenders = {};
 
 
 function checkKingAllowedMoves(col, row) {
@@ -69,17 +73,26 @@ function getEachEnemyPieceAllowedMoves(pieces, enemyColor) {
     return filteredArray;
 }
 
-function getFriedlyPiecesAllowedMoves(pieces, enemyColor, attackerCurrentSquare) {
+function getFriedlyPiecesAllowedMoves(pieces, enemyColor, attackerCurrentSquare, defensableSquares) {
 
 
     let concatedArrayTow = [];
     Object.keys(pieces)?.map(sinlgePiece => {
         if (pieces[sinlgePiece]?.color !== enemyColor) {
-            // get all the allowed moves for all the enemy pieces ;
+            // get all the allowed moves for all the friendly pieces !!
             let singlePieceAllowedMoves = checkMovesForSinglePiece(pieces[sinlgePiece], sinlgePiece[0], sinlgePiece[1], pieces);
-            // store the defenders in a new object
+
+            // store the BLOCK defenders in a new object
+            if (defensableSquares) {
+                let square = singlePieceAllowedMoves.find(square => defensableSquares.includes(square))
+                if (square) {
+                    blockDefenders = { ...blockDefenders, [pieces[sinlgePiece]?.type]: square }
+                }
+            }
+
+            // store the EAT defenders in a new object
             if (singlePieceAllowedMoves.includes(attackerCurrentSquare)) {
-                defenders = { ...defenders, [pieces[sinlgePiece]?.type]: attackerCurrentSquare }
+                EatDefenders = { ...EatDefenders, [pieces[sinlgePiece]?.type]: attackerCurrentSquare }
             }
             concatedArrayTow = [...concatedArrayTow, ...singlePieceAllowedMoves];
         }
@@ -101,118 +114,33 @@ const checkIfAttackerCouldBeEaten = (attackerPiece, attackerCurrentSquare, piece
     getFriedlyPiecesAllowedMoves(pieces, enemyColor, attackerCurrentSquare)
 }
 
+const checkIfCanAnyPieceBlock = (attackerPiece, attackerCurrentSquare, currentKingSquare, pieces, enemyColor) => {
 
-const checkIfCanAnyPieceBlock = (attackerPiece, attackerCurrentSquare, currentKingSquare, pieces) => {
+    let defensableSquares = [];
 
-    let defendableSquares = [];
-
-    //need to check if i can move any of my pieces to be in the attacker allowed moves to block him
-
-    // When want to block ---> the attacker only could be (queen, bishop, pawn, rook)
-
-
-    console.log(currentKingSquare + " " + attackerCurrentSquare);
-
-
-    //bishop attack logic
-    if (Number(attackerCurrentSquare[0]) > Number(currentKingSquare[0]) && Number(attackerCurrentSquare[1]) < Number(currentKingSquare[1])) {
-        
-        let kingCol = Number(currentKingSquare[0]) + 1;
-        let kingRwo = Number(currentKingSquare[1]) - 1;
-        let square = ''
-
-        let attackerCol = Number(attackerCurrentSquare[0]);
-        let attackerRwo = Number(attackerCurrentSquare[1]);
-
-        for(let i = kingCol, x = kingRwo; i < attackerCol || x < attackerRwo; i++, x--){
-            let col = i.toString();
-            let row = x.toString();
-
-            square = col + row;
-
-            defendableSquares.push(square);
-        }
-
-        console.log(defendableSquares);
-        
-        console.log('the enemy is right bottom');
-    } 
-    
-    
-    
-    else if (Number(attackerCurrentSquare[0]) > Number(currentKingSquare[0]) && Number(attackerCurrentSquare[1]) > Number(currentKingSquare[1])) {
-
-        // we add 1 to execlude the king square 
-        let kingCol = Number(currentKingSquare[0]) + 1;
-        let kingRwo = Number(currentKingSquare[1]) + 1;
-        let square = ''
-
-        let attackerCol = Number(attackerCurrentSquare[0]);
-        let attackerRwo = Number(attackerCurrentSquare[1]);
-
-        for(let i = kingCol, x = kingRwo; i < attackerCol || x < attackerRwo; i++, x++){
-            let col = i.toString();
-            let row = x.toString();
-
-            square = col + row;
-
-            defendableSquares.push(square);
-        }
-
-        console.log('the enemy is right top');
-
-
-
-        
-    } else if (Number(attackerCurrentSquare[0]) < Number(currentKingSquare[0]) && Number(attackerCurrentSquare[1]) < Number(currentKingSquare[1])) {
-       
-        let kingCol = Number(currentKingSquare[0]) - 1;
-        let kingRwo = Number(currentKingSquare[1]) - 1;
-        let square = ''
-
-        let attackerCol = Number(attackerCurrentSquare[0]);
-        let attackerRwo = Number(attackerCurrentSquare[1]);
-
-        for(let i = kingCol, x = kingRwo; i > attackerCol || x > attackerRwo; i--, x--){
-            let col = i.toString();
-            let row = x.toString();
-
-            square = col + row;
-
-            defendableSquares.push(square);
-        }
-       
-        console.log(defendableSquares);
-       
-       
-        console.log('the enemy is left bottom');
-    } else if (Number(attackerCurrentSquare[0]) < Number(currentKingSquare[0]) && Number(attackerCurrentSquare[1]) > Number(currentKingSquare[1])) {
-       
-
-        let kingCol = Number(currentKingSquare[0]) - 1;
-        let kingRwo = Number(currentKingSquare[1]) + 1;
-        let square = ''
-
-        let attackerCol = Number(attackerCurrentSquare[0]);
-        let attackerRwo = Number(attackerCurrentSquare[1]);
-
-        for(let i = kingCol, x = kingRwo; i > attackerCol || x < attackerRwo; i--, x++){
-            let col = i.toString();
-            let row = x.toString();
-
-            square = col + row;
-
-            defendableSquares.push(square);
-        }
-
-        console.log(defendableSquares);
-       
-       
-        console.log('the enemy is left top');
+    if (attackerPiece.type === 'bishop') {
+        defensableSquares = getDiagonalDefensalbleSquares(attackerCurrentSquare, currentKingSquare);
+        console.log(defensableSquares);
+    }
+    else if (attackerPiece.type === 'rook') {
+        defensableSquares = getStraightDefensebaleSquares(attackerCurrentSquare, currentKingSquare);
+        console.log(defensableSquares);
     }
 
-    console.log(defendableSquares);
+    else if (attackerPiece.type === 'queen') {
+        //compination between the bishop and rook because the queen will attack either diagonal or stright 
+        let diagonal = getDiagonalDefensalbleSquares(attackerCurrentSquare, currentKingSquare)
+        let straight = getStraightDefensebaleSquares(attackerCurrentSquare, currentKingSquare)
+        defensableSquares = diagonal ? diagonal : straight;
+    }
 
+    // now after i have the defensable squares 
+
+    // i need to get all the friendly pieces allowed moves 
+    //to check if any piece has allowd moves === defensableSquares 
+    // get the piece and the defensable squares
+
+    getFriedlyPiecesAllowedMoves(pieces, enemyColor, attackerCurrentSquare, defensableSquares)
 
 }
 
@@ -227,7 +155,6 @@ export const AllowedMovesToEscapeCheckMate = (isCheckMate, attackerPiece, attack
     // <<<<<<<<<==========================================  1- Normal Moves  ==========================================>>>>>>>>>>
 
     // rest the variable :
-
     let resultObject = {};
 
     let enemyColor;
@@ -260,14 +187,14 @@ export const AllowedMovesToEscapeCheckMate = (isCheckMate, attackerPiece, attack
 
     // <<<<<<<<==========================================  3- Blocked   ==========================================>>>>>>>>>>
 
-    checkIfCanAnyPieceBlock(attackerPiece, attackerCurrentSquare, currentKingSquare, pieces)
+    checkIfCanAnyPieceBlock(attackerPiece, attackerCurrentSquare, currentKingSquare, pieces, enemyColor)
 
 
 
 
     let finalArray = Array.from(new Set(kingAllowedMoves))
 
-    resultObject = { ...checkMateAllowedMoves, 'king': finalArray, ...defenders }
+    resultObject = { ...checkMateAllowedMoves, 'king': finalArray, ...EatDefenders, ...blockDefenders }
 
     console.log(resultObject);
 
