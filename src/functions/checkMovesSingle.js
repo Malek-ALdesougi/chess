@@ -187,7 +187,12 @@ function handleRookLogic(currentCol, currentRow, pieces, thePiece) {
 
             if (pieces[currentCol + rookNewPosition(currentRow, '+', i)] === undefined) {
                 allowedMoves.push(currentCol + rookNewPosition(currentRow, '+', i))
-            } else if (pieces[currentCol + rookNewPosition(currentRow, '+', i)]?.color !== thePiece.color || pieces[currentCol + rookNewPosition(currentRow, '+', i)]?.color === thePiece.color) {
+
+            } else if (pieces[currentCol + rookNewPosition(currentRow, '+', i)]?.type === 'king' && pieces[currentCol + rookNewPosition(currentRow, '+', i)]?.color !== thePiece.color) {
+                allowedMoves.push(currentCol + rookNewPosition(currentRow, '+', i))
+                flagUp = false;
+            }
+            else if (pieces[currentCol + rookNewPosition(currentRow, '+', i)] !== undefined && pieces[currentCol + rookNewPosition(currentRow, '+', i)].type !== 'king') {
                 allowedMoves.push(currentCol + rookNewPosition(currentRow, '+', i))
                 flagUp = false;
             } else { flagUp = false }
@@ -198,7 +203,12 @@ function handleRookLogic(currentCol, currentRow, pieces, thePiece) {
 
             if (pieces[currentCol + rookNewPosition(currentRow, '-', i)] === undefined) {
                 allowedMoves.push(currentCol + rookNewPosition(currentRow, '-', i))
-            } else if (pieces[currentCol + rookNewPosition(currentRow, '-', i)]?.color !== thePiece.color ||pieces[currentCol + rookNewPosition(currentRow, '-', i)]?.color === thePiece.color) {
+            }
+            else if (pieces[currentCol + rookNewPosition(currentRow, '-', i)]?.type === 'king' && pieces[currentCol + rookNewPosition(currentRow, '-', i)]?.color !== thePiece.color) {
+                allowedMoves.push(currentCol + rookNewPosition(currentRow, '-', i))
+                flagDown = false;
+            }
+            else if (pieces[currentCol + rookNewPosition(currentRow, '-', i)]?.color !== undefined && pieces[currentCol + rookNewPosition(currentRow, '-', i)]?.type !== 'king') {
                 allowedMoves.push(currentCol + rookNewPosition(currentRow, '-', i))
                 flagDown = false;
             } else { flagDown = false }
@@ -209,7 +219,14 @@ function handleRookLogic(currentCol, currentRow, pieces, thePiece) {
 
             if (pieces[rookNewPosition(currentCol, '+', i) + currentRow] === undefined) {
                 allowedMoves.push(rookNewPosition(currentCol, '+', i) + currentRow)
-            } else if (pieces[rookNewPosition(currentCol, '+', i) + currentRow]?.color !== thePiece.color || pieces[rookNewPosition(currentCol, '+', i) + currentRow]?.color === thePiece.color) {
+            }
+
+            else if (pieces[rookNewPosition(currentCol, '+', i) + currentRow]?.type === 'king' && pieces[rookNewPosition(currentCol, '+', i) + currentRow]?.color !== thePiece.color) {
+                allowedMoves.push(rookNewPosition(currentCol, '+', i) + currentRow)
+                flagRight = false;
+            }
+
+            else if (pieces[rookNewPosition(currentCol, '+', i) + currentRow]?.color !== undefined && pieces[rookNewPosition(currentCol, '+', i) + currentRow]?.type !== 'king') {
                 allowedMoves.push(rookNewPosition(currentCol, '+', i) + currentRow)
                 flagRight = false;
             }
@@ -221,7 +238,16 @@ function handleRookLogic(currentCol, currentRow, pieces, thePiece) {
 
             if (pieces[rookNewPosition(currentCol, '-', i) + currentRow] === undefined) {
                 allowedMoves.push(rookNewPosition(currentCol, '-', i) + currentRow)
-            } else if (pieces[rookNewPosition(currentCol, '-', i) + currentRow]?.color !== thePiece.color || pieces[rookNewPosition(currentCol, '-', i) + currentRow]?.color === thePiece.color) {
+            }
+
+
+            else if (pieces[rookNewPosition(currentCol, '-', i) + currentRow]?.type === 'king' && pieces[rookNewPosition(currentCol, '-', i) + currentRow]?.color !== thePiece.color) {
+                allowedMoves.push(rookNewPosition(currentCol, '-', i) + currentRow)
+                flagLeft = false;
+            }
+
+
+            else if (pieces[rookNewPosition(currentCol, '-', i) + currentRow]?.color !== undefined && pieces[rookNewPosition(currentCol, '-', i) + currentRow]?.type !== 'king') {
                 allowedMoves.push(rookNewPosition(currentCol, '-', i) + currentRow)
                 flagLeft = false;
             } else { flagLeft = false }
@@ -324,9 +350,6 @@ function checkKingAllowedMoves(col, row, pieces) {
             }
         }
     }
-
-    console.log(kingPossibleMoves);
-
     return kingPossibleMoves;
 }
 
@@ -378,24 +401,32 @@ export function checkMovesForSinglePiece(thePiece, currentCol, currentRow, piece
             // check if the pawn can eat at the country levels depending on its color '''''''
             if (thePiece?.color === 'white') {
 
-                    allowedMoves.push(handleNewPositionTwo(currentCol, '1', '+') + handleNewPositionTwo(currentRow, '1', '+'));
-                    allowedMoves.push(handleNewPositionTwo(currentCol, '1', '-') + handleNewPositionTwo(currentRow, '1', '+'))
+                // allowedMoves.push(handleNewPositionTwo(currentCol, '1', '+') + handleNewPositionTwo(currentRow, '1', '+'));
+                // allowedMoves.push(handleNewPositionTwo(currentCol, '1', '-') + handleNewPositionTwo(currentRow, '1', '+'));
 
-                if (pieces[handleNewPositionTwo(currentCol, '1', '+') + handleNewPositionTwo(currentRow, '1', '+')] !== undefined) {
+                if ((pieces[handleNewPositionTwo(currentCol, '1', '+') + handleNewPositionTwo(currentRow, '1', '+')] !== undefined &&
+                    pieces[handleNewPositionTwo(currentCol, '1', '+') + handleNewPositionTwo(currentRow, '1', '+')]?.type !== 'king') ||
+                    (chekker === 'king' && pieces[handleNewPositionTwo(currentCol, '1', '+') + handleNewPositionTwo(currentRow, '1', '+')]?.color !== 'white')) {
                     allowedMoves.push(handleNewPositionTwo(currentCol, '1', '+') + handleNewPositionTwo(currentRow, '1', '+'));
                 }
-                if (pieces[handleNewPositionTwo(currentCol, '1', '-') + handleNewPositionTwo(currentRow, '1', '+')] !== undefined) {
+                if ((pieces[handleNewPositionTwo(currentCol, '1', '-') + handleNewPositionTwo(currentRow, '1', '+')] !== undefined &&
+                    pieces[handleNewPositionTwo(currentCol, '1', '-') + handleNewPositionTwo(currentRow, '1', '+')]?.type !== 'king') ||
+                    (chekker === 'king' && pieces[handleNewPositionTwo(currentCol, '1', '-') + handleNewPositionTwo(currentRow, '1', '+')]?.color !== 'white')) {
                     allowedMoves.push(handleNewPositionTwo(currentCol, '1', '-') + handleNewPositionTwo(currentRow, '1', '+'))
                 }
             } else if (thePiece?.color === 'black') {
 
-                allowedMoves.push(handleNewPositionTwo(currentCol, '1', '+') + handleNewPositionTwo(currentRow, '1', '-'));
-                allowedMoves.push(handleNewPositionTwo(currentCol, '1', '-') + handleNewPositionTwo(currentRow, '1', '-'))
+                // allowedMoves.push(handleNewPositionTwo(currentCol, '1', '+') + handleNewPositionTwo(currentRow, '1', '-'));
+                // allowedMoves.push(handleNewPositionTwo(currentCol, '1', '-') + handleNewPositionTwo(currentRow, '1', '-'))
 
-                if (pieces[handleNewPositionTwo(currentCol, '1', '+') + handleNewPositionTwo(currentRow, '1', '-')] !== undefined) {
+                if ((pieces[handleNewPositionTwo(currentCol, '1', '+') + handleNewPositionTwo(currentRow, '1', '-')] !== undefined &&
+                    pieces[handleNewPositionTwo(currentCol, '1', '+') + handleNewPositionTwo(currentRow, '1', '-')]?.type !== 'king') ||
+                    (chekker === 'king' && pieces[handleNewPositionTwo(currentCol, '1', '+') + handleNewPositionTwo(currentRow, '1', '-')]?.color !== 'black')) {
                     allowedMoves.push(handleNewPositionTwo(currentCol, '1', '+') + handleNewPositionTwo(currentRow, '1', '-'));
                 }
-                if (pieces[handleNewPositionTwo(currentCol, '1', '-') + handleNewPositionTwo(currentRow, '1', '-')] !== undefined) {
+                if ((pieces[handleNewPositionTwo(currentCol, '1', '-') + handleNewPositionTwo(currentRow, '1', '-')] !== undefined &&
+                    pieces[handleNewPositionTwo(currentCol, '1', '-') + handleNewPositionTwo(currentRow, '1', '-')]?.type !== 'king') ||
+                    (chekker === 'king' && pieces[handleNewPositionTwo(currentCol, '1', '-') + handleNewPositionTwo(currentRow, '1', '-')]?.color !== 'black')) {
                     allowedMoves.push(handleNewPositionTwo(currentCol, '1', '-') + handleNewPositionTwo(currentRow, '1', '-'))
                 }
             }
@@ -415,7 +446,6 @@ export function checkMovesForSinglePiece(thePiece, currentCol, currentRow, piece
             // check if the piece is friend pice to remove from the allowed moves
             let filterdAllowedMoves = allowedMoves.filter((move) => pieces[move]?.color !== thePiece.color)
             return filterdAllowedMoves;
-        // chain the bishop moves with
         case 'bishop':
             allowedMoves = [];
             return handleBishopLogic(currentCol, currentRow, pieces, thePiece);
@@ -426,9 +456,10 @@ export function checkMovesForSinglePiece(thePiece, currentCol, currentRow, piece
             allowedMoves = [];
             allowedMoves = handleBishopLogic(currentCol, currentRow, pieces, thePiece).concat(handleRookLogic(currentCol, currentRow, pieces, thePiece));
             let filteredAllowdMoves2 = allowedMoves.filter((move) => move.length <= 2 && !move.includes('-'));
-            return filteredAllowdMoves2;
+            let fianlArray = Array.from(new Set(filteredAllowdMoves2));
+
+            return fianlArray;
         case 'king':
-            // console.log('start king');
             allowedMoves = [];
             return handleKingNormalMoves(currentCol, currentRow, pieces);
 
@@ -436,4 +467,5 @@ export function checkMovesForSinglePiece(thePiece, currentCol, currentRow, piece
         default:
             return allowedMoves;
     }
+
 }
