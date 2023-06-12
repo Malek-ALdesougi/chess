@@ -165,9 +165,6 @@ export const AllowedMovesToEscapeCheckMate = (isCheckMate, attackerPiece, attack
     let col = currentKingSquare[0];
     let row = currentKingSquare[1];
 
-    console.log(isCheckMate);
-    console.log(enemyColor);
-
     // the checked king possible moves
     kingPossibleMoves = checkKingAllowedMoves(col, row, pieces, chekker);
 
@@ -180,8 +177,7 @@ export const AllowedMovesToEscapeCheckMate = (isCheckMate, attackerPiece, attack
 
     kingPossibleMoves.map((kingPossibleMove) => {
         if (!enemyPiecesAllowedMoves.includes(kingPossibleMove) &&
-            pieces[kingPossibleMove]?.color !== enemyColor &&
-            !kingPossibleMove.includes('0')) {
+            pieces[kingPossibleMove]?.color !== enemyColor) {
             kingAllowedMoves.push(kingPossibleMove);
         }
 
@@ -209,6 +205,8 @@ export const AllowedMovesToEscapeCheckMate = (isCheckMate, attackerPiece, attack
 
     let filterdKingMoves = finalArray?.filter((item) => pieces[item] === undefined && !pieces[item]?.includes('9') && !pieces[item]?.includes('0') && !pieces[item]?.includes('-'))
 
+
+    console.log(filterdKingMoves);
     resultObject = { ...checkMateAllowedMoves, 'king': filterdKingMoves, ...eatDefenders, ...blockDefenders }
 
     console.log(resultObject);
