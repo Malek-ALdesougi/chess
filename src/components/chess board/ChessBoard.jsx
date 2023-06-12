@@ -18,6 +18,7 @@ import { checkMovesForSinglePiece } from '../../functions/checkMovesSingle';
 import { checkPlayerTurn } from '../../functions/checkPlayerTurn';
 import { checkIfmoveAllowed } from '../../functions/checkIfmoveAllowed';
 import { AllowedMovesToEscapeCheckMate } from '../../functions/AllowedMovesToEscapeCheckMate';
+import { checkKingStatus } from '../../functions/kingStatus/checkKingStatus';
 
 function ChessBoard() {
   const rows = ['8', '7', '6', '5', '4', '3', '2', '1'];
@@ -30,14 +31,14 @@ function ChessBoard() {
   const [selectedPiece, setSelectedPiece] = useState(null);
   const [allowedMoves, setAllowedMoves] = useState([]);
   const [piecesTrash, setPiecesTrash] = useState([]);
-  const [isCheckMate, setIsCheckMate] = useState({
-    white: false,
-    black: false,
-  });
+  // const [isWhiteCheckMate, setIsWhiteCheckMate] = useState(false)
+  // const [isBlackCheckMate, setIsBlackCheckMate] = useState(false)
+  const [isCheckMate, setIsCheckMate] = useState({white: false,black: false,});
   const [currentPiece, setCurrentPiece] = useState({});
   const attackerPiece = useRef(null);
   const [attackerCurrentSquare, setAttackerCurrentSquare] = useState('');
   const [checkMateAllowedMoves, setCheckMateAllowedMoves] = useState({});
+  const [isInitRender, setIsinitRender] = useState(true);
 
   //TODO: handle when the uesr first click on undefiend square -----> the game is get craches;
 
@@ -51,52 +52,72 @@ function ChessBoard() {
   }
 
   useEffect(() => {
-    attackerPiece.current = currentPiece;
-  }, [currentPiece, isCheckMate]);
+    if (isInitRender) {
+      setIsinitRender(false);
+      return;
+    } else {
+      let enemyColor = currentPiece.color === 'white' ? 'black' : 'white';
+      let kingCheckResult = checkKingStatus(pieces, enemyColor);
+      // every time the pieces get changed we need to check the king status
+      // IN THIS USeEFFECT WE NEED TO CHECK THE OPPOSITE KING STATUS AFTER EACH ROUND
 
-  useEffect(() => {
-    allowedMoves.map((move) => {
-      if (
-        pieces[move]?.type === 'king' &&
-        pieces[move]?.color !== currentPiece?.color
-      ) {
-        currentPiece?.color === 'white'
-          ? (isCheckMate.black = true)
-          : (isCheckMate.white = true);
-        // check mate
-        console.log(move + ' is the current king square');
+      console.log(kingCheckResult.isThereCheckMate);
+
+      console.log(kingCheckResult.isThereCheckMate);
+
+      if (kingCheckResult.isThereCheckMate === true) {
+
+        //to access the updated isCheckMate state immediately
+        let updatedIsCheckMate = {};
+
+        
+        console.log('there is a check mate');
+        if(currentPiece?.color === 'white'){
+          updatedIsCheckMate =  { ...isCheckMate, black: true }
+        }else if(currentPiece?.color === 'black'){
+          updatedIsCheckMate =  { ...isCheckMate, white: true }
+        }
+        
+        console.log('=================== we cant change the checkmate unless the condition is true ==================');
+        setIsCheckMate(updatedIsCheckMate)
+        console.log(isCheckMate);
+        console.log(updatedIsCheckMate);
         // TODO: we must check if isCheckmate or not to deciede check allowed moves on what the array OR the object
-        setCheckMateAllowedMoves(
+        return setCheckMateAllowedMoves(
           AllowedMovesToEscapeCheckMate(
-            isCheckMate,
-            attackerPiece.current,
-            attackerCurrentSquare,
-            move,
-            pieces
+            updatedIsCheckMate,
+            kingCheckResult?.attackersPieces,
+            kingCheckResult?.attackerSquare,
+            kingCheckResult?.kingCurrentSquare,
+            pieces,
+            kingCheckResult?.checkMateType
           )
         );
       }
-    });
-  }, [isCheckMate, pieces]);
+    }
+  }, [pieces]);
 
-  console.log(checkMateAllowedMoves);
+  useEffect(() => {
+    attackerPiece.current = currentPiece;
+  }, [currentPiece, isCheckMate]);
 
   function handleMove(square, col, row) {
+
     let firstPick = square;
     if (selectedPiece) {
+
+      
       // allow the player to choose another piece to play
       if (pieces[square]?.color === pieces[selectedPiece]?.color) {
-        setSelectedPiece(firstPick)
-       return setAllowedMoves(checkMovesForSinglePiece(pieces[col + row], col, row, pieces));
-         
+        setSelectedPiece(firstPick);
+        return setAllowedMoves(
+          checkMovesForSinglePiece(pieces[col + row], col, row, pieces)
+        );
       }
 
-      //check if the moves is allowed to let the piece move or not
-      // and also check if the current setuation is checkMate or not
-      // because the allowed moves will be deferent in checkMate case
-
       //TODO:  WE HAVE SOME IMPORTANT WORK HERE !!!
-      if (checkIfmoveAllowed(col, row, allowedMoves)) {
+
+      if (checkIfmoveAllowed(col, row, allowedMoves, isCheckMate, checkMateAllowedMoves)) {
         if (pieces[selectedPiece]?.type === 'pawn') {
           pieces[selectedPiece].basePostion = false;
         }
@@ -117,20 +138,18 @@ function ChessBoard() {
           return result;
         }, {});
         dispatch(UpdatePieces(updatedPieces));
-        //switch the turns
         setPlayerTurn(!playerTurn);
         setSelectedPiece(null);
       }
     } else {
       if (checkPlayerTurn(col, row, playerTurn, pieces)) {
-        setAllowedMoves(
-          checkMovesForSinglePiece(pieces[col + row], col, row, pieces, isCheckMate)
-        );
+        setAllowedMoves(checkMovesForSinglePiece(pieces[col + row], col, row, pieces, isCheckMate));
         setSelectedPiece(square);
         setCurrentPiece(pieces[square]);
       }
     }
   }
+  //after all to let the state update we check the king status
 
   console.log(allowedMoves);
 
@@ -145,12 +164,15 @@ function ChessBoard() {
 
           return (
             <div
+              tabIndex="-1"
               key={square}
               id={square}
               className={`square ${isBlackSquare ? 'black' : 'white'}`}
               onClick={() => handleMove(square, col, row)}
             >
-              {piece && <Piece color={piece?.color} type={piece.type} />}
+              {piece && (
+                <Piece tabIndex="-1" color={piece?.color} type={piece.type} />
+              )}
               {!piece && square}
             </div>
           );
