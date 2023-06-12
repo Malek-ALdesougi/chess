@@ -1,15 +1,51 @@
-export function checkIfmoveAllowed(col, row, allowedMoves, isCheckMate, checkMateAllowedMoves) {
+export function checkIfmoveAllowed(col, row, allowedMoves, isCheckMate, checkMateAllowedMoves, selectedPiece, currentSquare) {
 
-  console.log(isCheckMate);
+  let allowed = false;
+  let x = false;
+  if (isCheckMate.black === true || isCheckMate.white === true) {
 
-    //TODO: THE ALLOWED MOVES COULD BE AN ARRAY IN THE NORMAL SETUATION
-    //TODO: OR IT COULD BE AN OBJECT WITH KEYS FOR EACH AVAILABLE MOVE FOR EACH PIECE (EAT, BLOCK, ESCAPE)
+
+    //TODO:: !!======  NEED TO HANDEL THE DOUBLE AND SINGLE CHECK  ====== !!
+
+
+
+    let { king, ...defendersAndEaters } = checkMateAllowedMoves;
+
+    console.log(defendersAndEaters);
+
+    if (selectedPiece?.type === 'king') {
+      if (king.find((item) => item === col + row)) {
+        allowed = true;
+      }else{
+        x = true ;
+      }
+    } 
+    
+      Object.keys(defendersAndEaters).map((item) => {
+        if (item === selectedPiece.type + currentSquare) {
+          if (defendersAndEaters[item] === col + row) {
+            allowed = true;
+          }else{
+            x = true;
+          }
+        }
+      });
+
+    console.log(allowed);
+
+    if(allowed === false && x === false){
+     return alert('GG white won the game')
+    }
+
+    return allowed;
+  } else {
 
     const result = allowedMoves.find((move) => move === col + row);
-
     if (result) {
       return true;
     } else {
       return false;
     }
   }
+
+}

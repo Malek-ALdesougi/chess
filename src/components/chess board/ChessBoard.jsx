@@ -20,6 +20,8 @@ import { checkIfmoveAllowed } from '../../functions/checkIfmoveAllowed';
 import { AllowedMovesToEscapeCheckMate } from '../../functions/AllowedMovesToEscapeCheckMate';
 import { checkKingStatus } from '../../functions/kingStatus/checkKingStatus';
 
+let currentSquare;
+
 function ChessBoard() {
   const rows = ['8', '7', '6', '5', '4', '3', '2', '1'];
   const cols = ['1', '2', '3', '4', '5', '6', '7', '8'];
@@ -33,12 +35,36 @@ function ChessBoard() {
   const [piecesTrash, setPiecesTrash] = useState([]);
   // const [isWhiteCheckMate, setIsWhiteCheckMate] = useState(false)
   // const [isBlackCheckMate, setIsBlackCheckMate] = useState(false)
-  const [isCheckMate, setIsCheckMate] = useState({white: false,black: false,});
+  const [isCheckMate, setIsCheckMate] = useState({
+    white: false,
+    black: false,
+  });
   const [currentPiece, setCurrentPiece] = useState({});
   const attackerPiece = useRef(null);
   const [attackerCurrentSquare, setAttackerCurrentSquare] = useState('');
   const [checkMateAllowedMoves, setCheckMateAllowedMoves] = useState({});
   const [isInitRender, setIsinitRender] = useState(true);
+
+  function checkIfmoveAllowedForEscapeCheckMate(checkMateAllowedMoves,currentPiece,currentSquare,type) {
+
+
+    let { king, ...defendersAndEaters } = checkMateAllowedMoves;
+    let allow = false;
+
+    if (type === 'king') {
+      if (king.length > 0) {
+        allow = true;
+      }
+    } else {
+      Object.keys(defendersAndEaters).map((item) => {
+        if (item === type + currentSquare) {
+          allow = true;
+        }
+      });
+    }
+
+    return allow;
+  }
 
   //TODO: handle when the uesr first click on undefiend square -----> the game is get craches;
 
@@ -61,27 +87,22 @@ function ChessBoard() {
       // every time the pieces get changed we need to check the king status
       // IN THIS USeEFFECT WE NEED TO CHECK THE OPPOSITE KING STATUS AFTER EACH ROUND
 
-      console.log(kingCheckResult.isThereCheckMate);
-
-      console.log(kingCheckResult.isThereCheckMate);
-
       if (kingCheckResult.isThereCheckMate === true) {
-
         //to access the updated isCheckMate state immediately
         let updatedIsCheckMate = {};
 
-        
         console.log('there is a check mate');
-        if(currentPiece?.color === 'white'){
-          updatedIsCheckMate =  { ...isCheckMate, black: true }
-        }else if(currentPiece?.color === 'black'){
-          updatedIsCheckMate =  { ...isCheckMate, white: true }
+        if (currentPiece?.color === 'white') {
+          updatedIsCheckMate = { ...isCheckMate, black: true };
+        } else if (currentPiece?.color === 'black') {
+          updatedIsCheckMate = { ...isCheckMate, white: true };
         }
-        
-        console.log('=================== we cant change the checkmate unless the condition is true ==================');
-        setIsCheckMate(updatedIsCheckMate)
-        console.log(isCheckMate);
-        console.log(updatedIsCheckMate);
+
+        console.log(
+          '=================== we cant change the checkmate unless the condition is true =================='
+        );
+        setIsCheckMate(updatedIsCheckMate);
+
         // TODO: we must check if isCheckmate or not to deciede check allowed moves on what the array OR the object
         return setCheckMateAllowedMoves(
           AllowedMovesToEscapeCheckMate(
@@ -102,14 +123,12 @@ function ChessBoard() {
   }, [currentPiece, isCheckMate]);
 
   function handleMove(square, col, row) {
-
     let firstPick = square;
     if (selectedPiece) {
-
-      
       // allow the player to choose another piece to play
       if (pieces[square]?.color === pieces[selectedPiece]?.color) {
-        setSelectedPiece(firstPick);
+        // setSelectedPiece(firstPick);
+        firstSelectedPiece(col, row, square)
         return setAllowedMoves(
           checkMovesForSinglePiece(pieces[col + row], col, row, pieces)
         );
@@ -117,7 +136,17 @@ function ChessBoard() {
 
       //TODO:  WE HAVE SOME IMPORTANT WORK HERE !!!
 
-      if (checkIfmoveAllowed(col, row, allowedMoves, isCheckMate, checkMateAllowedMoves)) {
+      console.log(
+        'after the check this will happend again to determine the new allowed moves if depend on the check or normal allowed moves'
+      );
+      console.log(isCheckMate);
+
+      console.log(checkIfmoveAllowed(col, row, allowedMoves,isCheckMate,checkMateAllowedMoves,currentPiece,currentSquare));
+
+      if (checkIfmoveAllowed(col, row, allowedMoves,isCheckMate,checkMateAllowedMoves,currentPiece,currentSquare)) {
+
+        setIsCheckMate({white: false, black: false})
+
         if (pieces[selectedPiece]?.type === 'pawn') {
           pieces[selectedPiece].basePostion = false;
         }
@@ -142,14 +171,9 @@ function ChessBoard() {
         setSelectedPiece(null);
       }
     } else {
-      if (checkPlayerTurn(col, row, playerTurn, pieces)) {
-        setAllowedMoves(checkMovesForSinglePiece(pieces[col + row], col, row, pieces, isCheckMate));
-        setSelectedPiece(square);
-        setCurrentPiece(pieces[square]);
-      }
+      firstSelectedPiece(col, row, square);
     }
   }
-  //after all to let the state update we check the king status
 
   console.log(allowedMoves);
 
@@ -180,6 +204,33 @@ function ChessBoard() {
       })}
     </div>
   );
+
+  function firstSelectedPiece(col, row, square) {
+
+    if (checkPlayerTurn(col, row, playerTurn, pieces)) {
+      setAllowedMoves(
+        checkMovesForSinglePiece(pieces[col + row], col, row, pieces, isCheckMate));
+      setSelectedPiece(square);
+      currentSquare = square;
+      setCurrentPiece(pieces[square]);
+      if (isCheckMate.black === true || isCheckMate.white === true) {
+
+        console.log(isCheckMate);
+
+        console.log('============== anything ============');
+
+        let test = checkIfmoveAllowedForEscapeCheckMate(checkMateAllowedMoves, currentPiece, currentSquare, pieces[square].type);
+        if (test) {
+          setSelectedPiece(square);
+          setCurrentPiece(pieces[square]);
+        } else {
+          setSelectedPiece(null);
+          setCurrentPiece({});
+          alert('choose a valid piece to play noob !!');
+        }
+      }
+    }
+  }
 }
 
 export default ChessBoard;
