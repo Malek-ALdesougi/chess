@@ -2,11 +2,15 @@ export function checkIfmoveAllowed(col, row, allowedMoves, isCheckMate, checkMat
 
   let allowed = false;
   let x = false;
+
+  console.log('iuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuu');
+
+  console.log(checkMateAllowedMoves);
+
   if (isCheckMate.black === true || isCheckMate.white === true) {
 
 
     //TODO:: !!======  NEED TO HANDEL THE DOUBLE AND SINGLE CHECK  ====== !!
-
 
 
     let { king, ...defendersAndEaters } = checkMateAllowedMoves;

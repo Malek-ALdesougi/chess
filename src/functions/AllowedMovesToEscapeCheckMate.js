@@ -168,16 +168,12 @@ export const AllowedMovesToEscapeCheckMate = (isCheckMate, attackerPiece, attack
     // the checked king possible moves
     kingPossibleMoves = checkKingAllowedMoves(col, row, pieces, chekker);
 
-    console.log(kingPossibleMoves);
     // all the enemy pieces allowed moves
     let enemyPiecesAllowedMoves = getEachEnemyPieceAllowedMoves(pieces, enemyColor, chekker);
 
-    console.log(enemyPiecesAllowedMoves);
-
-
     kingPossibleMoves.map((kingPossibleMove) => {
         if (!enemyPiecesAllowedMoves.includes(kingPossibleMove) &&
-            pieces[kingPossibleMove]?.color !== enemyColor) {
+           ( pieces[kingPossibleMove]?.color === enemyColor || pieces[kingPossibleMove] === undefined)) {
             kingAllowedMoves.push(kingPossibleMove);
         }
 
@@ -195,15 +191,14 @@ export const AllowedMovesToEscapeCheckMate = (isCheckMate, attackerPiece, attack
     checkIfAttackerCouldBeEaten(attackerPiece, attackerCurrentSquare, pieces, enemyColor);
 
     // <<<<<<<<==========================================  3- Blocked   ==========================================>>>>>>>>>>
-    console.log(enemyColor);
     checkIfCanAnyPieceBlock(attackerPiece, attackerCurrentSquare, currentKingSquare, pieces, enemyColor)
 
 
 
 
-    let finalArray = Array.from(new Set(kingAllowedMoves))
+    // let finalArray = Array.from(new Set(kingAllowedMoves))
 
-    let filterdKingMoves = finalArray?.filter((item) => pieces[item] === undefined && !pieces[item]?.includes('9') && !pieces[item]?.includes('0') && !pieces[item]?.includes('-'))
+    let filterdKingMoves = kingAllowedMoves.filter(item => !item.includes('9') && !item.includes('0') && !item.includes('-'))
 
 
     console.log(filterdKingMoves);

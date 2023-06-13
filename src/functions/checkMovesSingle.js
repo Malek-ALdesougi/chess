@@ -117,11 +117,11 @@ function handleBishopLogic(currentCol, currentRow, pieces, thePiece) {
 
         if (flagA) {
             if (pieces[bishopNewPositionUpRightDownLeft(currentCol, currentRow, '+', i)] !== undefined) {
+                allowedMoves.push(bishopNewPositionUpRightDownLeft(currentCol, currentRow, '+', i))
                 flagA = false;
             }
 
-            if ((pieces[bishopNewPositionUpRightDownLeft(currentCol, currentRow, '+', i)] === undefined ||
-                pieces[bishopNewPositionUpRightDownLeft(currentCol, currentRow, '+', i)]?.color !== thePiece.color)) {
+            if (pieces[bishopNewPositionUpRightDownLeft(currentCol, currentRow, '+', i)] === undefined) {
                 allowedMoves.push(bishopNewPositionUpRightDownLeft(currentCol, currentRow, '+', i))
             }
         }
@@ -129,11 +129,11 @@ function handleBishopLogic(currentCol, currentRow, pieces, thePiece) {
         if (flagB) {
 
             if (pieces[bishopNewPositionUpRightDownLeft(currentCol, currentRow, '-', i)] !== undefined) {
+                allowedMoves.push(bishopNewPositionUpRightDownLeft(currentCol, currentRow, '-', i))
                 flagB = false;
             }
 
-            if ((pieces[bishopNewPositionUpRightDownLeft(currentCol, currentRow, '-', i)] === undefined ||
-                pieces[bishopNewPositionUpRightDownLeft(currentCol, currentRow, '-', i)]?.color !== thePiece.color)) {
+            if (pieces[bishopNewPositionUpRightDownLeft(currentCol, currentRow, '-', i)] === undefined) {
                 allowedMoves.push(bishopNewPositionUpRightDownLeft(currentCol, currentRow, '-', i))
             }
         }
@@ -142,11 +142,11 @@ function handleBishopLogic(currentCol, currentRow, pieces, thePiece) {
         if (flagC) {
 
             if (pieces[bishopNewPositionUpLeftDownRight(currentCol, '-', currentRow, '+', i)] !== undefined) {
+                allowedMoves.push(bishopNewPositionUpLeftDownRight(currentCol, '-', currentRow, '+', i))
                 flagC = false;
             }
 
-            if ((pieces[bishopNewPositionUpLeftDownRight(currentCol, '-', currentRow, '+', i)] === undefined ||
-                pieces[bishopNewPositionUpLeftDownRight(currentCol, '-', currentRow, '+', i)]?.color !== thePiece.color)) {
+            if (pieces[bishopNewPositionUpLeftDownRight(currentCol, '-', currentRow, '+', i)] === undefined) {
                 allowedMoves.push(bishopNewPositionUpLeftDownRight(currentCol, '-', currentRow, '+', i))
             }
         }
@@ -154,11 +154,11 @@ function handleBishopLogic(currentCol, currentRow, pieces, thePiece) {
         if (flagD) {
 
             if (pieces[bishopNewPositionUpLeftDownRight(currentCol, '+', currentRow, '-', i)] !== undefined) {
+                allowedMoves.push(bishopNewPositionUpLeftDownRight(currentCol, '+', currentRow, '-', i))
                 flagD = false;
             }
 
-            if ((pieces[bishopNewPositionUpLeftDownRight(currentCol, '+', currentRow, '-', i)] === undefined ||
-                pieces[bishopNewPositionUpLeftDownRight(currentCol, '+', currentRow, '-', i)]?.color !== thePiece.color)) {
+            if (pieces[bishopNewPositionUpLeftDownRight(currentCol, '+', currentRow, '-', i)] === undefined) {
                 allowedMoves.push(bishopNewPositionUpLeftDownRight(currentCol, '+', currentRow, '-', i))
             }
         }

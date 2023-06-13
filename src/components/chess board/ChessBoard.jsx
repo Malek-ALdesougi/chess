@@ -45,20 +45,27 @@ function ChessBoard() {
   const [checkMateAllowedMoves, setCheckMateAllowedMoves] = useState({});
   const [isInitRender, setIsinitRender] = useState(true);
 
-  function checkIfmoveAllowedForEscapeCheckMate(checkMateAllowedMoves,currentPiece,currentSquare,type) {
-
-
+  function checkIfmoveAllowedForEscapeCheckMate(
+    checkMateAllowedMoves,
+    currentPiece,
+    currentSquare,
+    type
+  ) {
     let { king, ...defendersAndEaters } = checkMateAllowedMoves;
     let allow = false;
 
     if (type === 'king') {
       if (king.length > 0) {
         allow = true;
+      } else {
+        allow = false;
       }
     } else {
       Object.keys(defendersAndEaters).map((item) => {
         if (item === type + currentSquare) {
           allow = true;
+        } else {
+          allow = false;
         }
       });
     }
@@ -78,6 +85,14 @@ function ChessBoard() {
   }
 
   useEffect(() => {
+    if (isCheckMate.black === true || isCheckMate.white === true) {
+      console.log(checkMateAllowedMoves);
+      let { king, ...defendersAndEaters } = checkMateAllowedMoves;
+      if (king.length === 0 && Array.from(defendersAndEaters).length === 0) {
+        return alert('Gggg');
+      }
+    }
+
     if (isInitRender) {
       setIsinitRender(false);
       return;
@@ -116,7 +131,7 @@ function ChessBoard() {
         );
       }
     }
-  }, [pieces]);
+  }, [pieces, isCheckMate]);
 
   useEffect(() => {
     attackerPiece.current = currentPiece;
@@ -128,24 +143,39 @@ function ChessBoard() {
       // allow the player to choose another piece to play
       if (pieces[square]?.color === pieces[selectedPiece]?.color) {
         // setSelectedPiece(firstPick);
-        firstSelectedPiece(col, row, square)
+        firstSelectedPiece(col, row, square);
         return setAllowedMoves(
           checkMovesForSinglePiece(pieces[col + row], col, row, pieces)
         );
       }
 
       //TODO:  WE HAVE SOME IMPORTANT WORK HERE !!!
-
-      console.log(
-        'after the check this will happend again to determine the new allowed moves if depend on the check or normal allowed moves'
-      );
       console.log(isCheckMate);
 
-      console.log(checkIfmoveAllowed(col, row, allowedMoves,isCheckMate,checkMateAllowedMoves,currentPiece,currentSquare));
+      console.log(
+        checkIfmoveAllowed(
+          col,
+          row,
+          allowedMoves,
+          isCheckMate,
+          checkMateAllowedMoves,
+          currentPiece,
+          currentSquare
+        )
+      );
 
-      if (checkIfmoveAllowed(col, row, allowedMoves,isCheckMate,checkMateAllowedMoves,currentPiece,currentSquare)) {
-
-        setIsCheckMate({white: false, black: false})
+      if (
+        checkIfmoveAllowed(
+          col,
+          row,
+          allowedMoves,
+          isCheckMate,
+          checkMateAllowedMoves,
+          currentPiece,
+          currentSquare
+        )
+      ) {
+        setIsCheckMate({ white: false, black: false });
 
         if (pieces[selectedPiece]?.type === 'pawn') {
           pieces[selectedPiece].basePostion = false;
@@ -206,20 +236,31 @@ function ChessBoard() {
   );
 
   function firstSelectedPiece(col, row, square) {
-
     if (checkPlayerTurn(col, row, playerTurn, pieces)) {
       setAllowedMoves(
-        checkMovesForSinglePiece(pieces[col + row], col, row, pieces, isCheckMate));
+        checkMovesForSinglePiece(
+          pieces[col + row],
+          col,
+          row,
+          pieces,
+          isCheckMate
+        )
+      );
       setSelectedPiece(square);
       currentSquare = square;
       setCurrentPiece(pieces[square]);
       if (isCheckMate.black === true || isCheckMate.white === true) {
-
         console.log(isCheckMate);
 
+        console.log(checkMateAllowedMoves);
         console.log('============== anything ============');
 
-        let test = checkIfmoveAllowedForEscapeCheckMate(checkMateAllowedMoves, currentPiece, currentSquare, pieces[square].type);
+        let test = checkIfmoveAllowedForEscapeCheckMate(
+          checkMateAllowedMoves,
+          currentPiece,
+          currentSquare,
+          pieces[square].type
+        );
         if (test) {
           setSelectedPiece(square);
           setCurrentPiece(pieces[square]);
