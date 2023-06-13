@@ -25,7 +25,6 @@ export const checkKingStatus = (pieces, enemyColor) => {
                 if (pieces[item]?.type === 'king') {
                     attackersPieces = [...attackersPieces, pieces[piece]];
                     attackerSquare = piece;
-                    console.log('d||||||||||||||||||||||||||||||||||||||||||||||||one edit the isThereCheckmate');
                     isThereCheckMate = true;
                 }
             })
