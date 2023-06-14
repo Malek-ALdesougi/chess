@@ -116,7 +116,9 @@ function handleBishopLogic(currentCol, currentRow, pieces, thePiece) {
     for (let i = 1; i <= 8; i++) {
 
         if (flagA) {
-            if (pieces[bishopNewPositionUpRightDownLeft(currentCol, currentRow, '+', i)] !== undefined) {
+            if (pieces[bishopNewPositionUpRightDownLeft(currentCol, currentRow, '+', i)] !== undefined && 
+            pieces[bishopNewPositionUpRightDownLeft(currentCol, currentRow, '+', i)]?.type !== 'king' && 
+            pieces[bishopNewPositionUpRightDownLeft(currentCol, currentRow, '+', i)]?.color !== thePiece?.color) {
                 allowedMoves.push(bishopNewPositionUpRightDownLeft(currentCol, currentRow, '+', i))
                 flagA = false;
             }
@@ -128,7 +130,9 @@ function handleBishopLogic(currentCol, currentRow, pieces, thePiece) {
 
         if (flagB) {
 
-            if (pieces[bishopNewPositionUpRightDownLeft(currentCol, currentRow, '-', i)] !== undefined) {
+            if (pieces[bishopNewPositionUpRightDownLeft(currentCol, currentRow, '-', i)] !== undefined && 
+            pieces[bishopNewPositionUpRightDownLeft(currentCol, currentRow, '-', i)]?.type !== 'king' &&
+            pieces[bishopNewPositionUpRightDownLeft(currentCol, currentRow, '-', i)]?.color !== thePiece?.color) {
                 allowedMoves.push(bishopNewPositionUpRightDownLeft(currentCol, currentRow, '-', i))
                 flagB = false;
             }
@@ -141,7 +145,9 @@ function handleBishopLogic(currentCol, currentRow, pieces, thePiece) {
         //handle UP-LEFT && DOWN-RIGHT DIRECTIONS
         if (flagC) {
 
-            if (pieces[bishopNewPositionUpLeftDownRight(currentCol, '-', currentRow, '+', i)] !== undefined) {
+            if (pieces[bishopNewPositionUpLeftDownRight(currentCol, '-', currentRow, '+', i)] !== undefined &&
+            pieces[bishopNewPositionUpLeftDownRight(currentCol, '-', currentRow, '+', i)]?.type !== 'king' &&
+            pieces[bishopNewPositionUpLeftDownRight(currentCol, '-', currentRow, '+', i)]?.color !== thePiece?.color) {
                 allowedMoves.push(bishopNewPositionUpLeftDownRight(currentCol, '-', currentRow, '+', i))
                 flagC = false;
             }
@@ -153,7 +159,9 @@ function handleBishopLogic(currentCol, currentRow, pieces, thePiece) {
 
         if (flagD) {
 
-            if (pieces[bishopNewPositionUpLeftDownRight(currentCol, '+', currentRow, '-', i)] !== undefined) {
+            if (pieces[bishopNewPositionUpLeftDownRight(currentCol, '+', currentRow, '-', i)] !== undefined &&
+            pieces[bishopNewPositionUpLeftDownRight(currentCol, '+', currentRow, '-', i)]?.type !== 'king' &&
+            pieces[bishopNewPositionUpLeftDownRight(currentCol, '+', currentRow, '-', i)]?.color !== thePiece?.color) {
                 allowedMoves.push(bishopNewPositionUpLeftDownRight(currentCol, '+', currentRow, '-', i))
                 flagD = false;
             }
@@ -258,6 +266,7 @@ function handleRookLogic(currentCol, currentRow, pieces, thePiece) {
 }
 
 function handleKingNormalMoves(currentCol, currentRow, pieces) {
+
     allowedMoves = [];
     kingPossibleMoves = [];
 
@@ -268,7 +277,7 @@ function handleKingNormalMoves(currentCol, currentRow, pieces) {
 
     kingPossibleMoves = checkKingAllowedMoves(currentCol, currentRow, pieces);
 
-    allowedMoves = kingPossibleMoves.filter(move => !enemyPiecesAllowedMoves.includes(move) && move.length <= 2 && !move.includes('0') && !move.includes('9'));
+    allowedMoves = kingPossibleMoves.filter(move => !enemyPiecesAllowedMoves.includes(move) && move.length <= 2 && !move.includes('0') && !move.includes('9') && move !== currentCol + currentRow);
     return allowedMoves;
 }
 
