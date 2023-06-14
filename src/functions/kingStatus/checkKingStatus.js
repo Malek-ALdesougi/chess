@@ -7,8 +7,9 @@ export const checkKingStatus = (pieces, enemyColor) => {
     let chekker = 'king';
     let attackersPieces = [];
     let attackerSquare = '';
-    let checkMateType;
+    let checkMateType = '';
     let isThereCheckMate = false;
+
 
     Object.keys(pieces).map((piece) => {
 
@@ -16,7 +17,6 @@ export const checkKingStatus = (pieces, enemyColor) => {
         if (pieces[piece]?.color === enemyColor && pieces[piece]?.type === 'king') {
             kingCurrentSquare = piece;
         }
-
 
         //get all friendly pieces allowed moves
         if (pieces[piece]?.color !== enemyColor) {
@@ -32,6 +32,8 @@ export const checkKingStatus = (pieces, enemyColor) => {
     })
 
     if (attackersPieces !== []) {
+        
+         attackersPieces = Array.from(new Set(attackersPieces));
 
         if (attackersPieces.length > 1) {
             console.log('there is double check mate case');
