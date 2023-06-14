@@ -77,6 +77,7 @@ export function getEachEnemyPieceAllowedMoves(pieces, enemyColor, chekker) {
 
 export function getFriedlyPiecesAllowedMoves(pieces, enemyColor, attackerCurrentSquare, defensableSquares) {
 
+
     let concatedArrayTow = [];
     console.log(enemyColor);
     // let chekker = 'king';
@@ -89,14 +90,17 @@ export function getFriedlyPiecesAllowedMoves(pieces, enemyColor, attackerCurrent
             if (defensableSquares?.length !== 0) {
                 let square = singlePieceAllowedMoves?.find(square => defensableSquares?.includes(square))
                 if (square) {
+                    console.log(blockDefenders);
                     blockDefenders = { ...blockDefenders, [pieces[sinlgePiece]?.type + sinlgePiece]: square }
                 }
             }
 
             // store the EAT defenders in a new object
             if (singlePieceAllowedMoves.includes(attackerCurrentSquare)) {
-                console.log('includes');
-                console.log(attackerCurrentSquare);
+                if(blockDefenders.hasOwnProperty([pieces[sinlgePiece]?.type + sinlgePiece])){
+                    // in case a single piece could be attacker and defender at the same time
+                    blockDefenders = {...blockDefenders, [pieces[sinlgePiece]?.type + sinlgePiece] : [blockDefenders[[pieces[sinlgePiece]?.type + sinlgePiece]], attackerCurrentSquare]}
+                }
                 eatDefenders = { ...eatDefenders, [pieces[sinlgePiece]?.type + sinlgePiece]: attackerCurrentSquare }
             }
             concatedArrayTow = [...concatedArrayTow, ...singlePieceAllowedMoves];
@@ -122,20 +126,25 @@ const checkIfAttackerCouldBeEaten = (attackerPiece, attackerCurrentSquare, piece
 const checkIfCanAnyPieceBlock = (attackerPiece, attackerCurrentSquare, currentKingSquare, pieces, enemyColor) => {
 
     let defensableSquares = [];
-    console.log(enemyColor);
 
-    if (attackerPiece[0].type === 'bishop') {
+    if (attackerPiece[0]?.type === 'bishop') {
         defensableSquares = getDiagonalDefensalbleSquares(attackerCurrentSquare, currentKingSquare);
     }
-    else if (attackerPiece[0].type === 'rook') {
+    else if (attackerPiece[0]?.type === 'rook') {
         defensableSquares = getStraightDefensebaleSquares(attackerCurrentSquare, currentKingSquare);
     }
 
-    else if (attackerPiece[0].type === 'queen') {
+    else if (attackerPiece[0]?.type === 'queen') {
         //compination between the bishop and rook because the queen will attack either diagonal or stright 
         let diagonal = getDiagonalDefensalbleSquares(attackerCurrentSquare, currentKingSquare)
         let straight = getStraightDefensebaleSquares(attackerCurrentSquare, currentKingSquare)
-        defensableSquares = diagonal ? diagonal : straight;
+
+        if(diagonal.length > 0){
+            defensableSquares = diagonal;
+        }else if(straight.length > 0){
+            defensableSquares = straight;
+        }
+
     }
    return getFriedlyPiecesAllowedMoves(pieces, enemyColor, attackerCurrentSquare, defensableSquares)
 }
@@ -150,6 +159,11 @@ export const AllowedMovesToEscapeCheckMate = (isCheckMate, attackerPiece, attack
 
     // <<<<<<<<<==========================================  1- Normal Moves  ==========================================>>>>>>>>>>
 
+    kingAllowedMoves = [];
+    eatDefenders = {};
+    blockDefenders = {};
+
+    console.log(checkMateType);
 
     // rest the variable :
     let resultObject = {};
@@ -181,12 +195,13 @@ export const AllowedMovesToEscapeCheckMate = (isCheckMate, attackerPiece, attack
 
     if(checkMateType === 'double'){
         // if the case is double checkmate then there is no eat or block defenders !!
-        let finalArray = Array.from(new Set(kingAllowedMoves))
-        return finalArray
+        let finalArray = Array.from(new Set(kingAllowedMoves)).filter((item) => !item.includes('0') && !item.includes('-') && !item.includes('9'));
+        return {'king' : finalArray}
     }
 
     // <<<<<<<<==========================================  2- Eaten   ==========================================>>>>>>>>>>
 
+    console.log(checkMateType);
     
     checkIfAttackerCouldBeEaten(attackerPiece, attackerCurrentSquare, pieces, enemyColor);
 

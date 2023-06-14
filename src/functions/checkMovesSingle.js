@@ -319,7 +319,6 @@ function checkKingAllowedMoves(col, row, pieces) {
                 //
                 case 5: possibleSquare = (colNum - 1).toString() + (rowNum + 1).toString();
                     if (pieces[possibleSquare]?.color !== kingColor) {
-                        console.log('up right added !!');
                         kingPossibleMoves.push(possibleSquare);
                     }
                     break;

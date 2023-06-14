@@ -14,8 +14,6 @@ export function handleStraightDefense(attackerCurrentSquare, currentKingSquare, 
             for (let x = kingRwo; x < attackerRwo; x++) {
                 let row = x.toString();
                 square = currentKingSquare[0] + row;
-
-                console.log(defendableSquares);
                 defendableSquares.push(square);
             }
             break;
@@ -27,8 +25,6 @@ export function handleStraightDefense(attackerCurrentSquare, currentKingSquare, 
                 let row = x.toString();
 
                 square = currentKingSquare[0] + row;
-
-                console.log(defendableSquares);
                 defendableSquares.push(square);
             }
             break;
@@ -38,9 +34,7 @@ export function handleStraightDefense(attackerCurrentSquare, currentKingSquare, 
 
             for (let i = kingCol; i < attackerCol; i++) {
                 let col = i.toString();
-
                 square = col + currentKingSquare[1];
-                console.log(defendableSquares);
                 defendableSquares.push(square);
             }
             break;
@@ -50,15 +44,14 @@ export function handleStraightDefense(attackerCurrentSquare, currentKingSquare, 
 
             for (let i = kingCol; i > attackerCol; i--) {
                 let col = i.toString();
-
                 square = col + currentKingSquare[1];
-                console.log(defendableSquares);
                 defendableSquares.push(square);
             }
             break;
 
         default: return defendableSquares;
     }
+    console.log(defendableSquares);
     return defendableSquares;
 
 }

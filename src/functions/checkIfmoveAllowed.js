@@ -7,6 +7,9 @@ export function checkIfmoveAllowed(col, row, allowedMoves, isCheckMate, checkMat
 
   console.log(checkMateAllowedMoves);
 
+  console.log(selectedPiece);
+  // console.log(currentSquare);
+
   if (isCheckMate.black === true || isCheckMate.white === true) {
 
 
@@ -24,13 +27,28 @@ export function checkIfmoveAllowed(col, row, allowedMoves, isCheckMate, checkMat
         x = true ;
       }
     } 
+
+    console.log(defendersAndEaters);
     
       Object.keys(defendersAndEaters).map((item) => {
-        if (item === selectedPiece.type + currentSquare) {
-          if (defendersAndEaters[item] === col + row) {
-            allowed = true;
-          }else{
-            x = true;
+        // console.log(defendersAndEaters[item]);
+        if(Array.isArray(defendersAndEaters[item])){
+          if(col + row === defendersAndEaters[item][0] || col + row === defendersAndEaters[item][1]){
+          console.log(col + row);
+          console.log('its an array means that its eater and defender');
+          return allowed = true;
+        }
+      }else{
+
+          console.log(selectedPiece.type + currentSquare);
+
+
+          if (item === selectedPiece.type + currentSquare) {
+            if (defendersAndEaters[item] === col + row) {
+              allowed = true;
+            }else{
+              x = true;
+            }
           }
         }
       });
