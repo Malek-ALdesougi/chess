@@ -49,6 +49,8 @@ function ChessBoard() {
       let enemyColor = currentPiece.color === 'white' ? 'black' : 'white';
       let kingCheckResult = checkKingStatus(pieces, enemyColor);
 
+      console.log(kingCheckResult.isThereCheckMate);
+
 
       console.log(isCheckMate);
 
@@ -96,7 +98,7 @@ function ChessBoard() {
         return alert('Gggg');
       }
     }
-  }, [isCheckMate, checkMateAllowedMoves]);
+  }, [isCheckMate]);
 
   useEffect(() => {
     attackerPiece.current = currentPiece;

@@ -16,11 +16,19 @@ export const checkKingStatus = (pieces, enemyColor) => {
         //get the enemy king current square
         if (pieces[piece]?.color === enemyColor && pieces[piece]?.type === 'king') {
             kingCurrentSquare = piece;
+
+            console.log(kingCurrentSquare);
         }
+
+
 
         //get all friendly pieces allowed moves
         if (pieces[piece]?.color !== enemyColor) {
             friedlyPieceAllowedMoves = checkMovesForSinglePiece(pieces[piece], piece[0], piece[1], pieces, chekker);
+
+            console.log(pieces[piece]);
+            console.log(friedlyPieceAllowedMoves);
+
             friedlyPieceAllowedMoves.map((item) => {
                 if (pieces[item]?.type === 'king') {
                     attackersPieces = [...attackersPieces, pieces[piece]];
