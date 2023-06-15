@@ -1,31 +1,28 @@
 import { handleStraightDefense } from "./handleStraightDefense";
 
+
+export function getStraightDirection(attackerCurrentSquare, currentKingSquare){
+    if (Number(attackerCurrentSquare[0]) === Number(currentKingSquare[0]) && Number(attackerCurrentSquare[1]) > Number(currentKingSquare[1])) {
+        return 'top'
+    }
+    else if (Number(attackerCurrentSquare[0]) === Number(currentKingSquare[0]) && Number(attackerCurrentSquare[1]) < Number(currentKingSquare[1])) {
+        return 'bottom'
+    } else if (Number(attackerCurrentSquare[0]) > Number(currentKingSquare[0]) && Number(attackerCurrentSquare[1]) === Number(currentKingSquare[1])) {
+        return 'right'
+    } else if (Number(attackerCurrentSquare[0]) < Number(currentKingSquare[0]) && Number(attackerCurrentSquare[1]) === Number(currentKingSquare[1])) {
+        return 'left'
+    }
+}
+
 export function getStraightDefensebaleSquares(attackerCurrentSquare, currentKingSquare) {
 
     let squares = [];
-    let direction;
+    let direction = getStraightDirection(attackerCurrentSquare, currentKingSquare);
     //rook attack defense logic
-    if (Number(attackerCurrentSquare[0]) === Number(currentKingSquare[0]) && Number(attackerCurrentSquare[1]) > Number(currentKingSquare[1])) {
-        direction = 'top'
-        squares = handleStraightDefense(attackerCurrentSquare, currentKingSquare, direction)
-    }
+    squares = handleStraightDefense(attackerCurrentSquare, currentKingSquare, direction)
 
-    else if (Number(attackerCurrentSquare[0]) === Number(currentKingSquare[0]) && Number(attackerCurrentSquare[1]) < Number(currentKingSquare[1])) {
-
-        direction = 'bottom'
-        squares = handleStraightDefense(attackerCurrentSquare, currentKingSquare, direction)
-
-    } else if (Number(attackerCurrentSquare[0]) > Number(currentKingSquare[0]) && Number(attackerCurrentSquare[1]) === Number(currentKingSquare[1])) {
-
-        direction = 'right'
-        squares = handleStraightDefense(attackerCurrentSquare, currentKingSquare, direction)
-
-    } else if (Number(attackerCurrentSquare[0]) < Number(currentKingSquare[0]) && Number(attackerCurrentSquare[1]) === Number(currentKingSquare[1])) {
-
-        direction = 'left'
-        squares = handleStraightDefense(attackerCurrentSquare, currentKingSquare, direction)
-    }
-
+    console.log(squares);
+    
     return squares;
 
 }

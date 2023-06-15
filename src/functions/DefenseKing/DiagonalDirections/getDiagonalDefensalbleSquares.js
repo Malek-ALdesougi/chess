@@ -1,29 +1,30 @@
 import { handleDiagonalDefense } from "./handleDiagonalDefense";
 
+export function getDiagonalDirection(attackerCurrentSquare, currentKingSquare){
 
-export function getDiagonalDefensalbleSquares(attackerCurrentSquare, currentKingSquare) {
-    let squares = [];
-    let direction;
-    //bishop attack logic
     if (Number(attackerCurrentSquare[0]) > Number(currentKingSquare[0]) && Number(attackerCurrentSquare[1]) < Number(currentKingSquare[1])) {
-        direction = 'right_bottom'
-        squares = handleDiagonalDefense(attackerCurrentSquare, currentKingSquare, direction)
-    }
-
-    else if (Number(attackerCurrentSquare[0]) > Number(currentKingSquare[0]) && Number(attackerCurrentSquare[1]) > Number(currentKingSquare[1])) {
-
-        direction = 'right_top'
-        squares = handleDiagonalDefense(attackerCurrentSquare, currentKingSquare, direction)
+        return 'right_bottom'
+    }else if (Number(attackerCurrentSquare[0]) > Number(currentKingSquare[0]) && Number(attackerCurrentSquare[1]) > Number(currentKingSquare[1])) {
+        return 'right_top'
 
     } else if (Number(attackerCurrentSquare[0]) < Number(currentKingSquare[0]) && Number(attackerCurrentSquare[1]) < Number(currentKingSquare[1])) {
-
-        direction = 'left_bottom'
-        squares = handleDiagonalDefense(attackerCurrentSquare, currentKingSquare, direction)
+        return 'left_bottom'
 
     } else if (Number(attackerCurrentSquare[0]) < Number(currentKingSquare[0]) && Number(attackerCurrentSquare[1]) > Number(currentKingSquare[1])) {
+        return 'left_top'
+    }
 
-        direction = 'left_top'
-        squares = handleDiagonalDefense(attackerCurrentSquare, currentKingSquare, direction)
+}
+
+export function getDiagonalDefensalbleSquares(attackerCurrentSquare, currentKingSquare, returnOnlyDirection = false) {
+    let squares = [];
+    let direction = getDiagonalDirection(attackerCurrentSquare, currentKingSquare);
+    //bishop attack logic
+    squares = handleDiagonalDefense(attackerCurrentSquare, currentKingSquare, direction)
+
+    console.log(direction);
+    if(returnOnlyDirection){
+        return direction
     }
 
     return squares;
