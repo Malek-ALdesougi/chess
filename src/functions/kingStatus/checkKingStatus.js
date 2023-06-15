@@ -1,4 +1,4 @@
-import { checkMovesForSinglePiece } from "../checkMovesSingle";
+import { checkMovesForSinglePiece } from "../singlePieceMoves/checkMovesSingle";
 
 export const checkKingStatus = (pieces, enemyColor) => {
 
@@ -48,9 +48,12 @@ export const checkKingStatus = (pieces, enemyColor) => {
             checkMateType = 'double';
         } else if (attackersPieces.length === 1) {
             console.log('there is only sinble check mate case');
+            console.log(attackersPieces);
             checkMateType = 'single';
         }
     }
+
+    console.log(checkMateType);
 
 
     if(isThereCheckMate === true){

@@ -1,9 +1,11 @@
 // Reuse checkMovesForSinglePiece
-import { checkMovesForSinglePiece } from "./checkMovesSingle";
+import { checkMovesForSinglePiece } from "../singlePieceMoves/checkMovesSingle";
 
-import { getDiagonalDefensalbleSquares } from "./DefenseKing/DiagonalDirections/getDiagonalDefensalbleSquares";
+import { checkIfCanAnyPieceBlock } from "../DefenseKing/blockDefenders/checkIfCanAnyPieceBlock";
 
-import { getStraightDefensebaleSquares } from "./DefenseKing/straightDirections/getStraightDefensebaleSquares";
+import { checkIfAttackerCouldBeEaten } from "../DefenseKing/eatDefenders/checkIfAttackerCouldBeEaten";
+
+import { getEachEnemyPieceAllowedMoves } from "../enemyPiecesAllowedMoves/getEachEnemyPieceAllowedMoves";
 
 const checkMateAllowedMoves = {};
 let kingPossibleMoves = [];
@@ -12,7 +14,7 @@ let eatDefenders = {};
 let blockDefenders = {};
 
 
-function checkKingAllowedMoves(col, row) {
+function checkKingPossibleMoves(col, row) {
 
     //check the safty for THE EACH possible square for all direction around it
     let colNum = parseInt(col);
@@ -60,27 +62,11 @@ function checkKingAllowedMoves(col, row) {
     return kingPossibleMoves;
 }
 
-export function getEachEnemyPieceAllowedMoves(pieces, enemyColor, chekker) {
-
-    //TODO: IT MIGHT BE SOMETHING WRONG WITH THE RETURN OF THIS FUNCTION
-
-    let concatedArray = [];
-    Object.keys(pieces)?.map(sinlgePiece => {
-        if (pieces[sinlgePiece]?.color === enemyColor) {
-            // get all the allowed moves for all the enemy pieces ;
-            concatedArray = [...concatedArray, ...checkMovesForSinglePiece(pieces[sinlgePiece], sinlgePiece[0], sinlgePiece[1], pieces, chekker)];
-        }
-    });
-    let filteredArray = concatedArray?.filter(item => !item.includes('0') && !item.includes('9') && item.length <= 2);
-    return filteredArray;
-}
 
 export function getFriedlyPiecesAllowedMoves(pieces, enemyColor, attackerCurrentSquare, defensableSquares) {
 
 
     let concatedArrayTow = [];
-    console.log(enemyColor);
-    // let chekker = 'king';
     Object.keys(pieces)?.map(sinlgePiece => {
         if (pieces[sinlgePiece]?.color !== enemyColor) {
             // get all the allowed moves for all the friendly pieces !!
@@ -112,47 +98,6 @@ export function getFriedlyPiecesAllowedMoves(pieces, enemyColor, attackerCurrent
     return filteredArray;
 }
 
-const checkIfAttackerCouldBeEaten = (attackerPiece, attackerCurrentSquare, pieces, enemyColor) => {
-
-    // need to determine the attacker type 
-
-    // cehck if the attacker square is in the allowed moves for any of my pieces
-
-    // We have 2 categoryies of attackers --------->>>> queen bishop pawn rook ||| knight
-
-    getFriedlyPiecesAllowedMoves(pieces, enemyColor, attackerCurrentSquare)
-}
-
-const checkIfCanAnyPieceBlock = (attackerPiece, attackerCurrentSquare, currentKingSquare, pieces, enemyColor) => {
-
-    let defensableSquares = [];
-
-    if (attackerPiece[0]?.type === 'bishop') {
-        defensableSquares = getDiagonalDefensalbleSquares(attackerCurrentSquare, currentKingSquare);
-    }
-    else if (attackerPiece[0]?.type === 'rook') {
-        defensableSquares = getStraightDefensebaleSquares(attackerCurrentSquare, currentKingSquare);
-    }
-
-    else if (attackerPiece[0]?.type === 'queen') {
-        //compination between the bishop and rook because the queen will attack either diagonal or stright 
-        let diagonal = getDiagonalDefensalbleSquares(attackerCurrentSquare, currentKingSquare)
-        let straight = getStraightDefensebaleSquares(attackerCurrentSquare, currentKingSquare)
-
-        if(diagonal.length > 0){
-            defensableSquares = diagonal;
-        }else if(straight.length > 0){
-            defensableSquares = straight;
-        }
-
-    }
-   return getFriedlyPiecesAllowedMoves(pieces, enemyColor, attackerCurrentSquare, defensableSquares)
-}
-
-
-
-
-
 
 
 export const AllowedMovesToEscapeCheckMate = (isCheckMate, attackerPiece, attackerCurrentSquare, currentKingSquare, pieces, checkMateType) => {
@@ -180,7 +125,7 @@ export const AllowedMovesToEscapeCheckMate = (isCheckMate, attackerPiece, attack
     let row = currentKingSquare[1];
 
     // the checked king possible moves
-    kingPossibleMoves = checkKingAllowedMoves(col, row, pieces, chekker);
+    kingPossibleMoves = checkKingPossibleMoves(col, row, pieces, chekker);
 
     // all the enemy pieces allowed moves
     let enemyPiecesAllowedMoves = getEachEnemyPieceAllowedMoves(pieces, enemyColor, chekker);
@@ -199,32 +144,15 @@ export const AllowedMovesToEscapeCheckMate = (isCheckMate, attackerPiece, attack
         return {'king' : finalArray}
     }
 
-    // <<<<<<<<==========================================  2- Eaten   ==========================================>>>>>>>>>>
-
-    console.log(checkMateType);
+    // <<<<<<<<==========================================  2- Eaters Pieces  ==========================================>>>>>>>>>>
     
     checkIfAttackerCouldBeEaten(attackerPiece, attackerCurrentSquare, pieces, enemyColor);
 
-    // <<<<<<<<==========================================  3- Blocked   ==========================================>>>>>>>>>>
+    // <<<<<<<<==========================================  3- Blockers Pieces   ==========================================>>>>>>>>>>
     checkIfCanAnyPieceBlock(attackerPiece, attackerCurrentSquare, currentKingSquare, pieces, enemyColor)
 
-
-
-
-    // let finalArray = Array.from(new Set(kingAllowedMoves))
-
     let filterdKingMoves = kingAllowedMoves.filter(item => !item.includes('9') && !item.includes('0') && !item.includes('-'))
-
-
-    console.log(filterdKingMoves);
     resultObject = { ...checkMateAllowedMoves, 'king': filterdKingMoves, ...eatDefenders, ...blockDefenders }
 
-    console.log(resultObject);
-
     return resultObject;
-
-
-    //TODO: THIS FUNCTION MUST RETURN THE OBJECT OF THE ALLOWED MOVES IN THE CHECK-MATE CASE ;
-    // TO BE RETURNED TO THE STATE IN CHESS BOARD COMPONENT TO SET THE ALLOWED MOVES AGAIN;;;;;;
-
 }

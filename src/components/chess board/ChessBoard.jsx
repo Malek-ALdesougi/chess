@@ -14,10 +14,10 @@ import { useDispatch, useSelector } from 'react-redux';
 import { UpdatePieces } from '../../redux/piecesReducer/actions';
 
 //functions
-import { checkMovesForSinglePiece } from '../../functions/checkMovesSingle';
-import { checkPlayerTurn } from '../../functions/checkPlayerTurn';
-import { checkIfmoveAllowed } from '../../functions/checkIfmoveAllowed';
-import { AllowedMovesToEscapeCheckMate } from '../../functions/AllowedMovesToEscapeCheckMate';
+import { checkMovesForSinglePiece } from '../../functions/singlePieceMoves/checkMovesSingle';
+import { checkPlayerTurn } from '../../functions/playerTurn/checkPlayerTurn';
+import { checkIfmoveAllowed } from '../../functions/checkIfMoveAllowed/checkIfmoveAllowed';
+import { AllowedMovesToEscapeCheckMate } from '../../functions/escapeCheckMate/AllowedMovesToEscapeCheckMate';
 import { checkKingStatus } from '../../functions/kingStatus/checkKingStatus';
 
 let currentSquare;
@@ -129,7 +129,6 @@ function ChessBoard() {
     return allow;
   }
 
-  //TODO: handle when the uesr first click on undefiend square -----> the game is get craches;
 
   const getPieceAt = (square) => {
     // Return the piece object for the given square to show it on the square
@@ -172,6 +171,8 @@ function ChessBoard() {
       }
     }
   }
+
+  console.log(allowedMoves);
 
   function handleMove(square, col, row) {
     if (selectedPiece) {
