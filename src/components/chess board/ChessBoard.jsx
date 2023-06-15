@@ -19,6 +19,7 @@ import { checkPlayerTurn } from '../../functions/playerTurn/checkPlayerTurn';
 import { checkIfmoveAllowed } from '../../functions/checkIfMoveAllowed/checkIfmoveAllowed';
 import { AllowedMovesToEscapeCheckMate } from '../../functions/escapeCheckMate/AllowedMovesToEscapeCheckMate';
 import { checkKingStatus } from '../../functions/kingStatus/checkKingStatus';
+import { Notification } from '../toastifyAlert/toastify';
 
 let currentSquare;
 
@@ -166,13 +167,11 @@ function ChessBoard() {
         } else {
           setSelectedPiece(null);
           setCurrentPiece({});
-          alert('choose a valid piece to play noob !!');
+          Notification('choose a valid piece Noob !!')
         }
       }
     }
   }
-
-  console.log(allowedMoves);
 
   function handleMove(square, col, row) {
     if (selectedPiece) {
@@ -227,7 +226,7 @@ function ChessBoard() {
           return (
             <div key={square} id={square} className={`square ${isBlackSquare ? 'black' : 'white'}`} onClick={() => handleMove(square, col, row)}>
               {piece && (<Piece tabIndex="-1" color={piece?.color} type={piece.type} /> )}
-              {!piece && square}
+              {/* {!piece && square} */}
             </div>
           );
         });

@@ -7,11 +7,9 @@ import { checkIfAttackerCouldBeEaten } from "../DefenseKing/eatDefenders/checkIf
 
 import { getEachEnemyPieceAllowedMoves } from "../enemyPiecesAllowedMoves/getEachEnemyPieceAllowedMoves";
 
-import { getDiagonalDirection } from "../DefenseKing/DiagonalDirections/getDiagonalDefensalbleSquares";
+import { getAttackerOppositeSquare } from "../oppositeSquareInCheckMate/getAttackerOppositeSquare";
 
-import { getStraightDirection } from "../DefenseKing/straightDirections/getStraightDefensebaleSquares";
-
-import { handleStraightDefense } from "../DefenseKing/straightDirections/handleStraightDefense";
+import { getAttackerDirection } from "../oppositeSquareInCheckMate/getAttackerDirection";
 
 const checkMateAllowedMoves = {};
 let kingPossibleMoves = [];
@@ -105,92 +103,6 @@ export function getFriedlyPiecesAllowedMoves(pieces, enemyColor, attackerCurrent
 }
 
 
-function getAttackerDirection(attackerPiece, attackerCurrentSquare, currentKingSquare, pieces) {
-
-    let direciton;
-    if (attackerPiece[0]?.type === 'bishop') {
-        direciton = getDiagonalDirection(attackerCurrentSquare, currentKingSquare)
-    }
-
-    if (attackerPiece[0]?.type === 'rook') {
-        direciton = getStraightDirection(attackerCurrentSquare, currentKingSquare)
-    }
-
-    if (attackerPiece[0]?.type === 'queen') {
-        let diagonal = getDiagonalDirection(attackerCurrentSquare, currentKingSquare);
-        let straight = getStraightDirection(attackerCurrentSquare, currentKingSquare);
-
-        direciton = diagonal ? diagonal : straight;
-    }
-
-    return direciton;
-    // now all squares in the opposite direction will be not allowd for the king 
-
-}
-
-function getAttackerOppositeSquare(attackerDirection, currentKingSquare) {
-    console.log(attackerDirection);
-    console.log(currentKingSquare);
-
-    let oppositeSquare = '';
-    let kingCurrentCol = parseInt(currentKingSquare[0]);
-    let kingCurrentRow = parseInt(currentKingSquare[1]);
-
-    switch (attackerDirection) {
-        case 'top':
-            kingCurrentRow = (kingCurrentRow - 1).toString()
-            oppositeSquare = getOppositeSquare(kingCurrentCol, kingCurrentRow);
-            break;
-        case 'bottom':
-            kingCurrentRow = (kingCurrentRow + 1).toString()
-            oppositeSquare = getOppositeSquare(kingCurrentCol, kingCurrentRow);
-            break;
-
-        case 'right':
-            kingCurrentCol = (kingCurrentCol - 1).toString();
-            oppositeSquare = getOppositeSquare(kingCurrentCol, kingCurrentRow);
-            break;
-        case 'left':
-            kingCurrentCol = (kingCurrentCol + 1).toString();
-            oppositeSquare = getOppositeSquare(kingCurrentCol, kingCurrentRow);
-            break;
-        case 'right_top':
-            kingCurrentCol = (kingCurrentCol - 1).toString()
-            kingCurrentRow = (kingCurrentRow - 1).toString();
-            oppositeSquare = getOppositeSquare(kingCurrentCol, kingCurrentRow);
-            break;
-
-        case 'right_bottom':
-            kingCurrentCol = (kingCurrentCol - 1).toString()
-            kingCurrentRow = (kingCurrentRow + 1).toString();
-            oppositeSquare = getOppositeSquare(kingCurrentCol, kingCurrentRow);
-            break;
-
-        case 'left_bottom':
-            kingCurrentCol = (kingCurrentCol + 1).toString()
-            kingCurrentRow = (kingCurrentRow + 1).toString();
-            oppositeSquare = getOppositeSquare(kingCurrentCol, kingCurrentRow);
-            break;
-
-        case 'left_top':
-            kingCurrentCol = (kingCurrentCol + 1).toString()
-            kingCurrentRow = (kingCurrentRow - 1).toString();
-            oppositeSquare = getOppositeSquare(kingCurrentCol, kingCurrentRow);
-            break;
-
-        default: return oppositeSquare;
-    }
-
-    return oppositeSquare;
-}
-
-function getOppositeSquare(kingCurrentCol, kingCurrentRow, attackerDirection) {
-    let oppositeSquare = '';
-    oppositeSquare = kingCurrentCol + kingCurrentRow;
-    return oppositeSquare;
-}
-
-
 export const AllowedMovesToEscapeCheckMate = (isCheckMate, attackerPiece, attackerCurrentSquare, currentKingSquare, pieces, checkMateType) => {
 
     // <<<<<<<<<==========================================  1- Normal Moves  ==========================================>>>>>>>>>>
@@ -199,14 +111,10 @@ export const AllowedMovesToEscapeCheckMate = (isCheckMate, attackerPiece, attack
     kingAllowedMoves = [];
     eatDefenders = {};
     blockDefenders = {};
-
-    console.log(attackerCurrentSquare);
-
     attackerDirection = getAttackerDirection(attackerPiece, attackerCurrentSquare, currentKingSquare, pieces);
 
     let oppositeSquare = getAttackerOppositeSquare(attackerDirection, currentKingSquare);
 
-    console.log(oppositeSquare);
 
     // rest the variable :
     let resultObject = {};
