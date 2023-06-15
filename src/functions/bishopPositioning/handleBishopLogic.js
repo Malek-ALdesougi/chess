@@ -13,71 +13,78 @@ export function handleBishopLogic(currentCol, currentRow, pieces, thePiece) {
 
         if (flagA) {
 
-            if((pieces[bishopNewPositionUpRightDownLeft(currentCol, currentRow, '+', i)]?.type === 'king' && 
-            pieces[bishopNewPositionUpRightDownLeft(currentCol, currentRow, '+', i)]?.color !== thePiece?.color)){
-                flagA = false;
-            }
-
-            if (pieces[bishopNewPositionUpRightDownLeft(currentCol, currentRow, '+', i)] !== undefined) {
-                allowedMoves.push(bishopNewPositionUpRightDownLeft(currentCol, currentRow, '+', i))
-                flagA = false;
-            }
-
             if (pieces[bishopNewPositionUpRightDownLeft(currentCol, currentRow, '+', i)] === undefined) {
                 allowedMoves.push(bishopNewPositionUpRightDownLeft(currentCol, currentRow, '+', i))
             }
+            else if (pieces[bishopNewPositionUpRightDownLeft(currentCol, currentRow, '+', i)]?.type === 'king' &&
+                pieces[bishopNewPositionUpRightDownLeft(currentCol, currentRow, '+', i)]?.color !== thePiece?.color) {
+                allowedMoves.push(bishopNewPositionUpRightDownLeft(currentCol, currentRow, '+', i))
+                flagA = false;
+            }
+            else if (pieces[bishopNewPositionUpRightDownLeft(currentCol, currentRow, '+', i)] !== undefined &&
+                pieces[bishopNewPositionUpRightDownLeft(currentCol, currentRow, '+', i)]?.type !== 'king') {
+                allowedMoves.push(bishopNewPositionUpRightDownLeft(currentCol, currentRow, '+', i))
+                flagA = false;
+            } else { flagA = false }
+
         }
 
         if (flagB) {
 
-            if((pieces[bishopNewPositionUpRightDownLeft(currentCol, currentRow, '-', i)]?.type === 'king' &&
-            pieces[bishopNewPositionUpRightDownLeft(currentCol, currentRow, '-', i)]?.color !== thePiece?.color)){
-                flagB = false;
-            }
-
-            if (pieces[bishopNewPositionUpRightDownLeft(currentCol, currentRow, '-', i)] !== undefined) {
-                allowedMoves.push(bishopNewPositionUpRightDownLeft(currentCol, currentRow, '-', i))
-                flagB = false;
-            }
-
             if (pieces[bishopNewPositionUpRightDownLeft(currentCol, currentRow, '-', i)] === undefined) {
                 allowedMoves.push(bishopNewPositionUpRightDownLeft(currentCol, currentRow, '-', i))
             }
+            else if (pieces[bishopNewPositionUpRightDownLeft(currentCol, currentRow, '-', i)]?.type === 'king' &&
+                pieces[bishopNewPositionUpRightDownLeft(currentCol, currentRow, '-', i)]?.color !== thePiece?.color) {
+                allowedMoves.push(bishopNewPositionUpRightDownLeft(currentCol, currentRow, '-', i))
+                flagB = false;
+            }
+            else if (pieces[bishopNewPositionUpRightDownLeft(currentCol, currentRow, '-', i)] !== undefined &&
+                pieces[bishopNewPositionUpRightDownLeft(currentCol, currentRow, '-', i)]?.type !== 'king') {
+                allowedMoves.push(bishopNewPositionUpRightDownLeft(currentCol, currentRow, '-', i))
+                flagB = false;
+            } else { flagB = false }
+
+
         }
 
         //handle UP-LEFT && DOWN-RIGHT DIRECTIONS
         if (flagC) {
 
-            if((pieces[bishopNewPositionUpLeftDownRight(currentCol, '-', currentRow, '+', i)]?.type === 'king' &&
-            pieces[bishopNewPositionUpLeftDownRight(currentCol, '-', currentRow, '+', i)]?.color !== thePiece?.color)){
-                flagC = false;
-            }
-
-            if (pieces[bishopNewPositionUpLeftDownRight(currentCol, '-', currentRow, '+', i)] !== undefined) {
-                allowedMoves.push(bishopNewPositionUpLeftDownRight(currentCol, '-', currentRow, '+', i))
-                flagC = false;
-            }
-
             if (pieces[bishopNewPositionUpLeftDownRight(currentCol, '-', currentRow, '+', i)] === undefined) {
                 allowedMoves.push(bishopNewPositionUpLeftDownRight(currentCol, '-', currentRow, '+', i))
             }
+            else if (pieces[bishopNewPositionUpLeftDownRight(currentCol, '-', currentRow, '+', i)]?.type === 'king' &&
+                pieces[bishopNewPositionUpLeftDownRight(currentCol, '-', currentRow, '+', i)]?.color !== thePiece?.color) {
+                allowedMoves.push(bishopNewPositionUpLeftDownRight(currentCol, '-', currentRow, '+', i))
+                flagC = false;
+            }
+            else if (pieces[bishopNewPositionUpLeftDownRight(currentCol, '-', currentRow, '+', i)] !== undefined &&
+                pieces[bishopNewPositionUpLeftDownRight(currentCol, '-', currentRow, '+', i)]?.type !== 'king') {
+                allowedMoves.push(bishopNewPositionUpLeftDownRight(currentCol, '-', currentRow, '+', i))
+                flagC = false;
+            } else { flagC = false }
+
+
         }
 
         if (flagD) {
 
-            if((pieces[bishopNewPositionUpLeftDownRight(currentCol, '+', currentRow, '-', i)]?.type === 'king' &&
-            pieces[bishopNewPositionUpLeftDownRight(currentCol, '+', currentRow, '-', i)]?.color !== thePiece?.color)){
-                flagD = false;
-            }
-
-            if (pieces[bishopNewPositionUpLeftDownRight(currentCol, '+', currentRow, '-', i)] !== undefined) {
-                allowedMoves.push(bishopNewPositionUpLeftDownRight(currentCol, '+', currentRow, '-', i))
-                flagD = false;
-            }
-
             if (pieces[bishopNewPositionUpLeftDownRight(currentCol, '+', currentRow, '-', i)] === undefined) {
                 allowedMoves.push(bishopNewPositionUpLeftDownRight(currentCol, '+', currentRow, '-', i))
             }
+            else if (pieces[bishopNewPositionUpLeftDownRight(currentCol, '+', currentRow, '-', i)]?.type === 'king' &&
+                pieces[bishopNewPositionUpLeftDownRight(currentCol, '+', currentRow, '-', i)]?.color !== thePiece?.color) {
+                allowedMoves.push(bishopNewPositionUpLeftDownRight(currentCol, '+', currentRow, '-', i))
+                flagD = false;
+            }
+            else if (pieces[bishopNewPositionUpLeftDownRight(currentCol, '+', currentRow, '-', i)] !== undefined &&
+                pieces[bishopNewPositionUpLeftDownRight(currentCol, '+', currentRow, '-', i)]?.type !== 'king') {
+                allowedMoves.push(bishopNewPositionUpLeftDownRight(currentCol, '+', currentRow, '-', i))
+                flagD = false;
+            } else { flagD = false }
+
+
         }
     }
 

@@ -29,7 +29,9 @@ export const checkKingStatus = (pieces, enemyColor) => {
             console.log(pieces[piece]);
             console.log(friedlyPieceAllowedMoves);
 
-            friedlyPieceAllowedMoves.map((item) => {
+            console.log(friedlyPieceAllowedMoves);
+
+            friedlyPieceAllowedMoves?.map((item) => {
                 if (pieces[item]?.type === 'king') {
                     attackersPieces = [...attackersPieces, pieces[piece]];
                     attackerSquare = piece;
