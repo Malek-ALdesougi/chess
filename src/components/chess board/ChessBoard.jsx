@@ -21,6 +21,8 @@ import { AllowedMovesToEscapeCheckMate } from '../../functions/escapeCheckMate/A
 import { checkKingStatus } from '../../functions/kingStatus/checkKingStatus';
 import { Notification } from '../toastifyAlert/toastify';
 
+import { getStraightDirection } from '../../functions/DefenseKing/straightDirections/getStraightDefensebaleSquares';
+
 let currentSquare;
 
 function ChessBoard() {
@@ -49,15 +51,8 @@ function ChessBoard() {
     } else {
       let enemyColor = currentPiece.color === 'white' ? 'black' : 'white';
       let kingCheckResult = checkKingStatus(pieces, enemyColor);
-
-      console.log(kingCheckResult.isThereCheckMate);
-
-
-      console.log(isCheckMate);
-
       
       if (kingCheckResult.isThereCheckMate === true) {
-        console.log('Is check mate get updated');
         //to access the updated isCheckMate state immediately
         let updatedIsCheckMate = {};
         if (currentPiece?.color === 'white') {
@@ -65,16 +60,7 @@ function ChessBoard() {
         } else if (currentPiece?.color === 'black') {
           updatedIsCheckMate = { ...isCheckMate, white: true };
         }
-
-        console.log(
-          '=================== we cant change the checkmate unless the condition is true =================='
-        );
         setIsCheckMate(updatedIsCheckMate);
-
-        console.log(kingCheckResult?.checkMateType);
-
-        console.log(AllowedMovesToEscapeCheckMate(updatedIsCheckMate, kingCheckResult?.attackersPieces, kingCheckResult?.attackerSquare, kingCheckResult?.kingCurrentSquare,pieces,kingCheckResult?.checkMateType));
-
         return setCheckMateAllowedMoves(
           AllowedMovesToEscapeCheckMate(updatedIsCheckMate, kingCheckResult?.attackersPieces, kingCheckResult?.attackerSquare, kingCheckResult?.kingCurrentSquare,pieces,kingCheckResult?.checkMateType));
       }
@@ -84,18 +70,11 @@ function ChessBoard() {
   // this useEffect to handle the end game
   useEffect(() => {
 
-    console.log(checkMateAllowedMoves);
-
     if (isCheckMate.black === true || isCheckMate.white === true) {
       let { king, ...defendersAndEaters } = checkMateAllowedMoves;
 
-      console.log(king);
-      console.log(defendersAndEaters);
-      console.log(checkMateAllowedMoves);
-
-      console.log(isCheckMate);
-
       if ((king?.length === 0 && Object.keys(defendersAndEaters)?.length === 0) || checkMateAllowedMoves?.length === 0) {
+        // here we need to return the end game component !!
         return alert('Gggg');
       }
     }
@@ -167,7 +146,7 @@ function ChessBoard() {
         } else {
           setSelectedPiece(null);
           setCurrentPiece({});
-          Notification('choose a valid piece Noob !!')
+          Notification("It's Check Mate, Choose a valid piece to play !!", 'red')
         }
       }
     }
@@ -214,6 +193,8 @@ function ChessBoard() {
     }
   }
 
+  console.log(allowedMoves);
+
   return (
     <div className="board">
       {rows.map((row) => {
@@ -226,7 +207,7 @@ function ChessBoard() {
           return (
             <div key={square} id={square} className={`square ${isBlackSquare ? 'black' : 'white'}`} onClick={() => handleMove(square, col, row)}>
               {piece && (<Piece tabIndex="-1" color={piece?.color} type={piece.type} /> )}
-              {/* {!piece && square} */}
+              {!piece && square}
             </div>
           );
         });

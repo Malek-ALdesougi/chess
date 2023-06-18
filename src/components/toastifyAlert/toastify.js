@@ -1,11 +1,11 @@
 import Toastify from 'toastify-js'
 
-export function Notification(text) {
+export function Notification(text, bg) {
 
     Toastify({
         text: `${text}`,
         className: "info",
-        duration: 1500,
+        duration: 2000,
         destination: "https://github.com/apvarun/toastify-js",
         newWindow: true,
         close: true,
@@ -16,7 +16,7 @@ export function Notification(text) {
             display: 'flex',
             justifyContent: 'center',
             alignItems: 'center',
-            background: "black",
+            background: `${bg}`,
             width: 'auto',
             height: 'auto',
             borderRadius: '50px',

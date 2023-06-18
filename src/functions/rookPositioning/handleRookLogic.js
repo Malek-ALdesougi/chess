@@ -1,4 +1,5 @@
 //functions
+import { checkIfPieceRightLeftPinnedToKing } from "../singlePieceMoves/checkMovesSingle";
 import { rookNewPosition } from "./rookNewPosition";
 
 
@@ -16,33 +17,41 @@ export function handleRookLogic(currentCol, currentRow, pieces, thePiece) {
         // up
         if (flagUp) {
 
-            if (pieces[currentCol + rookNewPosition(currentRow, '+', i)] === undefined) {
-                allowedMoves.push(currentCol + rookNewPosition(currentRow, '+', i))
+            if (!checkIfPieceRightLeftPinnedToKing(thePiece, currentCol, currentRow, pieces)) {
 
-            } else if (pieces[currentCol + rookNewPosition(currentRow, '+', i)]?.type === 'king' && pieces[currentCol + rookNewPosition(currentRow, '+', i)]?.color !== thePiece.color) {
-                allowedMoves.push(currentCol + rookNewPosition(currentRow, '+', i))
-                flagUp = false;
+                if (pieces[currentCol + rookNewPosition(currentRow, '+', i)] === undefined) {
+                    allowedMoves.push(currentCol + rookNewPosition(currentRow, '+', i))
+
+                } else if (pieces[currentCol + rookNewPosition(currentRow, '+', i)]?.type === 'king' && pieces[currentCol + rookNewPosition(currentRow, '+', i)]?.color !== thePiece.color) {
+                    allowedMoves.push(currentCol + rookNewPosition(currentRow, '+', i))
+                    flagUp = false;
+                }
+                else if (pieces[currentCol + rookNewPosition(currentRow, '+', i)] !== undefined && pieces[currentCol + rookNewPosition(currentRow, '+', i)].type !== 'king') {
+                    allowedMoves.push(currentCol + rookNewPosition(currentRow, '+', i))
+                    flagUp = false;
+                } else { flagUp = false }
             }
-            else if (pieces[currentCol + rookNewPosition(currentRow, '+', i)] !== undefined && pieces[currentCol + rookNewPosition(currentRow, '+', i)].type !== 'king') {
-                allowedMoves.push(currentCol + rookNewPosition(currentRow, '+', i))
-                flagUp = false;
-            } else { flagUp = false }
+
         }
 
         // down
         if (flagDown) {
 
-            if (pieces[currentCol + rookNewPosition(currentRow, '-', i)] === undefined) {
-                allowedMoves.push(currentCol + rookNewPosition(currentRow, '-', i))
+            if (!checkIfPieceRightLeftPinnedToKing(thePiece, currentCol, currentRow, pieces)) {
+             
+                if (pieces[currentCol + rookNewPosition(currentRow, '-', i)] === undefined) {
+                    allowedMoves.push(currentCol + rookNewPosition(currentRow, '-', i))
+                }
+                else if (pieces[currentCol + rookNewPosition(currentRow, '-', i)]?.type === 'king' && pieces[currentCol + rookNewPosition(currentRow, '-', i)]?.color !== thePiece.color) {
+                    allowedMoves.push(currentCol + rookNewPosition(currentRow, '-', i))
+                    flagDown = false;
+                }
+                else if (pieces[currentCol + rookNewPosition(currentRow, '-', i)]?.color !== undefined && pieces[currentCol + rookNewPosition(currentRow, '-', i)]?.type !== 'king') {
+                    allowedMoves.push(currentCol + rookNewPosition(currentRow, '-', i))
+                    flagDown = false;
+                } else { flagDown = false }
             }
-            else if (pieces[currentCol + rookNewPosition(currentRow, '-', i)]?.type === 'king' && pieces[currentCol + rookNewPosition(currentRow, '-', i)]?.color !== thePiece.color) {
-                allowedMoves.push(currentCol + rookNewPosition(currentRow, '-', i))
-                flagDown = false;
-            }
-            else if (pieces[currentCol + rookNewPosition(currentRow, '-', i)]?.color !== undefined && pieces[currentCol + rookNewPosition(currentRow, '-', i)]?.type !== 'king') {
-                allowedMoves.push(currentCol + rookNewPosition(currentRow, '-', i))
-                flagDown = false;
-            } else { flagDown = false }
+
         }
 
         // right
