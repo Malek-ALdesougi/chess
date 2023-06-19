@@ -25,15 +25,15 @@ export function checkIfmoveAllowed(col, row, allowedMoves, isCheckMate, checkMat
       }
     } 
 
-    console.log(defendersAndEaters);
     
       Object.keys(defendersAndEaters).map((item) => {
-        // console.log(defendersAndEaters[item]);
+        console.log(defendersAndEaters[item]);
         if(Array.isArray(defendersAndEaters[item])){
           if(col + row === defendersAndEaters[item][0] || col + row === defendersAndEaters[item][1]){
-          console.log(col + row);
           console.log('its an array means that its eater and defender');
           return allowed = true;
+        }else{
+          return x = true;
         }
       }else{
 
