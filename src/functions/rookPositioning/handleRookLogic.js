@@ -68,7 +68,6 @@ export function handleRookLogic(currentCol, currentRow, pieces, thePiece, chekke
         // right
         if (flagRight) {
 
-            console.log('reached the right and left ');
             if (!checkIfPieceTopDownPinnedToKing(thePiece, currentCol, currentRow, pieces)) {
 
                 if (pieces[rookNewPosition(currentCol, '+', i) + currentRow] === undefined) {
