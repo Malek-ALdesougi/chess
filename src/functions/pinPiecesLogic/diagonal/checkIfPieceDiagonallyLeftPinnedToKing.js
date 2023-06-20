@@ -11,7 +11,6 @@ export function checkIfPieceDiagonallyLeftPinnedToKing(thePiece, currentCol, cur
         if (pieces[i.toString() + x.toString()] !== undefined) {
             if ((pieces[i.toString() + x.toString()]?.type === 'queen' || pieces[i.toString() + x.toString()]?.type === 'bishop')
                 && pieces[i.toString() + x.toString()]?.color !== thePiece?.color) {
-                console.log('attacker left-Top found');
                 kingAttacker = true;
             }
             break;
@@ -22,7 +21,6 @@ export function checkIfPieceDiagonallyLeftPinnedToKing(thePiece, currentCol, cur
 
         if (pieces[i.toString() + x.toString()] !== undefined) {
             if (pieces[i.toString() + x.toString()]?.type === 'king' && pieces[i.toString() + x.toString()]?.color === thePiece?.color) {
-                console.log('king right-bottom found');
                 kingProtector = true;
             }
             break;
@@ -33,7 +31,6 @@ export function checkIfPieceDiagonallyLeftPinnedToKing(thePiece, currentCol, cur
 
         if (pieces[i.toString() + x.toString()] !== undefined) {
             if (pieces[i.toString() + x.toString()]?.type === 'king' && pieces[i.toString() + x.toString()]?.color === thePiece?.color) {
-                console.log('king left-Top found');
                 kingProtector = true;
             }
             break;
@@ -45,7 +42,6 @@ export function checkIfPieceDiagonallyLeftPinnedToKing(thePiece, currentCol, cur
         if (pieces[i.toString() + x.toString()] !== undefined) {
             if ((pieces[i.toString() + x.toString()]?.type === 'queen' || pieces[i.toString() + x.toString()]?.type === 'bishop')
                 && pieces[i.toString() + x.toString()]?.color !== thePiece?.color) {
-                console.log('attacker right-bottom found');
                 kingAttacker = true;
             }
             break;

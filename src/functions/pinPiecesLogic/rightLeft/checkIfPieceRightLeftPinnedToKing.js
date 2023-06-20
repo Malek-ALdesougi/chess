@@ -10,7 +10,6 @@ export function checkIfPieceRightLeftPinnedToKing(thePiece, currentCol, currentR
     for (let i = numberCol + 1; i <= 8; i++) {
         if (pieces[i + currentRow] !== undefined) {
             if (pieces[i + currentRow]?.type === 'king' && pieces[i + currentRow]?.color === thePiece?.color) {
-                console.log('King to right found');
                 kingProtector = true;
             }
             break;
@@ -21,7 +20,6 @@ export function checkIfPieceRightLeftPinnedToKing(thePiece, currentCol, currentR
         if (pieces[i + currentRow] !== undefined) {
             if ((pieces[i + currentRow]?.type === 'queen' || pieces[i + currentRow]?.type === 'rook') &&
                 pieces[i + currentRow]?.color !== thePiece?.color) {
-                console.log('attacker to right found');
                 kingAttacker = true;
             }
             break;
@@ -32,7 +30,6 @@ export function checkIfPieceRightLeftPinnedToKing(thePiece, currentCol, currentR
         if (pieces[i + currentRow] !== undefined) {
             if ((pieces[i + currentRow]?.type === 'queen' || pieces[i + currentRow]?.type === 'rook') &&
                 pieces[i + currentRow]?.color !== thePiece?.color) {
-                console.log('attacker to right found');
                 kingAttacker = true;
             }
             break;
@@ -43,7 +40,6 @@ export function checkIfPieceRightLeftPinnedToKing(thePiece, currentCol, currentR
     for (let i = numberCol - 1; i >= 1; i--) {
         if (pieces[i + currentRow] !== undefined) {
             if (pieces[i + currentRow]?.type === 'king' && pieces[i + currentRow]?.color === thePiece?.color) {
-                console.log('king to left found');
                 kingProtector = true;
             }
             break;

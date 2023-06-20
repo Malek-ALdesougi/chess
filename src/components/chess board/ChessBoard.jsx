@@ -11,7 +11,7 @@ import Piece from '../pieces/piece';
 import { useDispatch, useSelector } from 'react-redux';
 
 //action
-import { UpdatePieces } from '../../redux/piecesReducer/actions';
+import { UpdatePieces, handleShortCastling } from '../../redux/piecesReducer/actions';
 
 //functions
 import { checkMovesForSinglePiece } from '../../functions/singlePieceMoves/checkMovesSingle';
@@ -42,6 +42,9 @@ function ChessBoard() {
   const [attackerCurrentSquare, setAttackerCurrentSquare] = useState('');
   const [checkMateAllowedMoves, setCheckMateAllowedMoves] = useState({});
   const [isInitRender, setIsinitRender] = useState(true);
+
+  let firstSelected = useRef({});
+  let secondSelected = {};
 
 
   useEffect(() => {
@@ -120,9 +123,153 @@ function ChessBoard() {
   }
 
 
+  function checkCastlingKingNewSquare(kingNewSquare, castlingType){
+
+    console.log(castlingType); 
+    let kingCol, kingRow = '';
+    let isTherePiecesBetween = true;
+
+    if(currentPiece?.color === 'white'){
+      kingCol = '5';
+      kingRow = '1';
+      console.log('white king want to castle');
+    }else{
+      kingCol = '5';
+      kingRow = '8';
+      console.log('black king want to castle');
+    }
+
+    let concatedArray = [];
+    Object.keys(pieces)?.map(sinlgePiece => {
+        if (pieces[sinlgePiece]?.color !== currentPiece?.color) {
+            if (pieces[sinlgePiece]?.type !== 'king') {
+                concatedArray = [...concatedArray, ...checkMovesForSinglePiece(pieces[sinlgePiece], sinlgePiece[0], sinlgePiece[1], pieces)];
+            }
+        }
+    })
+    let filteredArray = concatedArray?.filter(item => !item.includes('0') && !item.includes('9') && item.length <= 2);
+    let foundInEnemyAllowedMoves = filteredArray.some((item) => item === kingNewSquare);
+
+    console.log(foundInEnemyAllowedMoves);
+
+    if(castlingType === 'short'){
+
+      if(pieces[(parseInt(kingCol) + 1) + kingRow] === undefined && pieces[(parseInt(kingCol) + 2) + kingRow] === undefined){
+        console.log('there is no pieces between short');
+        isTherePiecesBetween = false;
+      }
+    }else if(castlingType === 'long'){
+      if(pieces[(parseInt(kingCol) - 1) + kingRow] === undefined 
+      && pieces[(parseInt(kingCol) - 2) + kingRow] === undefined
+      && pieces[(parseInt(kingCol) - 3) + kingRow] === undefined){
+        console.log('there is no pieces between long');
+        isTherePiecesBetween = false;
+      }
+    }
+
+    
+    console.log(foundInEnemyAllowedMoves)
+    console.log(isTherePiecesBetween);
+
+    if(foundInEnemyAllowedMoves || isTherePiecesBetween){
+      //return false if the square founded in the enemy pieces allowed moves
+      console.log('returned from the first if');
+      return false;
+    }else if(!foundInEnemyAllowedMoves && !isTherePiecesBetween){
+      return true;
+    }else{
+      return false;
+    }
+
+  }
+
+  function castling(){
+    // checka mate === false; ============== DONE
+    // both pices must not moved at all; ================== DONE
+    //the new king square must not be under attack ==================== DONE
+
+    // ====================================        HANDLE SHORT CASTLING LOGIC   =============================================
+
+      if(((pieces[firstSelected.current]?.type === 'king' && pieces[secondSelected]?.type === 'rook' 
+      && (pieces[firstSelected.current]?.color === pieces[secondSelected]?.color === currentPiece?.color)  
+      && firstSelected.current ===  currentPiece?.color === 'white' ? '51' : '58' && secondSelected === currentPiece?.color === 'white'? '81' : '88')) 
+      ||
+       (pieces[firstSelected.current]?.type === 'rook' && pieces[secondSelected]?.type === 'king' 
+      && (pieces[firstSelected.current]?.color === pieces[secondSelected]?.color === currentPiece?.color)  
+      && firstSelected.current === currentPiece?.color === 'white' ? '81' : '88' && secondSelected === currentPiece?.color === 'white' ? '51' : '58')){
+
+        if(((pieces[secondSelected]?.type === 'rook' && secondSelected === '81') || (pieces[firstSelected.current]?.type === 'rook' && firstSelected.current === '81')) ||
+        ((pieces[secondSelected]?.type === 'rook' && secondSelected === '88') || (pieces[firstSelected.current]?.type === 'rook' && firstSelected.current === '88'))){
+         
+
+         
+          console.log('it defently short castling');
+
+
+          if(isCheckMate.black === false && isCheckMate.white === false){
+  
+            if(checkCastlingKingNewSquare(currentPiece?.color === 'white' ? '71': '78', 'short')){
+              console.log(firstSelected.current);
+              console.log(secondSelected);
+
+              // currentPiece?.color === 'white' ? handleShortCastling('white'):handleShortCastling('black');
+              handleShortCastling(firstSelected.current, secondSelected)
+
+              console.log('valid ....he want to do the castling right rook');
+            }else{
+              console.log('not valid castling');
+            }
+          }
+
+
+        }
+
+
+      }
+
+    // ====================================        HANDLE LONG CASTLING LOGIC   =============================================
+      
+      if(((pieces[firstSelected.current]?.type === 'rook' && pieces[secondSelected]?.type === 'king' 
+      && (pieces[firstSelected.current]?.color === pieces[secondSelected]?.color === currentPiece?.color) 
+      && secondSelected === (currentPiece?.color === 'white' ? '51' : '58')) && firstSelected.current === currentPiece?.color === 'white'? '11' : '18') 
+      ||
+      ((pieces[firstSelected.current]?.type === 'king' && pieces[secondSelected]?.type === 'rook' 
+      && (pieces[firstSelected.current]?.color === pieces[secondSelected]?.color === currentPiece?.color) 
+      && secondSelected === currentPiece?.color === 'white' ? '11': '18') && firstSelected.current === currentPiece?.color === 'white' ? '51' : '58')){
+
+        if(((pieces[secondSelected]?.type === 'rook' && secondSelected === '11') || (pieces[firstSelected.current]?.type === 'rook' && firstSelected.current === '11')) ||
+        ((pieces[secondSelected]?.type === 'rook' && secondSelected === '18') || (pieces[firstSelected.current]?.type === 'rook' && firstSelected.current === '18'))){
+          
+          
+          console.log("It's defenitly long castling !!");
+
+          if(isCheckMate.black === false && isCheckMate.white === false){
+  
+            if(checkCastlingKingNewSquare( currentPiece?.color === 'white' ? '31': '38', 'long')){
+
+              console.log(firstSelected);
+              console.log(secondSelected);
+  
+              console.log('valid ....he want to do the castling left rook');
+            }else{
+              console.log('not valid castling');
+            }
+          }
+
+        }
+
+      }
+
+      
+
+
+  }
+
   function firstSelectedPiece(col, row, square) {
 
-
+    firstSelected.current = col + row;
+    
+    console.log(firstSelected.current);
     // to handle the undefined selsected piece
     if(pieces[col + row] === undefined){
       return
@@ -154,6 +301,10 @@ function ChessBoard() {
 
   function handleMove(square, col, row) {
     if (selectedPiece) {
+      secondSelected = col + row;
+      console.log(secondSelected);
+
+      castling();
       // allow the player to choose another piece to play
       if (pieces[square]?.color === pieces[selectedPiece]?.color) {
         firstSelectedPiece(col, row, square);
