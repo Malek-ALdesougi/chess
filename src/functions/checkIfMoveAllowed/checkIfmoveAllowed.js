@@ -1,21 +1,16 @@
-export function checkIfmoveAllowed(col, row, allowedMoves, isCheckMate, checkMateAllowedMoves, selectedPiece, currentSquare) {
+import { checkPlayerTurn } from "../playerTurn/checkPlayerTurn";
+
+export function checkIfmoveAllowed(col, row, allowedMoves, isCheckMate, checkMateAllowedMoves, selectedPiece, currentSquare,playerTurn, pieces) {
 
   let allowed = false;
   let x = false;
 
-  console.log('iuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuu');
-
-  console.log(checkMateAllowedMoves);
-
-  console.log(selectedPiece);
-  // console.log(currentSquare);
+  checkPlayerTurn(col, row, playerTurn, pieces);
+  console.log('checkIfmoveAllowed function');
 
   if (isCheckMate.black === true || isCheckMate.white === true) {
 
-
     let { king, ...defendersAndEaters } = checkMateAllowedMoves;
-
-    console.log(defendersAndEaters);
 
     if (selectedPiece?.type === 'king') {
       if (king.find((item) => item === col + row)) {

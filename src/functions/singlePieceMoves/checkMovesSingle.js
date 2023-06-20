@@ -236,10 +236,7 @@ export function checkMovesForSinglePiece(thePiece, currentCol, currentRow, piece
                 eval(`${currentCol} + 2`) + '' + eval(`${currentRow} - 1`),
                 eval(`${currentCol} - 2`) + '' + eval(`${currentRow} + 1`),
                 eval(`${currentCol} - 2`) + '' + eval(`${currentRow} - 1`))
-
-            // check if the piece is friend pice to remove from the allowed moves
-            let filterdAllowedMoves = allowedMoves.filter((move) => pieces[move]?.color !== thePiece.color)
-            return filterdAllowedMoves;
+            return allowedMoves;
         case 'bishop':
             if (chekker !== 'king') {
                 // fully pinn logic
