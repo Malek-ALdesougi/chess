@@ -162,7 +162,7 @@ function ChessBoard() {
         );
       }
 
-      if (checkIfmoveAllowed(col, row, allowedMoves, isCheckMate, checkMateAllowedMoves, currentPiece, currentSquare)) {
+      if (checkIfmoveAllowed(col, row, allowedMoves, isCheckMate, checkMateAllowedMoves, currentPiece, currentSquare, playerTurn, pieces)) {
         setIsCheckMate((prev)=> (  { white:currentPiece.color==='white'? false:prev.white, black: currentPiece.color==='black'? false:prev.black }));
 
         if (pieces[selectedPiece]?.type === 'pawn') {

@@ -10,6 +10,7 @@ export const checkKingStatus = (pieces, enemyColor) => {
     let checkMateType = '';
     let isThereCheckMate = false;
 
+    console.log(enemyColor);
 
     Object.keys(pieces).map((piece) => {
 
@@ -24,7 +25,7 @@ export const checkKingStatus = (pieces, enemyColor) => {
         if (pieces[piece]?.color !== enemyColor) {
             friedlyPieceAllowedMoves = checkMovesForSinglePiece(pieces[piece], piece[0], piece[1], pieces, chekker);
             friedlyPieceAllowedMoves?.map((item) => {
-                if (pieces[item]?.type === 'king') {
+                if (pieces[item]?.type === 'king' && pieces[item]?.color === enemyColor) {
                     attackersPieces = [...attackersPieces, pieces[piece]];
                     attackerSquare = piece;
                     isThereCheckMate = true;
