@@ -10,8 +10,8 @@ import Piece from '../pieces/piece';
 //redux
 import { useDispatch, useSelector } from 'react-redux';
 
-//action
-import { UpdatePieces, handleShortCastling } from '../../redux/piecesReducer/actions';
+//action creators
+import { UpdatePieces, handleShortCastling, handleLongCastling } from '../../redux/piecesReducer/actions';
 
 //functions
 import { checkMovesForSinglePiece } from '../../functions/singlePieceMoves/checkMovesSingle';
@@ -21,9 +21,7 @@ import { AllowedMovesToEscapeCheckMate } from '../../functions/escapeCheckMate/A
 import { checkKingStatus } from '../../functions/kingStatus/checkKingStatus';
 import { Notification } from '../toastifyAlert/toastify';
 
-import { getStraightDirection } from '../../functions/DefenseKing/straightDirections/getStraightDefensebaleSquares';
-
-let currentSquare;
+// TODO: HERE WAS THE currentSauare VARIABLE IF ANY ERRORS ACCUOR
 
 function ChessBoard() {
   const rows = ['8', '7', '6', '5', '4', '3', '2', '1'];
@@ -31,6 +29,7 @@ function ChessBoard() {
 
   const pieces = useSelector((state) => state);
   const dispatch = useDispatch();
+
 
   const [playerTurn, setPlayerTurn] = useState(true);
   const [selectedPiece, setSelectedPiece] = useState(null);
@@ -45,6 +44,7 @@ function ChessBoard() {
 
   let firstSelected = useRef({});
   let secondSelected = {};
+  let currentSquare;
 
 
   useEffect(() => {
@@ -184,10 +184,6 @@ function ChessBoard() {
   }
 
   function castling(){
-    // checka mate === false; ============== DONE
-    // both pices must not moved at all; ================== DONE
-    //the new king square must not be under attack ==================== DONE
-
     // ====================================        HANDLE SHORT CASTLING LOGIC   =============================================
 
       if(((pieces[firstSelected.current]?.type === 'king' && pieces[secondSelected]?.type === 'rook' 
@@ -200,28 +196,17 @@ function ChessBoard() {
 
         if(((pieces[secondSelected]?.type === 'rook' && secondSelected === '81') || (pieces[firstSelected.current]?.type === 'rook' && firstSelected.current === '81')) ||
         ((pieces[secondSelected]?.type === 'rook' && secondSelected === '88') || (pieces[firstSelected.current]?.type === 'rook' && firstSelected.current === '88'))){
-         
-
-         
-          console.log('it defently short castling');
-
 
           if(isCheckMate.black === false && isCheckMate.white === false){
   
             if(checkCastlingKingNewSquare(currentPiece?.color === 'white' ? '71': '78', 'short')){
-              console.log(firstSelected.current);
-              console.log(secondSelected);
 
-              // currentPiece?.color === 'white' ? handleShortCastling('white'):handleShortCastling('black');
-              handleShortCastling(firstSelected.current, secondSelected)
-
-              console.log('valid ....he want to do the castling right rook');
-            }else{
-              console.log('not valid castling');
+             dispatch(handleShortCastling(firstSelected.current, secondSelected))
+             setPlayerTurn(!playerTurn);
+             setSelectedPiece(null);
+             setCheckMateAllowedMoves({});
             }
           }
-
-
         }
 
 
@@ -240,24 +225,17 @@ function ChessBoard() {
         if(((pieces[secondSelected]?.type === 'rook' && secondSelected === '11') || (pieces[firstSelected.current]?.type === 'rook' && firstSelected.current === '11')) ||
         ((pieces[secondSelected]?.type === 'rook' && secondSelected === '18') || (pieces[firstSelected.current]?.type === 'rook' && firstSelected.current === '18'))){
           
-          
-          console.log("It's defenitly long castling !!");
 
           if(isCheckMate.black === false && isCheckMate.white === false){
   
             if(checkCastlingKingNewSquare( currentPiece?.color === 'white' ? '31': '38', 'long')){
-
-              console.log(firstSelected);
-              console.log(secondSelected);
-  
-              console.log('valid ....he want to do the castling left rook');
-            }else{
-              console.log('not valid castling');
+              dispatch(handleLongCastling(firstSelected.current, secondSelected));
+              setPlayerTurn(!playerTurn);
+              setSelectedPiece(null);
+              setCheckMateAllowedMoves({});
             }
           }
-
         }
-
       }
 
       
@@ -268,8 +246,6 @@ function ChessBoard() {
   function firstSelectedPiece(col, row, square) {
 
     firstSelected.current = col + row;
-    
-    console.log(firstSelected.current);
     // to handle the undefined selsected piece
     if(pieces[col + row] === undefined){
       return
@@ -281,7 +257,6 @@ function ChessBoard() {
       currentSquare = square;
       setCurrentPiece(pieces[square]);
       if (isCheckMate.black === true || isCheckMate.white === true) {
-        console.log(isCheckMate);
 
         console.log(checkMateAllowedMoves);
         console.log('============== anything ============');
@@ -358,7 +333,7 @@ function ChessBoard() {
           return (
             <div key={square} id={square} className={`square ${isBlackSquare ? 'black' : 'white'}`} onClick={() => handleMove(square, col, row)}>
               {piece && (<Piece tabIndex="-1" color={piece?.color} type={piece.type} /> )}
-              {!piece && square}
+              {/* {!piece && square} */}
             </div>
           );
         });
