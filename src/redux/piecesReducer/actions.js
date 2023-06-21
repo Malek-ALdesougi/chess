@@ -9,19 +9,36 @@ export function handleShortCastling(firsPiece, secondPiece) {
 
     let kingSquare ;
     let rookSquare;
-    console.log(firsPiece);
-    console.log(secondPiece);
+
     if(firsPiece.includes('5')){
-        console.log(firsPiece + 'is the king square');
         kingSquare = firsPiece;
         rookSquare = secondPiece
     }else{
         kingSquare = secondPiece;
         rookSquare = firsPiece;
-        console.log(secondPiece + 'is the king square');
     }
 
     return (dispatch) => {
         dispatch({type: CONSTATNS.SHORT_CASTLING, payload: {kingSquare: kingSquare, rookSquare: rookSquare}})
     }
+}
+
+
+export function handleLongCastling(firsPiece, secondPiece){
+
+    let kingSquare ;
+    let rookSquare;
+
+    if(firsPiece.includes('5')){
+        kingSquare = firsPiece;
+        rookSquare = secondPiece
+    }else{
+        kingSquare = secondPiece;
+        rookSquare = firsPiece;
+    }
+
+    return (dispatch) => {
+        dispatch({type: CONSTATNS.LONG_CASTLING, payload:{kingSquare: kingSquare, rookSquare: rookSquare}})
+    }
+
 }
