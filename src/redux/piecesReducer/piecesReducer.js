@@ -42,9 +42,11 @@ const piecesReducer = (state = initialState, action) => {
         case CONSTANTS.UPDATE_PIECES:
             return action.payload;
         case CONSTANTS.SHORT_CASTLING:
+            console.log(action.payload);
             let shortKingOldLocation = Object.keys(state).find((piece) => piece === action.payload.kingSquare);
             let shortRookOldLocation = Object.keys(state).find((piece) => piece === action.payload.rookSquare);
 
+            // console.log(shortKingOldLocation);
             let shortKingNewLocaiton = (Number(shortKingOldLocation[0]) + 2) + shortKingOldLocation[1];
             let shortRookNewLocation = (Number(shortRookOldLocation[0]) - 2) + shortRookOldLocation[1];
 

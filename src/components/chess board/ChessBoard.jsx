@@ -43,9 +43,15 @@ function ChessBoard() {
   const [attackerCurrentSquare, setAttackerCurrentSquare] = useState('');
   const [checkMateAllowedMoves, setCheckMateAllowedMoves] = useState({});
   const [isInitRender, setIsinitRender] = useState(true);
-  let [color,setColor]=useState('white');
+  const [color,setColor]=useState('white');
+  const [isGameOver, setIsGameOver] = useState(false);
+
+
+  
+
 
   let firstSelected = useRef({});
+  // let [secondSelected, setSecondSelected] = useState('');
   let secondSelected = {};
   let [currentSquare, setCurrentSquare] = useState('');
   let [futureSquare, setFutureSquare] = useState('');
@@ -58,6 +64,7 @@ function ChessBoard() {
           dispatch(promotePawns(futureSquare,promotionType))
           setCouldBePromoted(false)
           setPromotionType('');
+          setPlayerTurn(!playerTurn)
         }
   },[promotionType])
 
@@ -71,7 +78,7 @@ function ChessBoard() {
       let kingCheckResult = checkKingStatus(pieces, enemyColor);
 
       if(currentPiece?.type === 'pawn'){
-        if(checkIfPawnCanPromot(futureSquare, setCouldBePromoted, pieces)){
+        if(checkIfPawnCanPromot(futureSquare, setCouldBePromoted, pieces, setPlayerTurn)){
           setColor( currentPiece?.color);
           setCurrentPiece({})
         }
@@ -100,8 +107,8 @@ function ChessBoard() {
       let { king, ...defendersAndEaters } = checkMateAllowedMoves;
 
       if ((king?.length === 0 && Object.keys(defendersAndEaters)?.length === 0) || checkMateAllowedMoves?.length === 0) {
-        // here we need to return the end game component !!
-        return alert('Gggg');
+        // here we need to show the end game component !!
+       return setIsGameOver(true);
       }
     }
   }, [isCheckMate]);
@@ -110,7 +117,6 @@ function ChessBoard() {
     attackerPiece.current = currentPiece;
   }, [currentPiece, isCheckMate]);
 
-  console.log(currentSquare);
 
   function checkIfmoveAllowedForEscapeCheckMate(checkMateAllowedMoves,currentPiece,currentSquare,type) {
 
@@ -147,7 +153,6 @@ function ChessBoard() {
     setAllowedMoves(checkMovesForSinglePiece(currentPiece, col, row, pieces));
   }
 
-
   function checkCastlingKingNewSquare(kingNewSquare, castlingType){
 
     let kingCol, kingRow = '';
@@ -156,9 +161,11 @@ function ChessBoard() {
     if(currentPiece?.color === 'white'){
       kingCol = '5';
       kingRow = '1';
+      console.log('white king want to castle');
     }else{
       kingCol = '5';
       kingRow = '8';
+      console.log('black king want to castle');
     }
 
     let concatedArray = [];
@@ -171,6 +178,8 @@ function ChessBoard() {
     })
     let filteredArray = concatedArray?.filter(item => !item.includes('0') && !item.includes('9') && item.length <= 2);
     let foundInEnemyAllowedMoves = filteredArray.some((item) => item === kingNewSquare);
+
+    console.log(foundInEnemyAllowedMoves);
 
     if(castlingType === 'short'){
 
@@ -187,8 +196,13 @@ function ChessBoard() {
       }
     }
 
+    
+    console.log(foundInEnemyAllowedMoves)
+    console.log(isTherePiecesBetween);
+
     if(foundInEnemyAllowedMoves || isTherePiecesBetween){
       //return false if the square founded in the enemy pieces allowed moves
+      console.log('returned from the first if');
       return false;
     }else if(!foundInEnemyAllowedMoves && !isTherePiecesBetween){
       return true;
@@ -258,11 +272,10 @@ function ChessBoard() {
 
   }
 
-  
-
   function firstSelectedPiece(col, row, square) {
 
     firstSelected.current = col + row;
+    console.log(col + row);
     // to handle the undefined selsected piece
     if(pieces[col + row] === undefined){
       return
@@ -272,15 +285,14 @@ function ChessBoard() {
       setAllowedMoves(checkMovesForSinglePiece(pieces[col + row],col,row,pieces,isCheckMate));
       setSelectedPiece(square);
       setCurrentSquare(square)
-      console.log(square);
       setCurrentPiece(pieces[square]);
       if (isCheckMate.black === true || isCheckMate.white === true) {
 
         console.log(checkMateAllowedMoves);
         console.log('============== anything ============');
 
-        let test = checkIfmoveAllowedForEscapeCheckMate( checkMateAllowedMoves, currentPiece, currentSquare, pieces[square].type);
-        if (test) {
+        let allowed = checkIfmoveAllowedForEscapeCheckMate( checkMateAllowedMoves, currentPiece, currentSquare, pieces[square].type);
+        if (allowed) {
           setSelectedPiece(square);
           setCurrentPiece(pieces[square]);
         } else {
@@ -295,6 +307,7 @@ function ChessBoard() {
   function handleMove(square, col, row) {
     if (selectedPiece) {
 
+      secondSelected = col + row;
       castling();
       // allow the player to choose another piece to play
       if (pieces[square]?.color === pieces[selectedPiece]?.color) {
@@ -336,11 +349,9 @@ function ChessBoard() {
     }
   }
 
-  console.log(allowedMoves);
-  console.log(isCheckMate);
-
   return (
     <>
+    {isGameOver && <div className='gameOver'><p className='title'>The game is over !!</p><br /><p className='winner'>{isCheckMate.black === true? 'White' : 'Black'} Won</p></div>}
    {couldBePromoted  && <Promotion couldBePromoted={setCouldBePromoted} promotionType={setPromotionType} pieceColor={color}/> }
     <div className="board">
       {rows.map((row) => {
@@ -353,8 +364,6 @@ function ChessBoard() {
           return (
             <div key={square} id={square} className={`square ${isBlackSquare ? 'black' : 'white'}`} onClick={() => handleMove(square, col, row)}>
               {piece && (<Piece tabIndex="-1" color={piece?.color} type={piece.type} /> )}
-              
-              {!piece && square}
             </div>
           );
         });
