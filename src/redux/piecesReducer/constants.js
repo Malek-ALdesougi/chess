@@ -5,3 +5,5 @@ export const ALLOWED_MOVES = 'ALLOWED_MOVES';
 export const SHORT_CASTLING = 'SHORT_CASTLING';
 
 export const LONG_CASTLING = 'LONG_CASTLING';
+
+export const PROMOTE_PAWN = 'PROMOTE_PAWN';

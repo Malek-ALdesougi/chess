@@ -54,21 +54,25 @@ const piecesReducer = (state = initialState, action) => {
             delete state[shortKingOldLocation];
             delete state[shortRookOldLocation];
 
-            return { ...state, [shortKingNewLocaiton]: kingObject, [shortRookNewLocation]: rookObject};
+            return { ...state, [shortKingNewLocaiton]: kingObject, [shortRookNewLocation]: rookObject };
 
-            case CONSTANTS.LONG_CASTLING:
-                let longKingOldLocation = Object.keys(state).find((piece) => piece === action.payload.kingSquare);
-                let longRookOldLocation = Object.keys(state).find((piece) => piece === action.payload.rookSquare);
+        case CONSTANTS.LONG_CASTLING:
+            let longKingOldLocation = Object.keys(state).find((piece) => piece === action.payload.kingSquare);
+            let longRookOldLocation = Object.keys(state).find((piece) => piece === action.payload.rookSquare);
 
-                let longKingNewLocaiton = (Number(longKingOldLocation[0]) - 2) + longKingOldLocation[1];
-                let longRookNewLocation = (Number(longRookOldLocation[0]) + 3) + longRookOldLocation[1];
+            let longKingNewLocaiton = (Number(longKingOldLocation[0]) - 2) + longKingOldLocation[1];
+            let longRookNewLocation = (Number(longRookOldLocation[0]) + 3) + longRookOldLocation[1];
 
-                const longKingObject = state[longKingOldLocation];
-                const longRookObject = state[longRookOldLocation];
+            const longKingObject = state[longKingOldLocation];
+            const longRookObject = state[longRookOldLocation];
 
-                delete state[longKingOldLocation];
-                delete state[longRookOldLocation];
-                return {...state, [longKingNewLocaiton]: longKingObject, [longRookNewLocation]: longRookObject};
+            delete state[longKingOldLocation];
+            delete state[longRookOldLocation];
+            return { ...state, [longKingNewLocaiton]: longKingObject, [longRookNewLocation]: longRookObject };
+
+        case CONSTANTS.PROMOTE_PAWN:
+        console.log('reach here but not updating the piece');
+            return { ...state, [action.payload.futureSquare]: { ...state[action.payload.futureSquare], type: action.payload.promotionType } };
 
         default: return state;
     }

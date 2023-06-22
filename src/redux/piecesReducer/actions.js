@@ -42,3 +42,10 @@ export function handleLongCastling(firsPiece, secondPiece){
     }
 
 }
+
+
+export function promotePawns(futureSquare,promotionType){
+    return (dispatch) =>{
+        dispatch({type: CONSTATNS.PROMOTE_PAWN, payload: {futureSquare,promotionType}})
+    }
+}

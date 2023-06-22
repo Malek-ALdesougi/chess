@@ -10,13 +10,16 @@ export function checkIfmoveAllowed(col, row, allowedMoves, isCheckMate, checkMat
 
   if (isCheckMate.black === true || isCheckMate.white === true) {
 
+
     let { king, ...defendersAndEaters } = checkMateAllowedMoves;
+
+    console.log(defendersAndEaters);
 
     if (selectedPiece?.type === 'king') {
       if (king.find((item) => item === col + row)) {
         allowed = true;
       }else{
-        x = true ;
+        x = false ;
       }
     } 
 
@@ -28,7 +31,7 @@ export function checkIfmoveAllowed(col, row, allowedMoves, isCheckMate, checkMat
           console.log('its an array means that its eater and defender');
           return allowed = true;
         }else{
-          return x = true;
+          return x = false;
         }
       }else{
 
@@ -39,13 +42,14 @@ export function checkIfmoveAllowed(col, row, allowedMoves, isCheckMate, checkMat
             if (defendersAndEaters[item] === col + row) {
               allowed = true;
             }else{
-              x = true;
+              x = false;
             }
           }
         }
       });
 
     console.log(allowed);
+    console.log(x);
 
     if(allowed === false && x === false){
      return alert('GG white won the game')

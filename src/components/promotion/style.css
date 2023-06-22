@@ -1,0 +1,15 @@
+.promotion {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    flex-direction: row;
+    position: absolute;
+    width: 46%;
+    height: 44%;
+    z-index: 10001;
+    background-color: black;
+    /* opacity: 0.7; */
+    /* text-align: center; */
+    border-radius: 30px;
+    /* gap: 113px; */
+}
