@@ -6,12 +6,13 @@ import { useEffect, useRef, useState } from 'react';
 
 //component
 import Piece from '../pieces/piece';
+import Promotion from '../promotion/promotion';
 
 //redux
 import { useDispatch, useSelector } from 'react-redux';
 
 //action creators
-import { UpdatePieces, handleShortCastling, handleLongCastling } from '../../redux/piecesReducer/actions';
+import { UpdatePieces, handleShortCastling, handleLongCastling, promotePawns } from '../../redux/piecesReducer/actions';
 
 //functions
 import { checkMovesForSinglePiece } from '../../functions/singlePieceMoves/checkMovesSingle';
@@ -20,6 +21,7 @@ import { checkIfmoveAllowed } from '../../functions/checkIfMoveAllowed/checkIfmo
 import { AllowedMovesToEscapeCheckMate } from '../../functions/escapeCheckMate/AllowedMovesToEscapeCheckMate';
 import { checkKingStatus } from '../../functions/kingStatus/checkKingStatus';
 import { Notification } from '../toastifyAlert/toastify';
+import { checkIfPawnCanPromot } from '../../functions/promotion/checkIfPawnCanPromot';
 
 // TODO: HERE WAS THE currentSauare VARIABLE IF ANY ERRORS ACCUOR
 
@@ -41,10 +43,23 @@ function ChessBoard() {
   const [attackerCurrentSquare, setAttackerCurrentSquare] = useState('');
   const [checkMateAllowedMoves, setCheckMateAllowedMoves] = useState({});
   const [isInitRender, setIsinitRender] = useState(true);
+  let [color,setColor]=useState('white');
 
   let firstSelected = useRef({});
   let secondSelected = {};
-  let currentSquare;
+  let [currentSquare, setCurrentSquare] = useState('');
+  let [futureSquare, setFutureSquare] = useState('');
+  let [couldBePromoted, setCouldBePromoted] = useState(false);
+  let [promotionType, setPromotionType] = useState('');
+
+  useEffect(()=>{
+      if(promotionType.length !== 0){
+        console.log('reach the dispatch fucntion');
+          dispatch(promotePawns(futureSquare,promotionType))
+          setCouldBePromoted(false)
+          setPromotionType('');
+        }
+  },[promotionType])
 
 
   useEffect(() => {
@@ -54,6 +69,14 @@ function ChessBoard() {
     } else {
       let enemyColor = currentPiece.color === 'white' ? 'black' : 'white';
       let kingCheckResult = checkKingStatus(pieces, enemyColor);
+
+      if(currentPiece?.type === 'pawn'){
+        if(checkIfPawnCanPromot(futureSquare, setCouldBePromoted, pieces)){
+          setColor( currentPiece?.color);
+          setCurrentPiece({})
+        }
+      }
+
       
       if (kingCheckResult.isThereCheckMate === true) {
         //to access the updated isCheckMate state immediately
@@ -86,6 +109,8 @@ function ChessBoard() {
   useEffect(() => {
     attackerPiece.current = currentPiece;
   }, [currentPiece, isCheckMate]);
+
+  console.log(currentSquare);
 
   function checkIfmoveAllowedForEscapeCheckMate(checkMateAllowedMoves,currentPiece,currentSquare,type) {
 
@@ -125,18 +150,15 @@ function ChessBoard() {
 
   function checkCastlingKingNewSquare(kingNewSquare, castlingType){
 
-    console.log(castlingType); 
     let kingCol, kingRow = '';
     let isTherePiecesBetween = true;
 
     if(currentPiece?.color === 'white'){
       kingCol = '5';
       kingRow = '1';
-      console.log('white king want to castle');
     }else{
       kingCol = '5';
       kingRow = '8';
-      console.log('black king want to castle');
     }
 
     let concatedArray = [];
@@ -149,8 +171,6 @@ function ChessBoard() {
     })
     let filteredArray = concatedArray?.filter(item => !item.includes('0') && !item.includes('9') && item.length <= 2);
     let foundInEnemyAllowedMoves = filteredArray.some((item) => item === kingNewSquare);
-
-    console.log(foundInEnemyAllowedMoves);
 
     if(castlingType === 'short'){
 
@@ -167,13 +187,8 @@ function ChessBoard() {
       }
     }
 
-    
-    console.log(foundInEnemyAllowedMoves)
-    console.log(isTherePiecesBetween);
-
     if(foundInEnemyAllowedMoves || isTherePiecesBetween){
       //return false if the square founded in the enemy pieces allowed moves
-      console.log('returned from the first if');
       return false;
     }else if(!foundInEnemyAllowedMoves && !isTherePiecesBetween){
       return true;
@@ -243,6 +258,8 @@ function ChessBoard() {
 
   }
 
+  
+
   function firstSelectedPiece(col, row, square) {
 
     firstSelected.current = col + row;
@@ -254,7 +271,8 @@ function ChessBoard() {
     if (checkPlayerTurn(col, row, playerTurn, pieces)) {
       setAllowedMoves(checkMovesForSinglePiece(pieces[col + row],col,row,pieces,isCheckMate));
       setSelectedPiece(square);
-      currentSquare = square;
+      setCurrentSquare(square)
+      console.log(square);
       setCurrentPiece(pieces[square]);
       if (isCheckMate.black === true || isCheckMate.white === true) {
 
@@ -276,8 +294,6 @@ function ChessBoard() {
 
   function handleMove(square, col, row) {
     if (selectedPiece) {
-      secondSelected = col + row;
-      console.log(secondSelected);
 
       castling();
       // allow the player to choose another piece to play
@@ -313,6 +329,7 @@ function ChessBoard() {
         setPlayerTurn(!playerTurn);
         setSelectedPiece(null);
         setCheckMateAllowedMoves({});
+        setFutureSquare(square);
       }
     } else {
       firstSelectedPiece(col, row, square);
@@ -320,8 +337,11 @@ function ChessBoard() {
   }
 
   console.log(allowedMoves);
+  console.log(isCheckMate);
 
   return (
+    <>
+   {couldBePromoted  && <Promotion couldBePromoted={setCouldBePromoted} promotionType={setPromotionType} pieceColor={color}/> }
     <div className="board">
       {rows.map((row) => {
         return cols.map((col) => {
@@ -333,12 +353,14 @@ function ChessBoard() {
           return (
             <div key={square} id={square} className={`square ${isBlackSquare ? 'black' : 'white'}`} onClick={() => handleMove(square, col, row)}>
               {piece && (<Piece tabIndex="-1" color={piece?.color} type={piece.type} /> )}
-              {/* {!piece && square} */}
+              
+              {!piece && square}
             </div>
           );
         });
       })}
     </div>
+    </>
   );
 
   

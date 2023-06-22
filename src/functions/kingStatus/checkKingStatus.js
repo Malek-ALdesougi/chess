@@ -9,9 +9,7 @@ export const checkKingStatus = (pieces, enemyColor) => {
     let attackerSquare = '';
     let checkMateType = '';
     let isThereCheckMate = false;
-
-    console.log(enemyColor);
-
+    
     Object.keys(pieces).map((piece) => {
 
         //get the enemy king current square
