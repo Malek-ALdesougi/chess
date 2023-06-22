@@ -24,8 +24,14 @@
   background-color: #6f9cac;
 }
 
+.container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
 .piece {
-  position: absolute;
+  /* position: absolute; */
   width: 50px;
   height: 50px;
   display: flex;
@@ -35,14 +41,14 @@
   background-size: cover;
   background-size: 50px;
   background-repeat: no-repeat;
-  animation: show-stone .3s forwards;
+  animation: show-stone 0.3s forwards;
 }
 
 .white.piece {
   background-position-y: -50px;
   width: 70px;
   height: 70px;
-  background-color:inherit;
+  background-color: inherit;
 }
 
 .black.piece {
@@ -76,6 +82,32 @@
   background-position-x: -300px;
 }
 
+.gameOver {
+  width: 500px;
+  height: 500px;
+  color: white;
+  background-color: rgb(0, 0, 0);
+  position: absolute;
+  z-index: 900;
+  border-radius: 30px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+.title {
+  font-size: 60px;
+  font-weight: bolder;
+  font-style: oblique;
+  font-family: emoji;
+}
+
+.winner {
+  font-size: 70px;
+  font-style: oblique;
+  font-weight: bolder;
+  font-family: emoji;
+}
 
 /* Media query */
 
@@ -90,7 +122,8 @@
     max-width: 30px;
     max-height: 30px;
   }
-  .white.piece, .black.piece{
+  .white.piece,
+  .black.piece {
     width: 20px;
     height: 20px;
   }
@@ -106,7 +139,8 @@
     max-width: 40px;
     max-height: 40px;
   }
-  .white.piece, .black.piece{
+  .white.piece,
+  .black.piece {
     width: 30px;
     height: 30px;
   }
@@ -122,7 +156,8 @@
     max-width: 40px;
     max-height: 40px;
   }
-  .white.piece, .black.piece{
+  .white.piece,
+  .black.piece {
     width: 30px;
     height: 30px;
   }
@@ -140,7 +175,8 @@
     max-height: 50px;
   }
 
-  .white.piece, .black.piece{
+  .white.piece,
+  .black.piece {
     width: 40px;
     height: 40px;
   }
@@ -158,7 +194,8 @@
     max-height: 80px;
   }
 
-  .white.piece, .black.piece{
+  .white.piece,
+  .black.piece {
     width: 40px;
     height: 40px;
   }
@@ -175,7 +212,8 @@
     max-width: 100px;
     max-height: 100px;
   }
-  .white.piece, .black.piece{
+  .white.piece,
+  .black.piece {
     width: 70px;
     height: 70px;
   }
@@ -185,7 +223,7 @@
   from {
     transform: scale(0);
   }
-  to{
+  to {
     transform: scale(1);
   }
 }
