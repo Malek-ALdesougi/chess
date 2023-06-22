@@ -80,7 +80,6 @@ export function getFriedlyPiecesAllowedMoves(pieces, enemyColor, attackerCurrent
             if (defensableSquares?.length !== 0) {
                 let square = singlePieceAllowedMoves?.find(square => defensableSquares?.includes(square))
                 if (square) {
-                    console.log(blockDefenders);
                     blockDefenders = { ...blockDefenders, [pieces[sinlgePiece]?.type + sinlgePiece]: square }
                 }
             }

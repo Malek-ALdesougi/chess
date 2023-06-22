@@ -42,11 +42,9 @@ const piecesReducer = (state = initialState, action) => {
         case CONSTANTS.UPDATE_PIECES:
             return action.payload;
         case CONSTANTS.SHORT_CASTLING:
-            console.log(action.payload);
             let shortKingOldLocation = Object.keys(state).find((piece) => piece === action.payload.kingSquare);
             let shortRookOldLocation = Object.keys(state).find((piece) => piece === action.payload.rookSquare);
 
-            // console.log(shortKingOldLocation);
             let shortKingNewLocaiton = (Number(shortKingOldLocation[0]) + 2) + shortKingOldLocation[1];
             let shortRookNewLocation = (Number(shortRookOldLocation[0]) - 2) + shortRookOldLocation[1];
 
@@ -73,7 +71,6 @@ const piecesReducer = (state = initialState, action) => {
             return { ...state, [longKingNewLocaiton]: longKingObject, [longRookNewLocation]: longRookObject };
 
         case CONSTANTS.PROMOTE_PAWN:
-        console.log('reach here but not updating the piece');
             return { ...state, [action.payload.futureSquare]: { ...state[action.payload.futureSquare], type: action.payload.promotionType } };
 
         default: return state;

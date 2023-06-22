@@ -21,7 +21,6 @@ export function getStraightDefensebaleSquares(attackerCurrentSquare, currentKing
     //rook attack defense logic
     squares = handleStraightDefense(attackerCurrentSquare, currentKingSquare, direction)
 
-    console.log(squares);
     
     return squares;
 

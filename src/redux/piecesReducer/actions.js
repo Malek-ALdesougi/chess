@@ -18,9 +18,6 @@ export function handleShortCastling(firsPiece, secondPiece) {
         rookSquare = firsPiece;
     }
 
-    console.log(kingSquare);
-    console.log(rookSquare)
-
     return (dispatch) => {
         dispatch({type: CONSTATNS.SHORT_CASTLING, payload: {kingSquare: kingSquare, rookSquare: rookSquare}})
     }

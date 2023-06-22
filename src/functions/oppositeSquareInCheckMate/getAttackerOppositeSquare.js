@@ -2,8 +2,6 @@
 import { getOppositeSquare } from "./getOppositeSquare";
 
 export function getAttackerOppositeSquare(attackerDirection, currentKingSquare) {
-    console.log(attackerDirection);
-    console.log(currentKingSquare);
 
     let oppositeSquare = '';
     let kingCurrentCol = parseInt(currentKingSquare[0]);

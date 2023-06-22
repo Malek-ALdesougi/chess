@@ -46,21 +46,15 @@ function ChessBoard() {
   const [color,setColor]=useState('white');
   const [isGameOver, setIsGameOver] = useState(false);
 
-
-  
-
-
   let firstSelected = useRef({});
-  // let [secondSelected, setSecondSelected] = useState('');
   let secondSelected = {};
-  let [currentSquare, setCurrentSquare] = useState('');
-  let [futureSquare, setFutureSquare] = useState('');
-  let [couldBePromoted, setCouldBePromoted] = useState(false);
-  let [promotionType, setPromotionType] = useState('');
+  const [currentSquare, setCurrentSquare] = useState('');
+  const [futureSquare, setFutureSquare] = useState('');
+  const [couldBePromoted, setCouldBePromoted] = useState(false);
+  const [promotionType, setPromotionType] = useState('');
 
   useEffect(()=>{
       if(promotionType.length !== 0){
-        console.log('reach the dispatch fucntion');
           dispatch(promotePawns(futureSquare,promotionType))
           setCouldBePromoted(false)
           setPromotionType('');
@@ -161,11 +155,9 @@ function ChessBoard() {
     if(currentPiece?.color === 'white'){
       kingCol = '5';
       kingRow = '1';
-      console.log('white king want to castle');
     }else{
       kingCol = '5';
       kingRow = '8';
-      console.log('black king want to castle');
     }
 
     let concatedArray = [];
@@ -179,30 +171,21 @@ function ChessBoard() {
     let filteredArray = concatedArray?.filter(item => !item.includes('0') && !item.includes('9') && item.length <= 2);
     let foundInEnemyAllowedMoves = filteredArray.some((item) => item === kingNewSquare);
 
-    console.log(foundInEnemyAllowedMoves);
-
     if(castlingType === 'short'){
 
       if(pieces[(parseInt(kingCol) + 1) + kingRow] === undefined && pieces[(parseInt(kingCol) + 2) + kingRow] === undefined){
-        console.log('there is no pieces between short');
         isTherePiecesBetween = false;
       }
     }else if(castlingType === 'long'){
       if(pieces[(parseInt(kingCol) - 1) + kingRow] === undefined 
       && pieces[(parseInt(kingCol) - 2) + kingRow] === undefined
       && pieces[(parseInt(kingCol) - 3) + kingRow] === undefined){
-        console.log('there is no pieces between long');
         isTherePiecesBetween = false;
       }
     }
 
-    
-    console.log(foundInEnemyAllowedMoves)
-    console.log(isTherePiecesBetween);
-
     if(foundInEnemyAllowedMoves || isTherePiecesBetween){
       //return false if the square founded in the enemy pieces allowed moves
-      console.log('returned from the first if');
       return false;
     }else if(!foundInEnemyAllowedMoves && !isTherePiecesBetween){
       return true;
@@ -275,7 +258,6 @@ function ChessBoard() {
   function firstSelectedPiece(col, row, square) {
 
     firstSelected.current = col + row;
-    console.log(col + row);
     // to handle the undefined selsected piece
     if(pieces[col + row] === undefined){
       return
@@ -287,9 +269,6 @@ function ChessBoard() {
       setCurrentSquare(square)
       setCurrentPiece(pieces[square]);
       if (isCheckMate.black === true || isCheckMate.white === true) {
-
-        console.log(checkMateAllowedMoves);
-        console.log('============== anything ============');
 
         let allowed = checkIfmoveAllowedForEscapeCheckMate( checkMateAllowedMoves, currentPiece, currentSquare, pieces[square].type);
         if (allowed) {
