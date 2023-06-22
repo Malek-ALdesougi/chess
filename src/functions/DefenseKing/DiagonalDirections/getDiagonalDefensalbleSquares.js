@@ -22,7 +22,6 @@ export function getDiagonalDefensalbleSquares(attackerCurrentSquare, currentKing
     //bishop attack logic
     squares = handleDiagonalDefense(attackerCurrentSquare, currentKingSquare, direction)
 
-    console.log(direction);
     if(returnOnlyDirection){
         return direction
     }

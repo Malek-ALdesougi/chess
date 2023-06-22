@@ -37,10 +37,8 @@ export const checkKingStatus = (pieces, enemyColor) => {
          attackersPieces = Array.from(new Set(attackersPieces));
 
         if (attackersPieces.length > 1) {
-            console.log('there is double check mate case');
             checkMateType = 'double';
         } else if (attackersPieces.length === 1) {
-            console.log('there is only sinble check mate case');
             checkMateType = 'single';
         }
     }

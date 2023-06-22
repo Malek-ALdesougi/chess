@@ -5,15 +5,13 @@ export function checkIfmoveAllowed(col, row, allowedMoves, isCheckMate, checkMat
   let allowed = false;
   let x = false;
 
-  checkPlayerTurn(col, row, playerTurn, pieces);
-  console.log('checkIfmoveAllowed function');
+  // checkPlayerTurn(col, row, playerTurn, pieces);
 
   if (isCheckMate.black === true || isCheckMate.white === true) {
 
 
     let { king, ...defendersAndEaters } = checkMateAllowedMoves;
 
-    console.log(defendersAndEaters);
 
     if (selectedPiece?.type === 'king') {
       if (king.find((item) => item === col + row)) {
@@ -25,18 +23,13 @@ export function checkIfmoveAllowed(col, row, allowedMoves, isCheckMate, checkMat
 
     
       Object.keys(defendersAndEaters).map((item) => {
-        console.log(defendersAndEaters[item]);
         if(Array.isArray(defendersAndEaters[item])){
           if(col + row === defendersAndEaters[item][0] || col + row === defendersAndEaters[item][1]){
-          console.log('its an array means that its eater and defender');
           return allowed = true;
         }else{
           return x = false;
         }
       }else{
-
-          console.log(selectedPiece.type + currentSquare);
-
 
           if (item === selectedPiece.type + currentSquare) {
             if (defendersAndEaters[item] === col + row) {
@@ -47,10 +40,6 @@ export function checkIfmoveAllowed(col, row, allowedMoves, isCheckMate, checkMat
           }
         }
       });
-
-    console.log(allowed);
-    console.log(x);
-
     if(allowed === false && x === false){
      return alert('GG white won the game')
     }

@@ -31,7 +31,6 @@ export function handleDiagonalDefense(attackerCurrentSquare, currentKingSquare, 
 
                 square = col + row;
 
-                console.log(defendableSquares);
                 defendableSquares.push(square);
             }
             break;

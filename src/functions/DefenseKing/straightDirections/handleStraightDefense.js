@@ -51,7 +51,6 @@ export function handleStraightDefense(attackerCurrentSquare, currentKingSquare, 
 
         default: return defendableSquares;
     }
-    console.log(defendableSquares);
     return defendableSquares;
 
 }
