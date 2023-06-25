@@ -331,6 +331,16 @@ function ChessBoard() {
     <>
    {isGameOver && <div className='gameOver'><p className='title'>The game is over !!</p><br /><p className='winner'>{isCheckMate.black === true? 'White' : 'Black'} Won</p></div>}
    {couldBePromoted  && <Promotion couldBePromoted={setCouldBePromoted} promotionType={setPromotionType} pieceColor={color}/> }
+
+    { piecesTrash.length !== 0 &&  <div className='Trash'>
+      {piecesTrash?.map((piece) => {
+        if(piece?.color === 'white'){
+          return <img src={`images/${piece?.color}/${piece?.type}.svg`} className={'trashPieces'} alt='type'/>
+        }
+      })}
+    </div>}
+
+    
     <div className="board">
       {rows.map((row) => {
         return cols.map((col) => {
@@ -347,6 +357,14 @@ function ChessBoard() {
         });
       })}
     </div>
+
+   { piecesTrash.length !== 0 && <div className='Trash'>
+    {piecesTrash?.map((piece) => {
+        if(piece?.color === 'black'){
+          return <img src={`images/${piece?.color}/${piece?.type}.svg`} className={'trashPieces'} alt='type'/>
+        }
+      })}
+    </div>}
     </>
   );
 

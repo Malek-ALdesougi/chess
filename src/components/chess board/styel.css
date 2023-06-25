@@ -28,6 +28,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  gap: 3rem;
 }
 
 .piece {
@@ -109,35 +110,61 @@
   font-family: emoji;
 }
 
+.Trash{
+  background-color: #6f9cac;
+  width: 250px;
+  height: 150px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  border-radius: 20px;
+}
+
+.trashPiece{
+  width: 20px;
+  height: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: row;
+
+}
+
+.trashPieces{
+  width: 30px;
+  height: 30px;
+}
+
 /* Media query */
 
 /* Mobile devices – 320px — 480px. */
 @media only screen and (max-width: 320px) {
   .board {
-    grid-template-rows: repeat(8, 30px);
-    grid-template-columns: repeat(8, 30px);
+    grid-template-rows: repeat(8, 20px);
+    grid-template-columns: repeat(8, 20px);
   }
 
   .square {
-    max-width: 30px;
-    max-height: 30px;
+    max-width: 20px;
+    max-height: 20px;
   }
   .white.piece,
   .black.piece {
-    width: 20px;
-    height: 20px;
+    width: 10px;
+    height: 10px;
   }
 }
 
 @media only screen and (min-width: 320px) {
   .board {
-    grid-template-rows: repeat(8, 40px);
-    grid-template-columns: repeat(8, 40px);
+    grid-template-rows: repeat(8,40px);
+    grid-template-columns: repeat(8,40px);
   }
 
   .square {
-    max-width: 40px;
-    max-height: 40px;
+    max-width:40px;
+    max-height:40px;
   }
   .white.piece,
   .black.piece {
@@ -166,6 +193,25 @@
 /* iPads, Tablets – 481px — 768px. */
 @media only screen and (min-width: 600px) {
   .board {
+    grid-template-rows: repeat(8, 60px);
+    grid-template-columns: repeat(8, 60px);
+  }
+
+  .square {
+    max-width: 60px;
+    max-height: 60px;
+  }
+
+  .white.piece,
+  .black.piece {
+    width: 50px;
+    height: 50px;
+  }
+}
+
+/* Small screens, laptops – 769px — 1024px */
+@media only screen and (min-width: 769px) {
+  .board {
     grid-template-rows: repeat(8, 50px);
     grid-template-columns: repeat(8, 50px);
   }
@@ -182,40 +228,21 @@
   }
 }
 
-/* Small screens, laptops – 769px — 1024px */
-@media only screen and (min-width: 769px) {
-  .board {
-    grid-template-rows: repeat(8, 80px);
-    grid-template-columns: repeat(8, 80px);
-  }
-
-  .square {
-    max-width: 80px;
-    max-height: 80px;
-  }
-
-  .white.piece,
-  .black.piece {
-    width: 40px;
-    height: 40px;
-  }
-}
-
 /* Desktops, large screens – 1025px */
 @media only screen and (min-width: 1025px) {
   .board {
-    grid-template-rows: repeat(8, 100px);
-    grid-template-columns: repeat(8, 100px);
+    grid-template-rows: repeat(8, 70px);
+    grid-template-columns: repeat(8, 70px);
   }
 
   .square {
-    max-width: 100px;
-    max-height: 100px;
+    max-width: 70px;
+    max-height: 70px;
   }
   .white.piece,
   .black.piece {
-    width: 70px;
-    height: 70px;
+    width: 50px;
+    height: 50px;
   }
 }
 
