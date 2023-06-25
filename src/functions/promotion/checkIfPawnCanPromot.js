@@ -18,6 +18,7 @@ export function checkIfPawnCanPromot(futureSquare, setCouldBePromoted, pieces, s
       }
     }else{
         setCouldBePromoted(false);
+        setPlayerTurn(!setPlayerTurn)
         return false;
     }
 

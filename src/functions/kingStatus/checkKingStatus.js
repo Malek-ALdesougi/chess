@@ -18,7 +18,6 @@ export const checkKingStatus = (pieces, enemyColor) => {
         }
 
 
-
         //get all friendly pieces allowed moves
         if (pieces[piece]?.color !== enemyColor) {
             friedlyPieceAllowedMoves = checkMovesForSinglePiece(pieces[piece], piece[0], piece[1], pieces, chekker);

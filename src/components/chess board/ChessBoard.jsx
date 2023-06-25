@@ -55,10 +55,10 @@ function ChessBoard() {
 
   useEffect(()=>{
       if(promotionType.length !== 0){
-          dispatch(promotePawns(futureSquare,promotionType))
-          setCouldBePromoted(false)
+          dispatch(promotePawns(futureSquare,promotionType));
+          setCouldBePromoted(false);
           setPromotionType('');
-          setPlayerTurn(!playerTurn)
+          setPlayerTurn(!playerTurn);
         }
   },[promotionType])
 
@@ -70,14 +70,13 @@ function ChessBoard() {
     } else {
       let enemyColor = currentPiece.color === 'white' ? 'black' : 'white';
       let kingCheckResult = checkKingStatus(pieces, enemyColor);
-
+      
       if(currentPiece?.type === 'pawn'){
         if(checkIfPawnCanPromot(futureSquare, setCouldBePromoted, pieces, setPlayerTurn)){
-          setColor( currentPiece?.color);
-          setCurrentPiece({})
+          setColor(currentPiece?.color);
+          setCurrentPiece({color: currentPiece?.color});
         }
       }
-
       
       if (kingCheckResult.isThereCheckMate === true) {
         //to access the updated isCheckMate state immediately
@@ -330,7 +329,7 @@ function ChessBoard() {
 
   return (
     <>
-    {isGameOver && <div className='gameOver'><p className='title'>The game is over !!</p><br /><p className='winner'>{isCheckMate.black === true? 'White' : 'Black'} Won</p></div>}
+   {isGameOver && <div className='gameOver'><p className='title'>The game is over !!</p><br /><p className='winner'>{isCheckMate.black === true? 'White' : 'Black'} Won</p></div>}
    {couldBePromoted  && <Promotion couldBePromoted={setCouldBePromoted} promotionType={setPromotionType} pieceColor={color}/> }
     <div className="board">
       {rows.map((row) => {
