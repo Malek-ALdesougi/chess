@@ -41,7 +41,7 @@ export function checkIfmoveAllowed(col, row, allowedMoves, isCheckMate, checkMat
         }
       });
     if(allowed === false && x === false){
-     return alert('GG white won the game')
+    //  return alert('GG white won the game')
     }
 
     return allowed;
