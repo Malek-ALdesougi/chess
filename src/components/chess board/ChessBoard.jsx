@@ -199,11 +199,11 @@ function ChessBoard() {
 
       if(((pieces[firstSelected.current]?.type === 'king' && pieces[secondSelected]?.type === 'rook' 
       && (pieces[firstSelected.current]?.color === pieces[secondSelected]?.color === currentPiece?.color)  
-      && firstSelected.current ===  (currentPiece?.color === 'white' ? '51' : '58') && secondSelected === (currentPiece?.color === 'white'? '81' : '88'))) 
+      && firstSelected.current ===  currentPiece?.color === 'white' ? '51' : '58' && secondSelected === currentPiece?.color === 'white'? '81' : '88')) 
       ||
        (pieces[firstSelected.current]?.type === 'rook' && pieces[secondSelected]?.type === 'king' 
       && (pieces[firstSelected.current]?.color === pieces[secondSelected]?.color === currentPiece?.color)  
-      && firstSelected.current === (currentPiece?.color === 'white' ? '81' : '88') && secondSelected === (currentPiece?.color === 'white' ? '51' : '58'))){
+      && firstSelected.current === currentPiece?.color === 'white' ? '81' : '88' && secondSelected === currentPiece?.color === 'white' ? '51' : '58')){
 
         if(((pieces[secondSelected]?.type === 'rook' && secondSelected === '81') || (pieces[firstSelected.current]?.type === 'rook' && firstSelected.current === '81')) ||
         ((pieces[secondSelected]?.type === 'rook' && secondSelected === '88') || (pieces[firstSelected.current]?.type === 'rook' && firstSelected.current === '88'))){
@@ -227,11 +227,11 @@ function ChessBoard() {
       
       if(((pieces[firstSelected.current]?.type === 'rook' && pieces[secondSelected]?.type === 'king' 
       && (pieces[firstSelected.current]?.color === pieces[secondSelected]?.color === currentPiece?.color) 
-      && secondSelected === (currentPiece?.color === 'white' ? '51' : '58')) && firstSelected.current === (currentPiece?.color === 'white'? '11' : '18')) 
+      && secondSelected === (currentPiece?.color === 'white' ? '51' : '58')) && firstSelected.current === currentPiece?.color === 'white'? '11' : '18') 
       ||
       ((pieces[firstSelected.current]?.type === 'king' && pieces[secondSelected]?.type === 'rook' 
       && (pieces[firstSelected.current]?.color === pieces[secondSelected]?.color === currentPiece?.color) 
-      && secondSelected === (currentPiece?.color === 'white' ? '11': '18')) && firstSelected.current === (currentPiece?.color === 'white' ? '51' : '58'))){
+      && secondSelected === currentPiece?.color === 'white' ? '11': '18') && firstSelected.current === currentPiece?.color === 'white' ? '51' : '58')){
 
         if(((pieces[secondSelected]?.type === 'rook' && secondSelected === '11') || (pieces[firstSelected.current]?.type === 'rook' && firstSelected.current === '11')) ||
         ((pieces[secondSelected]?.type === 'rook' && secondSelected === '18') || (pieces[firstSelected.current]?.type === 'rook' && firstSelected.current === '18'))){
@@ -283,11 +283,7 @@ function ChessBoard() {
   }
 
   function handleMove(square, col, row) {
-    console.log(firstSelected.current);
     if (selectedPiece) {
-
-      console.log(secondSelected);
-
       secondSelected = col + row;
       castling();
       // allow the player to choose another piece to play
