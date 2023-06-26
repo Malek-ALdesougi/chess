@@ -45,6 +45,10 @@ const piecesReducer = (state = initialState, action) => {
             let shortKingOldLocation = Object.keys(state).find((piece) => piece === action.payload.kingSquare);
             let shortRookOldLocation = Object.keys(state).find((piece) => piece === action.payload.rookSquare);
 
+            if(shortKingOldLocation === undefined){
+                return state
+            }
+
             let shortKingNewLocaiton = (Number(shortKingOldLocation[0]) + 2) + shortKingOldLocation[1];
             let shortRookNewLocation = (Number(shortRookOldLocation[0]) - 2) + shortRookOldLocation[1];
 
@@ -59,6 +63,10 @@ const piecesReducer = (state = initialState, action) => {
         case CONSTANTS.LONG_CASTLING:
             let longKingOldLocation = Object.keys(state).find((piece) => piece === action.payload.kingSquare);
             let longRookOldLocation = Object.keys(state).find((piece) => piece === action.payload.rookSquare);
+
+            if(longKingOldLocation === undefined){
+                return state;
+            }
 
             let longKingNewLocaiton = (Number(longKingOldLocation[0]) - 2) + longKingOldLocation[1];
             let longRookNewLocation = (Number(longRookOldLocation[0]) + 3) + longRookOldLocation[1];
