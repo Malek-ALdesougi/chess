@@ -46,12 +46,6 @@ Once the game is running, users can:
 -  Utilize tactical moves, castling, and pawn promotion to their advantage.</br>
 - Play against another human player only and on the same device as mentioned before.</br>
 
-<h2>6. Challenges and Solutions</h2> 
-During the development of the Chess Game Project, the following challenges were encountered:
-
-[Describe specific challenges faced during development and explain how they were overcome, such as complex game logic implementation, handling edge cases, or optimizing performance.]
-
-
 <h2>7. Future Enhancements </h2>
 To enhance the Chess Game Project in the future, the following improvements are planned:
 
