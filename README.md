@@ -1,5 +1,6 @@
-Chess Game Project Documentation
-Table of Contents
+#Chess Game Project Documentation
+
+<h1>Table of Contents</h1>
 Introduction
 Technologies Used
 Features
