@@ -10,17 +10,18 @@ Challenges and Solutions </br>
 Future Enhancements </br>
 Conclusion </br>
 
-1. <h2>Introduction</h2> <a name="introduction"></a> </br>
+ <h2>1. Introduction</h2> 
 The Chess Game Project is a web-based chess game developed using React JS. This documentation aims to provide an overview of the project, its key features, installation instructions, usage guidelines, challenges faced during development, future enhancements, and a concluding note.
 
-2. Technologies Used <a name="technologies-used"></a>
+<h2>2. Technologies Used</h2>
 The Chess Game Project leverages the following technologies and frameworks:
 
-React JS: A JavaScript library used for building user interfaces.
 HTML/CSS: The standard markup language and styling for web pages.
 JavaScript: The programming language used for implementing the game logic and interactions.
-[Add any additional technologies or libraries used in the project]
-3. Features <a name="features"></a>
+React JS: A JavaScript library used for building user interfaces.
+Redux: A state management system for React JS applications.
+
+<h2>3. Features</h2> <a name="features"></a>
 The Chess Game Project boasts the following features:
 
 Chess Game Logic: The game implements the complete set of rules and logic for chess, including movement, capturing, checkmate, and draw conditions.
