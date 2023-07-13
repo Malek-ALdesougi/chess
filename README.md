@@ -24,8 +24,8 @@ The Chess Game Project leverages the following technologies and frameworks:
 <h2>3. Features</h2> 
 The Chess Game Project boasts the following features:
 
-<h4>Chess Game Logic:</h4> - The game implements the complete set of rules and logic for chess, including movement, capturing, checkmate, and draw conditions.</br>
-<h4>Checkmate Detection:</h4> The game detects when the king is in checkmate, signaling the end of the game and declaring a winner.</br>
+- <h4>Chess Game Logic:</h4> - The game implements the complete set of rules and logic for chess, including movement, capturing, checkmate, and draw conditions.</br>
+- <h4>Checkmate Detection:</h4> The game detects when the king is in checkmate, signaling the end of the game and declaring a winner.</br>
 <h4>Tactical Moves:</h4> Players can employ various tactical moves, such as pinning a piece to the king, to strategically outmaneuver their opponents.</br>
 <h4>Castling:</h4> Both short and long castling moves are supported, enabling players to fortify their king's position and develop a solid defense.</br>
 <h4>Pawn Promotion:</h4> The game allows pawn promotion, enabling pawns to be promoted to higher-value pieces when reaching the opposite end of the board.</br>
