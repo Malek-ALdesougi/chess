@@ -39,6 +39,7 @@ To run the Chess Game Project locally, follow these steps:
 
 <h2>5. Usage</h2>
 Once the game is running, users can:
+
 - Two users must play on the same device (No socket io added yet). </br>
 - Interact with the chessboard by clicking on the pieces and valid squares.</br>
 - Move the pieces according to the rules of chess, first click on the piece is to select a piece and the second click is to choose a new position for the piece.</br
