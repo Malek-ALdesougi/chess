@@ -32,27 +32,36 @@ The Chess Game Project boasts the following features:
 <h2>4. Installation</h2> 
 To run the Chess Game Project locally, follow these steps:
 
-Clone the project repository from [insert repository URL].
-Install the required dependencies by running the following command: npm install.
-Start the development server using: npm start.
-Open your web browser and access the game at http://localhost:3000 (or the specified port, if different).
-5. Usage <a name="usage"></a>
-Once the game is running, users can:
+- Clone the project repository from https://github.com/Malek-ALdesougi/chess.</br>
+- Install the required dependencies by running the following command: npm install.</br>
+- Start the development server using: npm start. </br>
+- Open your web browser and access the game at http://localhost:3000.</br>
 
-Interact with the chessboard by clicking on pieces and valid squares.
-Move the pieces according to the rules of chess.
-Observe the game state, including check, checkmate, and draw conditions.
-Utilize tactical moves, castling, and pawn promotion to their advantage.
-Play against another human player or an AI opponent (if implemented).
-6. Challenges and Solutions <a name="challenges-and-solutions"></a>
+<h2>5. Usage</h2>
+Once the game is running, users can:
+- Two users must play on the same device (No socket io added yet). </br>
+- Interact with the chessboard by clicking on the pieces and valid squares.</br>
+- Move the pieces according to the rules of chess, first click on the piece is to select a piece and the second click is to choose a new position for the piece.</br
+- Observe the game state, including check, and checkmate.</br>
+-  Utilize tactical moves, castling, and pawn promotion to their advantage.</br>
+- Play against another human player only and on the same device as mentioned before.</br>
+
+<h2>6. Challenges and Solutions</h2> 
 During the development of the Chess Game Project, the following challenges were encountered:
 
 [Describe specific challenges faced during development and explain how they were overcome, such as complex game logic implementation, handling edge cases, or optimizing performance.]
-7. Future Enhancements <a name="future-enhancements"></a>
+
+
+<h2>7. Future Enhancements </h2>
 To enhance the Chess Game Project in the future, the following improvements are planned:
 
-[Outline future updates, such as additional features, improved user interface, multiplayer functionality, or integration with chess engines.]
-8. Conclusion <a name="conclusion"></a>
+- Online Multiplayer: Integrate Socket.io or similar technology to allow players to engage in online multiplayer matches. This feature would enable users to play against each other remotely, adding a competitive and social aspect to the game.
+- AI Opponent: Implement an AI opponent using algorithms such as Minimax with Alpha-Beta pruning or Monte Carlo Tree Search. This would provide players with the option to play against the computer at different difficulty levels, enhancing the game's single-player experience.
+
+
+<h2>8. Conclusion</h2>
 The Chess Game Project showcases a complete chess game implemented from scratch using React JS. It incorporates essential chess features, including game logic, checkmate detection, tactical moves, castling, and pawn promotion. By providing this documentation, we hope to inspire and assist others in exploring the world of chess game development.
 
 Thank you for your interest in the Chess Game Project, and we look forward to further enhancing the game in the future!
+
+<h2>This project is developed and maintained by Malek AL-Desougi</h2>
