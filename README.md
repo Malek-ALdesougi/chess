@@ -1,5 +1,5 @@
 ```diff
-<h1> - Chess Game Project Documentation</h1>
++ <h1> Chess Game Project Documentation</h1>
 - text in red
 + text in green
 ! text in orange
