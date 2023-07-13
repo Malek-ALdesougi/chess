@@ -16,15 +16,15 @@ The Chess Game Project is a web-based chess game developed using React JS. This 
 <h2>2. Technologies Used</h2>
 The Chess Game Project leverages the following technologies and frameworks:
 
-HTML/CSS: The standard markup language and styling for web pages. </br>
-JavaScript: The programming language used for implementing the game logic and interactions.</br>
-React JS: A JavaScript library used for building user interfaces.</br>
-Redux: A state management system for React JS applications.</br>
+- HTML/CSS: The standard markup language and styling for web pages. </br>
+- JavaScript: The programming language used for implementing the game logic and interactions.</br>
+- React JS: A JavaScript library used for building user interfaces.</br>
+- Redux: A state management system for React JS applications.</br>
 
 <h2>3. Features</h2> 
 The Chess Game Project boasts the following features:
 
-<h4>Chess Game Logic:</h4> The game implements the complete set of rules and logic for chess, including movement, capturing, checkmate, and draw conditions.</br>
+<h4>Chess Game Logic:</h4> - The game implements the complete set of rules and logic for chess, including movement, capturing, checkmate, and draw conditions.</br>
 <h4>Checkmate Detection:</h4> The game detects when the king is in checkmate, signaling the end of the game and declaring a winner.</br>
 <h4>Tactical Moves:</h4> Players can employ various tactical moves, such as pinning a piece to the king, to strategically outmaneuver their opponents.</br>
 <h4>Castling:</h4> Both short and long castling moves are supported, enabling players to fortify their king's position and develop a solid defense.</br>
