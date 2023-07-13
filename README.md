@@ -1,14 +1,10 @@
-```diff
-+ <h1> Chess Game Project Documentation</h1>
-- text in red
-+ text in green
-! text in orange
-# text in gray
-@@ text in purple (and bold)@@
-```
+<h1> Chess Game Project Documentation</h1>
 
 <h3>Table of Contents</h3>
-Introduction
+```diff
++ Introduction
+```
+
 Technologies Used
 Features
 Installation
