@@ -1,6 +1,6 @@
 <h1 style="color:purple;"> Chess Game Project Documentation</h1>
 
-<h3>Table of Contents :</h3>
+<h3>Table of Contents :</h3>:
 - Introduction </br>
 - Technologies Used </br>
 - Features </br>
